@@ -1,12 +1,12 @@
 import { Grid, Typography, TextField, Button } from '@mui/material';
 import DropdownMenuitem from './DropdownMenuitem';
 
-export default function MUIMenubar() {
+export default function Menubar() {
     return (
         // todo: ajustar cores no tema padrão (importar theme e por de referência?)
         <Grid container p={2} justifyContent="space-between" alignItems="center" sx={{ backgroundColor: "#323232", color: "white" }}>
             <Typography variant="h3">Ararastore</Typography>
-            <TextField size="small" variant="filled"></TextField>
+            <TextField variant="filled"></TextField>
             <Grid sx={{ display: "flex" }}>
                 <DropdownMenuitem>
                     Home
