@@ -1,9 +1,11 @@
 import { Grid, Link, Stack, Typography } from "@mui/material";
 
 export default function Footer() {
-    {/* TODO: use theme to set colors */ }
     return (
-        <Grid container p={4} justifyContent="space-evenly" alignItems="center" sx={{ backgroundColor: "#323232", color: "white" }}>
+        <Grid container p={4} justifyContent="space-evenly" alignItems="center" sx={{
+            backgroundColor: (theme) => theme.palette.background.paper,
+            color: (theme) => theme.palette.text.primary
+        }}>
             <FooterSection title="ARARASTORE" links={[{ title: "Sobre", href: "#" }, { title: "Ajuda", href: "#" }, { title: "Nossas Lojas", href: "#" }, { title: "Trocas e Deveoluções", href: "#" }, { title: "Central e Privacidade", href: "#" }, { title: "Política de Privacidade", href: "#" }]} />
             <FooterSection title="SOCIAL MEDIA" links={[{ title: "Instagram", href: "#" }, { title: "Linkedin", href: "#" }, { title: "Facebook", href: "#" }, { title: "Twitter", href: "#" }]} />
         </Grid >

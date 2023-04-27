@@ -7,14 +7,10 @@ import theme from './theme/Theme';
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <div className="App">
-        <Menubar></Menubar>
-        <Home></Home>
-        <Footer></Footer>
-        <header className="App-header">
-        </header>
-      </div>
-    </ThemeProvider>
+      <Menubar></Menubar>
+      <Home></Home>
+      <Footer></Footer>
+    </ThemeProvider >
   );
 }
 
