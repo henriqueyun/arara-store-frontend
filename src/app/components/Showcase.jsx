@@ -11,12 +11,14 @@ export default function Showcase() {
             setProducts(products);
         };
         getProducts();
+
     }, []);
 
     return (
         <>
             {
-                products.length ? products.map(product => {
+                // TODO: adjust when showcase backend is done to not use hardcoded six products
+                products.length ? products.slice(0, 6).map(product => {
                     return (
                         <Grid item>
                             <ProductItem key={product.id} product={product}></ProductItem>
