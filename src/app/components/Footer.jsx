@@ -22,16 +22,16 @@ function FooterSection(props) {
         return [firstHalf, secondHalf];
     }
 
-    const splitedLinks = splitArrInTwo(links)
+    const splittedLinks = splitArrInTwo(links)
 
     return (
         <Grid display="flex" gap={2} flexDirection="column">
             <Typography variant="h4">{title}</Typography>
             <Grid display="flex" gap={3}>
-                {splitedLinks.map(halfLinks =>
-                    <Stack gap={1}>
+                {splittedLinks.map((halfLinks, index) =>
+                    <Stack gap={1} key={`half-links-${halfLinks[0].title}`}>
                         {halfLinks.map(link =>
-                            <Link color="inherit" underline="none" href={link.href} variant="h6">{link.title}</Link>
+                            <Link key={link.title} color="inherit" underline="none" href={link.href} variant="h6">{link.title}</Link>
                         )}
                     </Stack>)
                 }

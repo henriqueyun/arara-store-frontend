@@ -1,5 +1,5 @@
 import { Container, Grid, Typography } from "@mui/material";
-import { Showcase, ProductsFilter, ProductItem } from "../components"
+import { ProductsFilter, ProductItem } from "../components"
 import { client } from "../../client/";
 import { useEffect, useState } from "react";
 
@@ -11,22 +11,21 @@ export default function Products() {
             setProducts(products);
         };
         getProducts();
-
     }, []);
 
     return (
-        <Container maxWidth="xl" sx={{ backgroundColor: "firebrick" }}>
-            <Grid container xs={12} my={8} display="flex" sx={{ backgroundColor: "salmon" }}>
-                <Grid item xs={3} sx={{ backgroundColor: "lightyellow" }}>
-                    <ProductsFilter />
+        <Container maxWidth="xl">
+            <Grid container my={8} display="flex">
+                <Grid item xs={3}>
+                    <ProductsFilter products={products} />
                 </Grid>
-                <Grid item xs={9} display="flex" justifyContent="center" flexWrap="wrap" gap={8} sx={{ backgroundColor: "lightpink" }}>
+                {/* make this a component */}
+                <Grid item xs={9} display="flex" justifyContent="center" flexWrap="wrap" gap={8}>
                     {
-
                         products.length ? products.map(product => {
                             return (
-                                <Grid item>
-                                    <ProductItem key={product.id} product={product}></ProductItem>
+                                <Grid item key={product.id}>
+                                    <ProductItem product={product}></ProductItem>
                                 </Grid>
                             );
                         }) :
