@@ -1,5 +1,5 @@
 import { Typography } from "@mui/material";
-
+import { formatCurrency } from "../util"
 export default function ProductItem(props) {
     const { product } = props;
     return (
@@ -19,10 +19,6 @@ function Price(props) {
     const { price, discount } = props
     function calculateDiscount(price, discount) {
         return price - ((price / 100) * discount)
-    }
-
-    function formatCurrency(value) {
-        return value.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
     }
 
     return (
