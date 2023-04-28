@@ -1,4 +1,4 @@
-import { Grid, Typography, TextField, Button, InputAdornment } from '@mui/material';
+import { Grid, Typography, TextField, Button, InputAdornment, Link } from '@mui/material';
 import DropdownMenuitem from './DropdownMenuitem';
 import SearchIcon from '@mui/icons-material/Search';
 
@@ -8,7 +8,7 @@ export default function Menubar() {
             backgroundColor: (theme) => theme.palette.background.paper,
             color: (theme) => theme.palette.text.primary
         }}>
-            <Typography variant="h3">Ararastore</Typography>
+            <Link color="inherit" underline="none" href="/" variant="h3">Ararastore</Link>
             <TextField
                 variant="outlined"
                 sx={{
