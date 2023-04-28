@@ -14,7 +14,7 @@ const theme = createTheme({
     },
     text: {
       primary: "#FFFFFF",
-      secondary: "#AAAAAA",
+      secondary: "#000000",
       disabled: "#CCCCCC"
     },
     background: {
@@ -30,7 +30,7 @@ const theme = createTheme({
           borderRadius: "50px"
         }
       }
-    }
+    },
   },
 });
 
