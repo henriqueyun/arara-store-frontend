@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Menu, Button } from '@mui/material';
+import { Menu, Button, Typography } from '@mui/material';
 
 
 export default function DropdownMenuitem(props) {
@@ -16,7 +16,7 @@ export default function DropdownMenuitem(props) {
     return (
         <div>
             <Button onClick={handleClick}>
-                {props?.children}
+                <Typography>{props?.children}</Typography>
             </Button>
             <Menu
                 anchorEl={anchorEl}
