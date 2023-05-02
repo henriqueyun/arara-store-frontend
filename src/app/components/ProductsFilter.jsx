@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Checkbox, FormControlLabel, Grid, Stack } from "@mui/material";
+import { Button, Checkbox, FormControlLabel, Grid, Stack } from "@mui/material";
 import { Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import { formatCurrency } from "../util"
@@ -74,14 +74,15 @@ export default function ProductsFilter(props) {
     }, [products])
 
     function formatLabelByField(field, value) {
-        if (!["Desconto", "Preço"].includes(field)) {
+        if (!["discount", "price"].includes(field)) {
             return value
         }
-
-        return field === "Desconto" ? `${value}%` : formatCurrency(value);
+        return field === "discount" ? `${value}%` : formatCurrency(value);
     }
+
     // TODO: divide in separeted in functions
     function handleFieldChange(event) {
+        console.log(event.target.value.split("-"))
         const [field, value] = event.target.value.split("-")
         setActiveFilters(oldActiveFilters => {
             const fieldValues = oldActiveFilters[field] ? Object.values(oldActiveFilters[field]) : [];
@@ -107,6 +108,7 @@ export default function ProductsFilter(props) {
     }
 
     function getCheckedFieldValue(field, value) {
+        // console.log("field", field, "value", value.toString(10))
         if (activeFilters[field]) {
             return activeFilters[field].includes(value.toString(10))
         }

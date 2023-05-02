@@ -11,8 +11,8 @@ export default function Products() {
         setFilteredProducts(products.filter(p => {
             const fields = Object.keys(filters)
             const passFilters = fields.every(f => {
-                console.log(`filters [f] ${filters[f]} includes p[f] ${p[f]}`)
-                return filters[f].includes(p[f])
+                const productField = typeof p[f] === "number" ? JSON.stringify(p[f]) : p[f];
+                return filters[f].includes(productField)
             })
             return passFilters
         }))
