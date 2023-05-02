@@ -82,7 +82,6 @@ export default function ProductsFilter(props) {
 
     // TODO: divide in separeted in functions
     function handleFieldChange(event) {
-        console.log(event.target.value.split("-"))
         const [field, value] = event.target.value.split("-")
         setActiveFilters(oldActiveFilters => {
             const fieldValues = oldActiveFilters[field] ? Object.values(oldActiveFilters[field]) : [];
@@ -108,11 +107,15 @@ export default function ProductsFilter(props) {
     }
 
     function getCheckedFieldValue(field, value) {
-        // console.log("field", field, "value", value.toString(10))
         if (activeFilters[field]) {
             return activeFilters[field].includes(value.toString(10))
         }
         return false
+    }
+
+    function cleanFilters() {
+        setActiveFilters([])
+        handleFilter(activeFilters)
     }
 
     return (
@@ -141,6 +144,9 @@ export default function ProductsFilter(props) {
                     </Accordion>
                     : <></>
             )}
+            <Grid py={2}>
+                <Button onClick={cleanFilters} color="secondary" variant="outlined" fullWidth={true}>Limpar Filtros</Button>
+            </Grid>
         </Grid >
     )
 }
