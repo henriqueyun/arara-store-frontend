@@ -3,7 +3,7 @@ import ProductItem from "./ProductItem";
 import Showcase from "./Showcase"
 import DropdownMenuitem from "./DropdownMenuitem";
 import Footer from "./Footer";
-import ProductsFilter from "./ProductsFilter";
+import ProductsFilter from "./ProductsFilters/ProductsFilter";
 
 export {
     Menubar,
