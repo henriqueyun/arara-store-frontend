@@ -5,10 +5,24 @@ import { useEffect, useState } from "react";
 
 export default function Products() {
     const [products, setProducts] = useState([]);
+    const [filteredProducts, setFilteredProducts] = useState([]);
+
+    function applyFilters(filters) {
+        setFilteredProducts(products.filter(p => {
+            const fields = Object.keys(filters)
+            const passFilters = fields.every(f => {
+                console.log(`filters [f] ${filters[f]} includes p[f] ${p[f]}`)
+                return filters[f].includes(p[f])
+            })
+            return passFilters
+        }))
+    }
+
     useEffect(() => {
         const getProducts = async () => {
             const products = await client.products.findAll();
             setProducts(products);
+            setFilteredProducts(products);
         };
         getProducts();
     }, []);
@@ -17,12 +31,12 @@ export default function Products() {
         <Container maxWidth="xl">
             <Grid container my={8} display="flex">
                 <Grid item xs={3}>
-                    <ProductsFilter products={products} />
+                    <ProductsFilter handleFilter={applyFilters} products={products} />
                 </Grid>
                 {/* make this a component */}
                 <Grid item xs={9} display="flex" justifyContent="center" flexWrap="wrap" gap={8}>
                     {
-                        products.length ? products.map(product => {
+                        filteredProducts.length ? filteredProducts.map(product => {
                             return (
                                 <Grid item key={product.id}>
                                     <ProductItem product={product}></ProductItem>

@@ -4,9 +4,13 @@ import { Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import { formatCurrency } from "../util"
 
+// TODO: refactor, separate the setup of filter data from component mounting
 export default function ProductsFilter(props) {
-    const { products } = props;
+    const { products, handleFilter } = props;
+
     const [productsFilters, setProductsFilters] = useState([]);
+    const [activeFilters, setActiveFilters] = useState({});
+
     function getFilterFieldValues(fields) {
         const fieldsWithValues = fields.map(field => {
             let values = products.map(product => {
@@ -24,8 +28,7 @@ export default function ProductsFilter(props) {
         return values.filter(value => !!value)
     }
 
-    // TODO: upgrade this code, maybe create a new endpoint or make this translation in backend, idk
-    function getFiltersWithTranslatedFields(filters) {
+    function getTranslatedField(field) {
         const translatedToPortugueseFields = {
             name: "Produto",
             color: "Cor",
@@ -34,10 +37,7 @@ export default function ProductsFilter(props) {
             price: "Preço",
             discount: "Desconto"
         }
-        return filters.map(filter => {
-            filter.field = translatedToPortugueseFields[filter.field]
-            return filter
-        })
+        return translatedToPortugueseFields[field]
     }
 
     function excludeNotFilterableFields(fields) {
@@ -64,8 +64,7 @@ export default function ProductsFilter(props) {
         const uniqueFields = removeDuplicatedValues([...fields])
         const filterableFields = excludeNotFilterableFields(uniqueFields)
         const fieldsWithFilterableValues = getFilterFieldValues(filterableFields)
-        const translatedFields = getFiltersWithTranslatedFields(fieldsWithFilterableValues)
-        setProductsFilters(translatedFields)
+        setProductsFilters(fieldsWithFilterableValues)
     }
 
     useEffect(() => {
@@ -81,6 +80,38 @@ export default function ProductsFilter(props) {
 
         return field === "Desconto" ? `${value}%` : formatCurrency(value);
     }
+    // TODO: divide in separeted in functions
+    function handleFieldChange(event) {
+        const [field, value] = event.target.value.split("-")
+        setActiveFilters(oldActiveFilters => {
+            const fieldValues = oldActiveFilters[field] ? Object.values(oldActiveFilters[field]) : [];
+            if (event.target.checked) {
+                oldActiveFilters[field] = [...fieldValues, value];
+            } else {
+                oldActiveFilters[field] = removeValueFromValues(value, fieldValues)
+                /* if filter remains with no values remove it key. When checking filters if
+                 there is filters blank values keys will return that filters are truthy 
+                 (when they're nothing but just blank key) */
+                if (oldActiveFilters[field].length === 0) {
+                    delete oldActiveFilters[field]
+                }
+            }
+            return { ...oldActiveFilters }
+        })
+
+        handleFilter(activeFilters)
+
+        function removeValueFromValues(value, values) {
+            return values.filter(v => v !== value)
+        }
+    }
+
+    function getCheckedFieldValue(field, value) {
+        if (activeFilters[field]) {
+            return activeFilters[field].includes(value.toString(10))
+        }
+        return false
+    }
 
     return (
         <Grid>
@@ -90,14 +121,18 @@ export default function ProductsFilter(props) {
                         <AccordionSummary
                             expandIcon={<AddIcon color="primary"></AddIcon>}
                         >
-                            {filter.field}
+                            {getTranslatedField(filter.field)}
                         </AccordionSummary>
                         <AccordionDetails>
                             <Stack>
                                 {filter.values.map(value => (
                                     <FormControlLabel
+                                        key={`${filter.field}-${value}`}
                                         control={<Checkbox />}
                                         label={formatLabelByField(filter.field, value)}
+                                        value={`${filter.field}-${value}`}
+                                        checked={getCheckedFieldValue(filter.field, value)}
+                                        onChange={handleFieldChange}
                                     />))}
                             </Stack>
                         </AccordionDetails>
