@@ -9,12 +9,19 @@ export default function ProductsFilter(props) {
     const [productsFilters, setProductsFilters] = useState([]);
     function getFilterFieldValues(fields) {
         const fieldsWithValues = fields.map(field => {
-            const values = products.map(product => {
+            let values = products.map(product => {
                 return product[field]
             })
-            return { field, values: removeDuplicatedValues(values) }
+            values = removeDuplicatedValues(values)
+            values = removeFalsyValues(values)
+
+            return { field, values }
         })
         return fieldsWithValues
+    }
+
+    function removeFalsyValues(values) {
+        return values.filter(value => !!value)
     }
 
     // TODO: upgrade this code, maybe create a new endpoint or make this translation in backend, idk
