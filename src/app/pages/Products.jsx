@@ -33,7 +33,7 @@ export default function Products() {
                 <Grid item xs={3}>
                     <ProductsFilter handleFilter={applyFilters} products={products} />
                 </Grid>
-                {/* make this a component */}
+                {/* TODO: make component */}
                 <Grid item xs={9} display="flex" justifyContent="center" flexWrap="wrap" gap={8}>
                     {
                         filteredProducts.length ? filteredProducts.map(product => {

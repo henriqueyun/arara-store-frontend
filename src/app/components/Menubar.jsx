@@ -1,5 +1,4 @@
 import { Grid, Typography, TextField, Button } from '@mui/material';
-import DropdownMenuitem from './DropdownMenuitem';
 
 export default function Menubar() {
     return (
@@ -10,12 +9,12 @@ export default function Menubar() {
             <Typography variant="h3">Ararastore</Typography>
             <TextField variant="filled"></TextField>
             <Grid sx={{ display: "flex" }}>
-                <DropdownMenuitem color="secondary">
-                    Home
-                </DropdownMenuitem>
-                <DropdownMenuitem color="secondary">
-                    Muié
-                </DropdownMenuitem>
+                <Button href="/products">
+                    <Typography>Home</Typography>
+                </Button>
+                <Button href="/products">
+                    <Typography>Muié</Typography>
+                </Button>
             </Grid>
             <Grid sx={{ display: "flex" }}>
                 <Button color="secondary"><Typography color="text.primary">Entrar</Typography></Button>

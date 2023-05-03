@@ -1,15 +1,16 @@
 import { ThemeProvider } from '@emotion/react';
-import './App.css';
+import { RouterProvider } from 'react-router-dom';
 import { Menubar, Footer } from './components';
-import Products from './pages/Products';
-import theme from './theme/Theme';
+import { router } from './router';
+import { theme } from './theme';
+import './App.css';
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
       <Menubar></Menubar>
       {/* TODO: add router for user navigation between pages */}
-      <Products></Products>
+      <RouterProvider router={router} />;
       <Footer></Footer>
     </ThemeProvider >
   );
