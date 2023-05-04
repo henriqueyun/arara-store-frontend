@@ -1,5 +1,5 @@
-import { Container, Grid, Typography } from "@mui/material";
-import { ProductsFilter, ProductItem } from "../components"
+import { Container, Grid } from "@mui/material";
+import { ProductsFilter, ProductsGrid } from "../components"
 import { client } from "../../client/";
 import { useEffect, useState } from "react";
 
@@ -33,19 +33,8 @@ export default function Products() {
                 <Grid item xs={3}>
                     <ProductsFilter handleFilter={applyFilters} products={products} />
                 </Grid>
-                {/* TODO: make component */}
-                <Grid item xs={9} display="flex" justifyContent="center" flexWrap="wrap" gap={8}>
-                    {
-                        filteredProducts.length ? filteredProducts.map(product => {
-                            return (
-                                <Grid item key={product.id}>
-                                    <ProductItem product={product}></ProductItem>
-                                </Grid>
-                            );
-                        }) :
-                            <Typography variant="h6">Houve um problema ao buscar os produtos</Typography>
-                    }
-                </Grid>
+                <ProductsGrid products={filteredProducts}>
+                </ProductsGrid>
             </Grid>
         </Container >
     )
