@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Grid, Typography } from "@mui/material";
+import { Grid, Link, Typography } from "@mui/material";
 import ProductItem from "../components/ProductItem";
 import { client } from "../../client/";
 
@@ -21,7 +21,9 @@ export default function Showcase() {
                 products.length ? products.slice(0, 6).map(product => {
                     return (
                         <Grid item>
-                            <ProductItem key={product.id} product={product}></ProductItem>
+                            <Link color="inherit" underline="none" href={`/products/${product.id}`}>
+                                <ProductItem key={product.id} product={product}></ProductItem>
+                            </Link>
                         </Grid>
                     );
                 }) :

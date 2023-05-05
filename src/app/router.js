@@ -2,7 +2,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import {
     Home,
     Products,
-    ProductDetails
+    Product
 } from "./pages"
 
 const router = createBrowserRouter([
@@ -21,7 +21,7 @@ const router = createBrowserRouter([
     {
         path: "/products/:id",
         Component() {
-            return <ProductDetails />
+            return <Product />
         }
     }
 ]);
