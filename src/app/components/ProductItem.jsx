@@ -19,17 +19,18 @@ function Price(props) {
     const { price, discount } = props
     return (
         <div>
-            {discount > 0 ?
-                (
-                    <>
-                        <Typography variant="caption">
-                            <s>{formatCurrency(price)}</s>
-                        </Typography>
-                        <Typography variant="h6">{formatCurrency(calculateDiscount(price, discount))}</Typography>
-                    </>) : (
-                    <>
-                        <Typography variant="h6">{formatCurrency(price)}</Typography>
-                    </>)
+            {
+                discount > 0 ?
+                    (
+                        <>
+                            <Typography variant="caption">
+                                <s>{formatCurrency(price)}</s>
+                            </Typography>
+                            <Typography variant="h6">{formatCurrency(calculateDiscount(price, discount))}</Typography>
+                        </>) : (
+                        <>
+                            <Typography variant="h6">{formatCurrency(parseFloat(price))}</Typography>
+                        </>)
             }
         </div>
     )

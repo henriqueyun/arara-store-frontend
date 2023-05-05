@@ -1,9 +1,9 @@
+/**
+ * Returns value formatted in BRL currency
+ * @param {number} value value number to be formatted
+ * @returns 
+ */
 function formatCurrency(value) {
-    // alert(value)
-    if (value) {
-        return value.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
-    }
-    value = 0
     return value.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
 }
 

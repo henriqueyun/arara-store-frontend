@@ -131,10 +131,11 @@ function Amounts(props) {
 }
 
 function NoDiscountPrice(props) {
+    console.log(props.children)
     return (
         <Grid display="flex" justifyContent="end">
             <Grid display="flex" gap={1} px={1} alignItems="center" sx={{ color: (theme) => theme.palette.common.white, backgroundColor: (theme) => theme.palette.common.black }}>
-                <Typography variant="h5">{formatCurrency(props.children)}</Typography>
+                <Typography variant="h5">{formatCurrency(parseFloat(props.children))}</Typography>
             </Grid>
         </Grid>
     )
@@ -145,8 +146,8 @@ function Price(props) {
     return (
         <Grid display="flex" justifyContent="end">
             <Grid display="flex" gap={1} px={1} alignItems="center" sx={{ color: (theme) => theme.palette.common.white, backgroundColor: (theme) => theme.palette.common.black }}>
-                <Typography><s>{formatCurrency(noDiscountPrice)}</s></Typography>
-                <Typography variant="h5">{formatCurrency(price)}</Typography>
+                <Typography><s>{formatCurrency(parseFloat(noDiscountPrice))}</s></Typography>
+                <Typography variant="h5">{formatCurrency(parseFloat(price))}</Typography>
             </Grid>
         </Grid>
     )
@@ -172,7 +173,7 @@ function InstallmentsOptions(props) {
         <Grid display="flex" alignItems="flex-end">
             <Typography>
                 em até<br />
-                <Typography><b>2x de {formatCurrency(price / 2)}</b> no cartão de crédito</Typography>
+                <Typography><b>2x de {formatCurrency((price / 2))}</b> no cartão de crédito</Typography>
             </Typography>
         </Grid>
     )
