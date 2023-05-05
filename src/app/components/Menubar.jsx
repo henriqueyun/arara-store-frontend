@@ -1,5 +1,4 @@
 import { Grid, Typography, TextField, Button, InputAdornment, Link } from '@mui/material';
-import DropdownMenuitem from './DropdownMenuitem';
 import SearchIcon from '@mui/icons-material/Search';
 
 export default function Menubar() {
@@ -25,12 +24,12 @@ export default function Menubar() {
                 }}
             ></TextField>
             <Grid sx={{ display: "flex" }}>
-                <DropdownMenuitem color="secondary">
-                    Home
-                </DropdownMenuitem>
-                <DropdownMenuitem color="secondary">
-                    Muié
-                </DropdownMenuitem>
+                <Button href="/products">
+                    <Typography>Home</Typography>
+                </Button>
+                <Button href="/products">
+                    <Typography>Muié</Typography>
+                </Button>
             </Grid>
             <Grid sx={{ display: "flex" }}>
                 <Button color="secondary"><Typography color="text.primary">Entrar</Typography></Button>

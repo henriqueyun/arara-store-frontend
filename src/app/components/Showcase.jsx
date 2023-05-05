@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Grid, Typography } from "@mui/material";
+import { Grid, Link, Typography } from "@mui/material";
 import ProductItem from "../components/ProductItem";
 import { client } from "../../client/";
 
@@ -20,8 +20,10 @@ export default function Showcase() {
                 // TODO: adjust when showcase backend is done to not use hardcoded six products
                 products.length ? products.slice(0, 6).map(product => {
                     return (
-                        <Grid item>
-                            <ProductItem key={product.id} product={product}></ProductItem>
+                        <Grid key={product.id} item>
+                            <Link color="inherit" underline="none" href={`/products/${product.id}`}>
+                                <ProductItem key={product.id} product={product}></ProductItem>
+                            </Link>
                         </Grid>
                     );
                 }) :
