@@ -1,5 +1,5 @@
 import { Typography } from "@mui/material";
-import { formatCurrency } from "../util"
+import { calculateDiscount, formatCurrency } from "../util"
 export default function ProductItem(props) {
     const { product } = props;
     return (
@@ -17,10 +17,6 @@ export default function ProductItem(props) {
 
 function Price(props) {
     const { price, discount } = props
-    function calculateDiscount(price, discount) {
-        return price - ((price / 100) * discount)
-    }
-
     return (
         <div>
             {discount > 0 ?
