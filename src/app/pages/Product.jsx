@@ -1,18 +1,28 @@
-// TODO: remove linter disabling
-/* eslint-disable no-unused-vars */
-import { Container, Grid, Stack, Typography, Button, Divider, IconButton } from "@mui/material";
+import { Container, Grid, Stack, Typography, Button, Divider, IconButton, Chip } from "@mui/material";
 import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useParams } from "react-router-dom";
 import { Showcase } from "../components"
+import { useEffect, useState } from "react";
+import { client } from "../../client";
+import { calculateDiscount, formatCurrency } from "../util";
 
 export default function Product() {
-    let { id } = useParams();
+    const { id } = useParams();
+    const [product, setProduct] = useState({});
+
+    useEffect(() => {
+        const getProducts = async () => {
+            const product = await client.products.findById(id);
+            setProduct(product);
+        };
+        getProducts();
+    }, [id])
 
     return (
         <>
             <ProductExhibition>
-                <ProductInfo></ProductInfo>
+                <ProductInfo product={product}></ProductInfo>
             </ProductExhibition>
             {/* TODO: see how product exhibition bottom showcases should work then remove hardcoded showcases*/}
             <Grid container py={8} justifyContent="center" gap={8}>
@@ -34,7 +44,6 @@ export default function Product() {
 }
 
 function ProductExhibition(props) {
-    const { product } = props
     return (
         <Container>
             <Grid container alignItems="center" gap={4} py={8}>
@@ -46,34 +55,39 @@ function ProductExhibition(props) {
 }
 
 function ProductImages(props) {
+    const { imageUrl } = props
     return (
         <Grid display="flex" gap={2} >
-            <Stack spacing={2}>
-                <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=720&q=80" alt="A woman using a yellow sweatshirt outfit" style={{ width: "60px", height: "100%" }} />
-                <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=720&q=80" alt="A woman using a yellow sweatshirt outfit" style={{ width: "60px", height: "100%" }} />
-                <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=720&q=80" alt="A woman using a yellow sweatshirt outfit" style={{ width: "60px", height: "100%" }} />
-                <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=720&q=80" alt="A woman using a yellow sweatshirt outfit" style={{ width: "60px", height: "100%" }} />
-                <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=720&q=80" alt="A woman using a yellow sweatshirt outfit" style={{ width: "60px", height: "100%" }} />
-            </Stack>
-            <Grid sx={{ backgroundColor: "pink" }}>
-                <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=720&q=80" alt="A woman using a yellow sweatshirt outfit" style={{ width: "350px", height: "100%" }} />
+            <Grid>
+                <img src={imageUrl} alt="Highlighted product" style={{ width: "350px", height: "100%" }} />
             </Grid>
         </Grid >
     )
 }
 
 function ProductInfo(props) {
+    const { product } = props
     return (
         <>
             <Grid container alignItems="center" >
-                <ProductImages />
+                <ProductImages imageUrl={product.image} />
                 <Grid display="flex" justifyContent="center" sx={{ margin: "0 auto" }}>
                     <Grid display="flex" flexDirection="column" gap={4}>
-                        <Title />
-                        <Amounts />
-                        <OptativeDetail detailTitle="COR" />
-                        <OptativeDetail detailTitle="TAMANHO" />
-                        <OptativeDetail detailTitle="QUANTIDADE" />
+                        <Title>
+                            {product.name}
+                        </Title>
+                        <Amounts price={product.price} discount={product.discount} />
+                        <OptativeDetail detailTitle="COR">
+                            {product.color}
+                        </OptativeDetail>
+                        <OptativeDetail detailTitle="TAMANHO">
+                            {product.size}
+                        </OptativeDetail>
+                        {/* TODO: quantity component */}
+                        <Grid>
+                            <Typography sx={{ fontWeight: "bold" }}>QUANTIDADE</Typography>
+                            <Chip label="TODO" variant="outlined" color="secondary"></Chip>
+                        </Grid>
                         <BuyButtons />
                     </Grid>
                 </Grid>
@@ -85,10 +99,9 @@ function ProductInfo(props) {
 }
 
 function Title(props) {
-    const { title } = props
     return (
         <Grid display="flex" gap={1} alignItems="center">
-            <Typography variant="h4">Camiseta Doidera Máxima</Typography>
+            <Typography variant="h4">{props.children}</Typography>
             <IconButton color="secondary"><ShareOutlinedIcon></ShareOutlinedIcon></IconButton>
         </Grid>
     )
@@ -99,20 +112,41 @@ function Amounts(props) {
     return (
         <Grid display="flex" gap={1}>
             <Grid>
-                <Price />
-                <Discount />
+                {discount > 0 ?
+                    <>
+                        <Price price={calculateDiscount(price, discount)} noDiscountPrice={price} />
+                        <Discount>
+                            {discount}
+                        </Discount>
+                    </>
+                    :
+                    <NoDiscountPrice>
+                        {price}
+                    </NoDiscountPrice>
+                }
             </Grid>
-            <InstallmentsOptions />
+            <InstallmentsOptions price={calculateDiscount(price, discount)} />
         </Grid >
     )
 }
 
-function Price(props) {
+function NoDiscountPrice(props) {
     return (
         <Grid display="flex" justifyContent="end">
             <Grid display="flex" gap={1} px={1} alignItems="center" sx={{ color: (theme) => theme.palette.common.white, backgroundColor: (theme) => theme.palette.common.black }}>
-                <Typography><s>R$ 200,00</s></Typography>
-                <Typography variant="h5">R$ 159,90</Typography>
+                <Typography variant="h5">{formatCurrency(props.children)}</Typography>
+            </Grid>
+        </Grid>
+    )
+}
+
+function Price(props) {
+    const { noDiscountPrice, price } = props
+    return (
+        <Grid display="flex" justifyContent="end">
+            <Grid display="flex" gap={1} px={1} alignItems="center" sx={{ color: (theme) => theme.palette.common.white, backgroundColor: (theme) => theme.palette.common.black }}>
+                <Typography><s>{formatCurrency(noDiscountPrice)}</s></Typography>
+                <Typography variant="h5">{formatCurrency(price)}</Typography>
             </Grid>
         </Grid>
     )
@@ -120,20 +154,25 @@ function Price(props) {
 
 function Discount(props) {
     return (
-        <Grid display="flex" flexDirection="row-reverse" >
-            <Grid sx={{ backgroundColor: (theme) => theme.palette.warning.main }} px={1.5}>
-                <Typography sx={{ fontWeight: 'bold' }}>20% OFF</Typography>
-            </Grid>
-        </Grid >
+        props.children ?
+            < Grid display="flex" flexDirection="row-reverse" >
+                <Grid sx={{ backgroundColor: (theme) => theme.palette.warning.main }} px={1.5}>
+                    <Typography sx={{ fontWeight: 'bold' }}>{props.children}% OFF</Typography>
+                </Grid>
+            </Grid >
+            :
+            <></>
     )
 }
 
+// TODO: replace for real installments option
 function InstallmentsOptions(props) {
+    const { price } = props
     return (
         <Grid display="flex" alignItems="flex-end">
             <Typography>
                 em até<br />
-                <Typography><b>2x de R$ 80,00</b> no cartão de crédito</Typography>
+                <Typography><b>2x de {formatCurrency(price / 2)}</b> no cartão de crédito</Typography>
             </Typography>
         </Grid>
     )
@@ -146,11 +185,7 @@ function OptativeDetail(props) {
             <Typography sx={{ fontWeight: 'bold' }}>{detailTitle}</Typography>
             <Stack direction="row" spacing={1}>
                 {/* TODO: fix that color setup */}
-                <Button color="secondary" sx={{ px: 4, fontWeight: 'bold', color: (theme) => theme.palette.common.black, borderColor: (theme) => theme.palette.common.black }} variant="outlined">PRETO</Button>
-                <Button color="secondary" sx={{ px: 4, fontWeight: 'bold', color: (theme) => theme.palette.common.black, borderColor: (theme) => theme.palette.common.black }} variant="outlined">AZUL</Button>
-                <Button color="secondary" sx={{ px: 4, fontWeight: 'bold', color: (theme) => theme.palette.common.black, borderColor: (theme) => theme.palette.common.black }} variant="outlined">AMARELO</Button>
-                <Button color="secondary" sx={{ px: 4, fontWeight: 'bold', color: (theme) => theme.palette.common.black, borderColor: (theme) => theme.palette.common.black }} variant="outlined">VERMELHA</Button>
-                <Button color="secondary" sx={{ px: 4, fontWeight: 'bold', color: (theme) => theme.palette.common.black, borderColor: (theme) => theme.palette.common.black }} variant="outlined">VERDE</Button>
+                <Chip color="secondary" size="large" sx={{ px: 2 }} label={props.children} variant="outlined" />
             </Stack>
         </Grid>
     )
@@ -166,7 +201,6 @@ function BuyButtons() {
 }
 
 function LargeDescription(props) {
-    const { description } = props
     return (
         <Grid textAlign="left">
             <Typography variant="h6">DETALHES DO PRODUTO</Typography><br />
