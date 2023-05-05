@@ -1229,7 +1229,7 @@
     "@emotion/sheet" "^1.2.1"
     "@emotion/utils" "^1.2.0"
     "@emotion/weak-memoize" "^0.3.0"
-    stylis "4.1.3"
+    stylis "4.1.4"
 
 "@emotion/hash@^0.9.0":
   version "0.9.0"
