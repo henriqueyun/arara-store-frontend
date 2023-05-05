@@ -20,7 +20,7 @@ export default function Showcase() {
                 // TODO: adjust when showcase backend is done to not use hardcoded six products
                 products.length ? products.slice(0, 6).map(product => {
                     return (
-                        <Grid item>
+                        <Grid key={product.id} item>
                             <Link color="inherit" underline="none" href={`/products/${product.id}`}>
                                 <ProductItem key={product.id} product={product}></ProductItem>
                             </Link>
