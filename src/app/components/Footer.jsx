@@ -4,7 +4,7 @@ export default function Footer() {
     return (
         <Grid container p={4} justifyContent="space-evenly" alignItems="center" sx={{
             backgroundColor: (theme) => theme.palette.background.paper,
-            color: (theme) => theme.palette.text.primary
+            color: (theme) => theme.palette.background.default
         }}>
             <FooterSection title="ARARASTORE" links={[{ title: "Sobre", href: "#" }, { title: "Ajuda", href: "#" }, { title: "Nossas Lojas", href: "#" }, { title: "Trocas e Deveoluções", href: "#" }, { title: "Central e Privacidade", href: "#" }, { title: "Política de Privacidade", href: "#" }]} />
             <FooterSection title="SOCIAL MEDIA" links={[{ title: "Instagram", href: "#" }, { title: "Linkedin", href: "#" }, { title: "Facebook", href: "#" }, { title: "Twitter", href: "#" }]} />

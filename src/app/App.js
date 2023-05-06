@@ -10,7 +10,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <Menubar></Menubar>
       {/* TODO: add router for user navigation between pages */}
-      <RouterProvider router={router} />;
+      <RouterProvider router={router} />
       <Footer></Footer>
     </ThemeProvider >
   );
