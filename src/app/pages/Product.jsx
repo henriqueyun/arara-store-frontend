@@ -86,7 +86,7 @@ function ProductInfo(props) {
                         {/* TODO: quantity component */}
                         <Grid>
                             <Typography sx={{ fontWeight: "bold" }}>QUANTIDADE</Typography>
-                            <Chip label="TODO" variant="outlined" color="secondary"></Chip>
+                            <Chip label="TODO" variant="outlined" ></Chip>
                         </Grid>
                         <BuyButtons />
                     </Grid>
@@ -102,7 +102,7 @@ function Title(props) {
     return (
         <Grid display="flex" gap={1} alignItems="center">
             <Typography variant="h4">{props.children}</Typography>
-            <IconButton color="secondary"><ShareOutlinedIcon></ShareOutlinedIcon></IconButton>
+            <IconButton ><ShareOutlinedIcon></ShareOutlinedIcon></IconButton>
         </Grid>
     )
 }
@@ -186,7 +186,7 @@ function OptativeDetail(props) {
             <Typography sx={{ fontWeight: 'bold' }}>{detailTitle}</Typography>
             <Stack direction="row" spacing={1}>
                 {/* TODO: fix that color setup */}
-                <Chip color="secondary" size="large" sx={{ px: 2 }} label={props.children} variant="outlined" />
+                <Chip size="large" sx={{ px: 2 }} label={props.children} variant="outlined" />
             </Stack>
         </Grid>
     )
@@ -195,8 +195,8 @@ function OptativeDetail(props) {
 function BuyButtons() {
     return (
         <Grid display="flex" gap={1}>
-            <Button size="large" color="secondary" variant="outlined" startIcon={<ShoppingCartIcon />}>ADICIONAR AO CARRINHO</Button>
-            <Button size="large" color="secondary" variant="contained">COMPRAR AGORA</Button>
+            <Button size="large" variant="outlined" startIcon={<ShoppingCartIcon />}>ADICIONAR AO CARRINHO</Button>
+            <Button size="large" variant="contained">COMPRAR AGORA</Button>
         </Grid>
     )
 }

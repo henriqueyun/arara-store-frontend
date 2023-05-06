@@ -4,7 +4,7 @@ const theme = createTheme({
   mode: "light",
   palette: {
     primary: {
-      main: "#FFFFFF"
+      main: "#000000"
     },
     secondary: {
       main: "#323232"
@@ -13,12 +13,12 @@ const theme = createTheme({
       main: "#FFD873"
     },
     text: {
-      primary: "#FFFFFF",
+      primary: "#000000",
       secondary: "#000000",
       disabled: "#CCCCCC"
     },
     background: {
-      default: "#FFFFFF",
+      default: "#F5F5F5",
       paper: "#323232"
     }
   },
@@ -26,7 +26,7 @@ const theme = createTheme({
     MuiTextField: {
       styleOverrides: {
         root: {
-          backgroundColor: "white",
+          backgroundColor: "#F5F5F5",
           borderRadius: "50px"
         }
       }

@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { Button, Checkbox, FormControlLabel, Grid, Stack } from "@mui/material";
+import { Button, Checkbox, FormControlLabel, Grid, Stack, Typography } from "@mui/material";
 import { Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import { formatCurrency } from "../../util"
 import { setupFiltersData } from "./setupFiltersData";
+import { theme } from "../../theme/Theme";
 
 export default function ProductsFilter(props) {
     const { products, handleFilter } = props;
@@ -83,22 +84,25 @@ export default function ProductsFilter(props) {
     }
 
     return (
+        // TODO: refactor and split in components
         <Grid>
             {productsFilters.length && productsFilters.map(filter =>
                 filter.values ?
                     <Accordion key={filter.field} >
                         <AccordionSummary
-                            expandIcon={<AddIcon color="primary"></AddIcon>}
+                            expandIcon={<AddIcon sx={{ color: (theme) => theme.palette.background.default }}></AddIcon>}
                         >
-                            {getTranslatedField(filter.field)}
+                            {<Typography color="background.default">{getTranslatedField(filter.field)}</Typography>}
                         </AccordionSummary>
                         <AccordionDetails>
                             <Stack>
                                 {filter.values.map(value => (
                                     <FormControlLabel
                                         key={`${filter.field}-${value}`}
-                                        control={<Checkbox />}
-                                        label={formatLabelByField(filter.field, value)}
+                                        control={<Checkbox style={{
+                                            color: theme.palette.background.default,
+                                        }} />}
+                                        label={<Typography color="background.default">{formatLabelByField(filter.field, value)}</Typography>}
                                         value={`${filter.field}-${value}`}
                                         checked={getCheckedFieldValue(filter.field, value)}
                                         onChange={handleFieldChange}
@@ -109,7 +113,7 @@ export default function ProductsFilter(props) {
                     : <></>
             )}
             <Grid py={2}>
-                <Button onClick={cleanFilters} color="secondary" variant="outlined" fullWidth={true}>Limpar Filtros</Button>
+                <Button onClick={cleanFilters} variant="outlined" fullWidth={true}>Limpar Filtros</Button>
             </Grid>
         </Grid >
     )
