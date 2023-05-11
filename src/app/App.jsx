@@ -2,17 +2,14 @@ import { ThemeProvider } from '@emotion/react';
 import { RouterProvider } from 'react-router-dom';
 import React from 'react';
 import { Menubar, Footer } from './components';
-import { router } from './router';
 import { theme } from './theme';
 import './App.css';
 import { AuthProvider } from './context/AuthContext';
+import router from './routes'
+console.log("🚀 ~ file: App.jsx:9 ~ router:", router)
+
 
 function App() {
-  // const [token, setToken] = useState();
-
-  // if (!token) {
-  //   return <Login setToken={setToken} />;
-  // }
   return (
     <AuthProvider>
       <ThemeProvider theme={theme}>

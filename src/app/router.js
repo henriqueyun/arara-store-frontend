@@ -5,32 +5,9 @@ import {
   Product,
   Login
 } from './pages';
+import routes from './routes';
+console.log("🚀 ~ file: router.js:9 ~ routes:", routes)
 
-const router = createBrowserRouter([
-  {
-    path: '/',
-    Component() {
-      return <Home />;
-    },
-  },
-  {
-    path: '/products',
-    Component() {
-      return <Products />;
-    },
-  },
-  {
-    path: '/products/:id',
-    Component() {
-      return <Product />;
-    },
-  },
-  {
-    path: '/login',
-    Component() {
-      return <Login />;
-    },
-  },
-]);
+const router = createBrowserRouter(routes);
 
 export { router };

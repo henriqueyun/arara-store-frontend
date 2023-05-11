@@ -12,15 +12,19 @@ export default function Product() {
     const { id } = useParams();
     const [product, setProduct] = useState({});
     const navigate = useNavigate()
-    const { loading, authenticated } = useContext(Context);
+    const { loading, logged } = useContext(Context);
+    console.log("🚀 ~ file: Product.jsx:16 ~ Product ~ loading:", loading)
+    console.log("🚀 ~ file: Product.jsx:16 ~ Product ~ logged:", logged)
+        if (loading) {
+            <h1>Loading...</h1>;
+        }
+        if(!logged) {
+             navigate('/login')
+        } 
 
     useEffect(() => {   
-        if(loading) {
-             // FAZER UM COMPONENTE DE LOADING
-        }
-        if(!authenticated) {
-            return navigate('/login')
-        }  
+        
+         
         const getProducts = async () => {
             const product = await client.products.findById(id);
             setProduct(product);
@@ -30,6 +34,8 @@ export default function Product() {
 
     return (
         <>
+         {loading && <h1>Loading...</h1>}           
+            
             <ProductExhibition>
                 <ProductInfo product={product}></ProductInfo>
             </ProductExhibition>
