@@ -1,32 +1,34 @@
-import { Button, Container } from "@mui/material";
-import { LoginService } from "../../client/services/login";
-import { useState } from "react";
+import { Button, Container, FormLabel, InputLabel } from '@mui/material';
+import React, { useState } from 'react';
+import { client } from '../../client';
 
 export default function Login() {
-  const loginService = new LoginService();
-  const [email, setEmail] = useState()
+  const [email, setEmail] = useState('felipe@gmail.com');
+  const [password, setPassword] = useState('12345678');
 
-  async function login() {
-    await loginService.login({login: email, password: password})
+  async function login(event) {
+    event.preventDefault();
+    const userToken = await client.users.login({ email, password });
+    sessionStorage.setItem('token', JSON.stringify(userToken))
   }
 
   return (
-     <Container maxWidth="xl">
-      <Button onClick={login()}>
-    <form action="">      
-      <label>
-        <p>Username</p>
-        <input type="text" />
-      </label>
-      <label>
-        <p>Password</p>
-        <input type="password" />
-      </label>
-      <div>
-        <button type="submit">Login</button>
-      </div>
-    </form>
-      </Button>
+    <>
+     <Container maxWidth="xl" justifyContent="center" >
+        <form onSubmit={(e) => login(e)}>
+          <label htmlFor="username">
+            <p>Username</p>
+            <input type="text" id="username" onChange={(e) => setEmail(e.target.value)} />
+          </label>
+          <label htmlFor="password">
+            <p>Password</p>
+            <input type="password" id="password" onChange={(e) => setPassword(e.target.value)} />
+          </label>
+          <div>
+            <button type="submit">Login</button>
+          </div>
+        </form>
      </Container>
+    </>
   )
 }

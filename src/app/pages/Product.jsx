@@ -1,7 +1,7 @@
 import { Container, Grid, Stack, Typography, Button, Divider, IconButton, Chip } from "@mui/material";
 import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import { useParams } from "react-router-dom";
+import { Router, useParams, redirect } from 'react-router-dom';
 import { Showcase } from "../components"
 import { useEffect, useState } from "react";
 import { client } from "../../client";
@@ -10,8 +10,15 @@ import { calculateDiscount, formatCurrency } from "../util";
 export default function Product() {
     const { id } = useParams();
     const [product, setProduct] = useState({});
+    const router = Router()
 
     useEffect(() => {
+        const token = sessionStorage.getItem('token')
+        if(!token) {
+        // Tem que redirecionar para o login
+          return <redirect to="/login" />
+        }
+        console.log("🚀 ~ file: Product.jsx:16 ~ useEffect ~ token:", token)
         const getProducts = async () => {
             const product = await client.products.findById(id);
             setProduct(product);
