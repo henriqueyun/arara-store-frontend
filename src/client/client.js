@@ -8,4 +8,10 @@ const client = {
   users: UserService(axios),
 };
 
+function setAuth(token) {
+  axios.defaults.headers.Authorization = token;  
+}
+
+// TODO: Change to export {client, setAuth}
 export default client;
+export {setAuth}
