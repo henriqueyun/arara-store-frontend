@@ -1,21 +1,17 @@
-import { Button, Container, FormLabel, InputLabel } from '@mui/material';
-import React, { useState } from 'react';
-import { client } from '../../client';
+import {  Container } from '@mui/material';
+import React, { useContext, useState } from 'react';
+import { Context } from '../context/AuthContext';
 
 export default function Login() {
   const [email, setEmail] = useState('felipe@gmail.com');
   const [password, setPassword] = useState('12345678');
+  const { handleLogin } = useContext(Context);
 
-  async function login(event) {
-    event.preventDefault();
-    const userToken = await client.users.login({ email, password });
-    sessionStorage.setItem('token', JSON.stringify(userToken))
-  }
 
   return (
     <>
      <Container maxWidth="xl" justifyContent="center" >
-        <form onSubmit={(e) => login(e)}>
+        <form >
           <label htmlFor="username">
             <p>Username</p>
             <input type="text" id="username" onChange={(e) => setEmail(e.target.value)} />
@@ -25,7 +21,7 @@ export default function Login() {
             <input type="password" id="password" onChange={(e) => setPassword(e.target.value)} />
           </label>
           <div>
-            <button type="submit">Login</button>
+            <button type="button" onClick={handleLogin(email, password)}>Login</button>
           </div>
         </form>
      </Container>

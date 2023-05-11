@@ -5,6 +5,7 @@ import { Menubar, Footer } from './components';
 import { router } from './router';
 import { theme } from './theme';
 import './App.css';
+import { AuthProvider } from './context/AuthContext';
 
 function App() {
   // const [token, setToken] = useState();
@@ -13,12 +14,15 @@ function App() {
   //   return <Login setToken={setToken} />;
   // }
   return (
-    <ThemeProvider theme={theme}>
-      <Menubar />
-      {/* TODO: add router for user navigation between pages */}
-      <RouterProvider router={router} />
-      <Footer />
-    </ThemeProvider>
+    <AuthProvider>
+      <ThemeProvider theme={theme}>
+        <Menubar />
+        {/* TODO: add router for user navigation between pages */}
+        <RouterProvider router={router} />
+        <Footer />
+      </ThemeProvider>
+    </AuthProvider>
+    
   );
 }
 

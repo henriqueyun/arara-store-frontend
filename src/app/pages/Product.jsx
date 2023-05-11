@@ -1,24 +1,26 @@
 import { Container, Grid, Stack, Typography, Button, Divider, IconButton, Chip } from "@mui/material";
 import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import { Router, useParams, redirect } from 'react-router-dom';
+import {  useNavigate, useParams } from 'react-router-dom';
 import { Showcase } from "../components"
-import { useEffect, useState } from "react";
+import {   useContext, useEffect, useState } from "react";
 import { client } from "../../client";
 import { calculateDiscount, formatCurrency } from "../util";
+import { Context } from "../context/AuthContext";
 
 export default function Product() {
     const { id } = useParams();
     const [product, setProduct] = useState({});
-    const router = Router()
+    const navigate = useNavigate()
+    const { loading, authenticated } = useContext(Context);
 
-    useEffect(() => {
-        const token = sessionStorage.getItem('token')
-        if(!token) {
-        // Tem que redirecionar para o login
-          return <redirect to="/login" />
+    useEffect(() => {   
+        if(loading) {
+             // FAZER UM COMPONENTE DE LOADING
         }
-        console.log("🚀 ~ file: Product.jsx:16 ~ useEffect ~ token:", token)
+        if(!authenticated) {
+            return navigate('/login')
+        }  
         const getProducts = async () => {
             const product = await client.products.findById(id);
             setProduct(product);

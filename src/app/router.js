@@ -3,8 +3,8 @@ import {
   Home,
   Products,
   Product,
+  Login
 } from './pages';
-import Login from './pages/Login';
 
 const router = createBrowserRouter([
   {
