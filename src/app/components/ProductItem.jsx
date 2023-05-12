@@ -7,7 +7,7 @@ export default function ProductItem({ product }) {
   return (
     <div>
       <img
-        src={product.images[0].imageUrl || ''}
+        src={product.images[0]?.imageUrl || 'https://images.unsplash.com/photo-1553002401-c0945c2ff0b0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NDV8fG1pc3NpbmclMjBzaWdufGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60'}
         alt="Um homem estiloso olhando para a camêra de costas para uma parede preta"
         style={{ width: '300px', height: '450px' }}
       />

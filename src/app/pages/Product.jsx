@@ -69,7 +69,7 @@ function ProductImages({ imageUrl }) {
   return (
     <Grid display="flex" gap={2}>
       <Grid>
-        <img src={imageUrl} alt="Highlighted product" style={{ width: '350px', height: '100%' }} />
+        <img src={imageUrl || 'https://images.unsplash.com/photo-1553002401-c0945c2ff0b0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NDV8fG1pc3NpbmclMjBzaWdufGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60'} alt="Highlighted product" style={{ width: '350px', height: '100%' }} />
       </Grid>
     </Grid>
   );
@@ -79,7 +79,7 @@ function ProductInfo({ product }) {
   return (
     <>
       <Grid container alignItems="center">
-        <ProductImages imageUrl={product.images[0].imageUrl} />
+        <ProductImages imageUrl={product?.images && product?.images[0]?.imageUrl} />
         <Grid display="flex" justifyContent="center" sx={{ margin: '0 auto' }}>
           <Grid display="flex" flexDirection="column" gap={4}>
             <Title>
