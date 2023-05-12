@@ -40,9 +40,9 @@ export default function ProductsFilter({ products, handleFilter }) {
   }
 
   function removeFieldFromFiltersWhenValueAreEmpty(filters, field) {
-    const newFilters = filters;
     if (filters[field].length === 0) {
-      delete newFilters[field];
+      // eslint-disable-next-line no-param-reassign
+      delete filters[field];
     }
   }
 
