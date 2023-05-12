@@ -7,7 +7,7 @@ export default function Products() {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
 
-  function applyFilters(filters) {
+  const applyFilters = (filters) => {
     setFilteredProducts(products.filter((p) => {
       const fields = Object.keys(filters);
       const passFilters = fields.every((f) => {
@@ -16,7 +16,7 @@ export default function Products() {
       });
       return passFilters;
     }));
-  }
+  };
 
   useEffect(() => {
     console.log('useEffect products global');
@@ -32,7 +32,7 @@ export default function Products() {
     <Container maxWidth="xl">
       <Grid container my={8} display="flex">
         <Grid item xs={3}>
-          <ProductsFilter handleFilter={applyFilters()} products={products} />
+          <ProductsFilter handleFilter={applyFilters} products={products} />
         </Grid>
         <ProductsGrid products={filteredProducts} />
       </Grid>

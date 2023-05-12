@@ -30,7 +30,6 @@ export default function ProductsFilter({ products, handleFilter }) {
   }, [products]);
 
   useEffect(() => {
-    console.log('useEffect products filter filter');
     handleFilter(activeFilters);
   }, [activeFilters]);
 
@@ -75,19 +74,19 @@ export default function ProductsFilter({ products, handleFilter }) {
     });
   }
 
-  function getCheckedFieldValue(field, value) {
+  const getCheckedFieldValue = (field, value) => {
     if (activeFilters[field]) {
       return activeFilters[field].includes(value.toString(10));
     }
     return false;
-  }
+  };
 
-  function cleanFilters() {
+  const cleanFilters = () => {
     setActiveFilters([]);
-  }
+  };
 
   return (
-  // TODO: refactor and split in components
+    // TODO: refactor and split in components
     <Grid>
       {productsFilters.length && productsFilters.map((filter) => (filter.values
         ? (
@@ -108,7 +107,7 @@ export default function ProductsFilter({ products, handleFilter }) {
                         color: theme.palette.background.default,
                       }}
                       />
-)}
+                    )}
                     label={<Typography color="background.default">{formatLabelByField(filter.field, value)}</Typography>}
                     value={`${filter.field}-${value}`}
                     checked={getCheckedFieldValue(filter.field, value)}
@@ -124,7 +123,7 @@ export default function ProductsFilter({ products, handleFilter }) {
         : <></>))}
 
       <Grid py={2}>
-        <Button onClick={cleanFilters()} variant="outlined" fullWidth>Limpar Filtros</Button>
+        <Button onClick={cleanFilters} variant="outlined" fullWidth>Limpar Filtros</Button>
       </Grid>
     </Grid>
   );

@@ -24,7 +24,7 @@ const router = createBrowserRouter([
   {
     path: '/products/:id',
     Component() {
-      return <Component isPrivate variant={<Product />} />;
+      return <Component variant={<Product />} />;
     },
   },
   {
