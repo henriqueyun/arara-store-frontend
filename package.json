@@ -21,6 +21,10 @@
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-react-hooks": "^4.3.0",
     "react-scripts": "^5.0.1"
   },
   "scripts": {
@@ -46,5 +50,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "browser": {
+    "assert": false
   }
 }

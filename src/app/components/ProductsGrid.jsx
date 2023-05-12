@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { Grid, Typography, Link } from '@mui/material';
 import React from 'react';
 import ProductItem from './ProductItem';

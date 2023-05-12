@@ -3,4 +3,6 @@ import Products from './Products';
 import Product from './Product';
 import Login from './Login';
 
-export { Home, Products, Product, Login };
+export {
+  Home, Products, Product, Login,
+};

@@ -1,5 +1,4 @@
-/* eslint-disable import/prefer-default-export */
-export const ProductService = (http) => ({
+const ProductService = (http) => ({
   findAll: async () => {
     const { data } = await http.get('/products');
     return data;
@@ -10,3 +9,5 @@ export const ProductService = (http) => ({
   },
   hello: () => 'Hello!',
 });
+
+export default ProductService;

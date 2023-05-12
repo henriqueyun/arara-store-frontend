@@ -1,6 +1,5 @@
-/* eslint-disable import/prefer-default-export */
-export const UserService = (http) => ({
-  login: async (loginData) => {
-    return await http.post('/login', loginData);
-  },
+const UserService = (http) => ({
+  login: async (loginData) => http.post('/login', loginData),
 });
+
+export default UserService;

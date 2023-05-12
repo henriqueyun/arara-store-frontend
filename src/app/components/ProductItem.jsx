@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { Typography } from '@mui/material';
 import React from 'react';
 import { calculateDiscount, formatCurrency } from '../util';

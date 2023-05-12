@@ -9,8 +9,8 @@ const client = {
 };
 
 function setAuth(token) {
-  axios.defaults.headers.Authorization = token;  
+  axios.defaults.headers.Authorization = token;
 }
 
 // TODO: Change to export {client, setAuth}
-export {client, setAuth}
+export { client, setAuth };

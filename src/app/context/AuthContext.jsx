@@ -1,4 +1,4 @@
-import React, { createContext } from 'react';
+import React, { createContext, useMemo } from 'react';
 
 import useAuth from './hooks/useAuth';
 
@@ -6,11 +6,14 @@ const Context = createContext();
 
 function AuthProvider({ children }) {
   const {
-    logged, loading, handleLogin, handleLogout
+    logged, loading, handleLogin, handleLogout,
   } = useAuth();
+  const providerValue = useMemo(() => ({
+    loading, logged, handleLogin, handleLogout,
+  }), []);
 
   return (
-    <Context.Provider value={{ loading, logged, handleLogin, handleLogout }}>
+    <Context.Provider value={providerValue}>
       {children}
     </Context.Provider>
   );

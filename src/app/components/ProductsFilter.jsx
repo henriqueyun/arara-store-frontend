@@ -1,8 +1,3 @@
-/* eslint-disable react/jsx-no-useless-fragment */
-/* eslint-disable max-len */
-/* eslint-disable no-param-reassign */
-/* eslint-disable react/prop-types */
-/* eslint-disable no-use-before-define */
 import React, { useEffect, useState } from 'react';
 import {
   Checkbox, FormControlLabel, Grid, Stack,
@@ -14,6 +9,10 @@ import { formatCurrency } from '../util';
 export default function ProductsFilter(props) {
   const { products } = props;
   const [productsFilters, setProductsFilters] = useState([]);
+  function removeDuplicatedValues(values) {
+    return [...new Set([...values])];
+  }
+
   function getFilterFieldValues(fields) {
     const fieldsWithValues = fields.map((field) => {
       const values = products.map((product) => product[field]);
@@ -50,12 +49,9 @@ export default function ProductsFilter(props) {
     return fields.filter((field) => !excludedFields.includes(field));
   }
 
-  function removeDuplicatedValues(values) {
-    return [...new Set([...values])];
-  }
-
   function getProductsFilters() {
-    const fields = products.reduce((accProducts, product) => [...accProducts, ...Object.keys(product)], []);
+    const fields = products
+      .reduce((accProducts, product) => [...accProducts, ...Object.keys(product)], []);
 
     const uniqueFields = removeDuplicatedValues([...fields]);
     const filterableFields = excludeNotFilterableFields(uniqueFields);
@@ -98,7 +94,7 @@ export default function ProductsFilter(props) {
             </AccordionDetails>
           </Accordion>
         )
-        : <></>))}
+        : null))}
     </Grid>
   );
 }
