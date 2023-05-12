@@ -6,8 +6,7 @@ export default function Login() {
   const [email, setEmail] = useState('felipe@gmail.com');
   const [password, setPassword] = useState('12345678');
   const { handleLogin } = useContext(Context);
-
-
+  
   return (
     <>
      <Container maxWidth="xl" justifyContent="center" >

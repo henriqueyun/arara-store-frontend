@@ -5,8 +5,7 @@ import { Menubar, Footer } from './components';
 import { theme } from './theme';
 import './App.css';
 import { AuthProvider } from './context/AuthContext';
-import router from './routes'
-console.log("🚀 ~ file: App.jsx:9 ~ router:", router)
+import { router } from './router'
 
 
 function App() {

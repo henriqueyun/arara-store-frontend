@@ -13,5 +13,4 @@ function setAuth(token) {
 }
 
 // TODO: Change to export {client, setAuth}
-export default client;
-export {setAuth}
+export {client, setAuth}

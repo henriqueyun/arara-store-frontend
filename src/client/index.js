@@ -1,3 +1,3 @@
-import client from './client';
+import { client, setAuth } from './client';
 
-export { client };
+export { client, setAuth };
