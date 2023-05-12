@@ -16,8 +16,22 @@ export default function Footer() {
         color: (theme) => theme.palette.background.default,
       }}
     >
-      <FooterSection title="ARARASTORE" links={[{ title: 'Sobre', href: '#' }, { title: 'Ajuda', href: '#' }, { title: 'Nossas Lojas', href: '#' }, { title: 'Trocas e Deveoluções', href: '#' }, { title: 'Central e Privacidade', href: '#' }, { title: 'Política de Privacidade', href: '#' }]} />
-      <FooterSection title="SOCIAL MEDIA" links={[{ title: 'Instagram', href: '#' }, { title: 'Linkedin', href: '#' }, { title: 'Facebook', href: '#' }, { title: 'Twitter', href: '#' }]} />
+      <FooterSection
+        title="ARARASTORE"
+        links={[{ title: 'Sobre', href: '#' },
+          { title: 'Ajuda', href: '#' },
+          { title: 'Nossas Lojas', href: '#' },
+          { title: 'Trocas e Deveoluções', href: '#' },
+          { title: 'Central e Privacidade', href: '#' },
+          { title: 'Política de Privacidade', href: '#' }]}
+      />
+      <FooterSection
+        title="SOCIAL MEDIA"
+        links={[{ title: 'Instagram', href: '#' },
+          { title: 'Linkedin', href: '#' },
+          { title: 'Facebook', href: '#' },
+          { title: 'Twitter', href: '#' }]}
+      />
     </Grid>
   );
 }

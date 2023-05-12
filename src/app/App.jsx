@@ -2,11 +2,10 @@ import { ThemeProvider } from '@emotion/react';
 import { RouterProvider } from 'react-router-dom';
 import React from 'react';
 import { Menubar, Footer } from './components';
+import router from './router';
 import { theme } from './theme';
 import './App.css';
 import { AuthProvider } from './context/AuthContext';
-import { router } from './router'
-
 
 function App() {
   return (
@@ -18,7 +17,6 @@ function App() {
         <Footer />
       </ThemeProvider>
     </AuthProvider>
-    
   );
 }
 

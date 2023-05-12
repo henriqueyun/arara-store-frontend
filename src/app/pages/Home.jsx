@@ -1,5 +1,6 @@
-import { Grid, Typography } from "@mui/material";
-import { Showcase } from "../components";
+import { Grid, Typography } from '@mui/material';
+import React from 'react';
+import { Showcase } from '../components';
 
 export default function Home() {
   return (
@@ -16,8 +17,7 @@ export default function Home() {
         <Grid container justifyContent="center">
           <Typography variant="h1">Ararastore</Typography>
         </Grid>
-        <Showcase>
-        </Showcase>
+        <Showcase />
       </Grid>
     </Grid>
   );

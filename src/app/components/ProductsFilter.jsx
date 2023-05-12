@@ -1,22 +1,18 @@
-<<<<<<< HEAD
-/* eslint-disable react/jsx-no-useless-fragment */
-/* eslint-disable max-len */
-/* eslint-disable no-param-reassign */
-/* eslint-disable react/prop-types */
-/* eslint-disable no-use-before-define */
-=======
->>>>>>> a47e886f73e8aca6d7fc7d5e383f2fe8db12c7a5
 import React, { useEffect, useState } from 'react';
 import {
   Checkbox, FormControlLabel, Grid, Stack,
-  Accordion, AccordionSummary, AccordionDetails,
+  Accordion, AccordionSummary, AccordionDetails, Typography,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { formatCurrency } from '../util';
 
-export default function ProductsFilter(props) {
-  const { products } = props;
+export default function ProductsFilter({ products }) {
   const [productsFilters, setProductsFilters] = useState([]);
+
+  function removeDuplicatedValues(values) {
+    return [...new Set([...values])];
+  }
+
   function getFilterFieldValues(fields) {
     const fieldsWithValues = fields.map((field) => {
       const values = products.map((product) => product[field]);
@@ -36,8 +32,9 @@ export default function ProductsFilter(props) {
       discount: 'Desconto',
     };
     return filters.map((filter) => {
-      filter.field = translatedToPortugueseFields[filter.field];
-      return filter;
+      const newFilter = filter;
+      newFilter.field = translatedToPortugueseFields[filter.field];
+      return newFilter;
     });
   }
 
@@ -48,17 +45,14 @@ export default function ProductsFilter(props) {
       'quantity',
       'description',
       'id',
-      'image',
+      'images',
     ];
     return fields.filter((field) => !excludedFields.includes(field));
   }
 
-  function removeDuplicatedValues(values) {
-    return [...new Set([...values])];
-  }
-
   function getProductsFilters() {
-    const fields = products.reduce((accProducts, product) => [...accProducts, ...Object.keys(product)], []);
+    const fields = products
+      .reduce((accProducts, product) => [...accProducts, ...Object.keys(product)], []);
 
     const uniqueFields = removeDuplicatedValues([...fields]);
     const filterableFields = excludeNotFilterableFields(uniqueFields);
@@ -101,7 +95,7 @@ export default function ProductsFilter(props) {
             </AccordionDetails>
           </Accordion>
         )
-        : <></>))}
+        : <Typography>Erro ao montar os filtros, recarregue a página</Typography>))}
     </Grid>
   );
 }

@@ -3,12 +3,11 @@ import { Typography } from '@mui/material';
 import React from 'react';
 import { calculateDiscount, formatCurrency } from '../util';
 
-export default function ProductItem(props) {
-  const { product } = props;
+export default function ProductItem({ product }) {
   return (
     <div>
       <img
-        src={product.image}
+        src={product.images[0].imageUrl || ''}
         alt="Um homem estiloso olhando para a camêra de costas para uma parede preta"
         style={{ width: '300px', height: '450px' }}
       />
