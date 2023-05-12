@@ -1,10 +1,17 @@
 import axios from 'axios';
-import { ProductService } from "./services";
+import { ProductService, AuthService } from './services';
 
 axios.defaults.baseURL = 'http://localhost:3000';
 
 const client = {
-    products: ProductService(axios)
+  products: ProductService(axios),
+  auth: AuthService(axios),
+};
+
+function setAuth(token) {
+  axios.defaults.headers.Authorization = token;
 }
 
-export default client
+// TODO: Change to export {client, setAuth}
+export default client;
+export { setAuth }

@@ -1,37 +1,37 @@
 import { createTheme } from '@mui/material/styles';
 
 const theme = createTheme({
-  mode: "light",
+  mode: 'light',
   palette: {
     primary: {
-      main: "#000000"
+      main: '#000000',
     },
     secondary: {
-      main: "#323232"
+      main: '#323232',
     },
     warning: {
-      main: "#FFD873"
+      main: '#FFD873',
     },
     text: {
-      primary: "#000000",
-      secondary: "#000000",
-      disabled: "#CCCCCC"
+      primary: '#000000',
+      secondary: '#000000',
+      disabled: '#CCCCCC',
     },
     background: {
-      default: "#F5F5F5",
-      paper: "#323232"
-    }
+      default: '#F5F5F5',
+      paper: '#323232',
+    },
   },
   components: {
     MuiTextField: {
       styleOverrides: {
         root: {
-          backgroundColor: "#F5F5F5",
-          borderRadius: "50px"
-        }
-      }
+          backgroundColor: '#F5F5F5',
+          borderRadius: '50px',
+        },
+      },
     },
   },
 });
 
-export { theme }
+export { theme };

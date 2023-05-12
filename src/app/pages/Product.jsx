@@ -1,11 +1,11 @@
 import { Container, Grid, Stack, Typography, Button, Divider, IconButton, Chip } from "@mui/material";
 import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import { useParams } from "react-router-dom";
 import { Showcase } from "../components"
-import { useEffect, useState } from "react";
 import { client } from "../../client";
 import { calculateDiscount, formatCurrency } from "../util";
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 export default function Product() {
     const { id } = useParams();

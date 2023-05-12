@@ -5,7 +5,8 @@ import { useEffect, useState } from "react";
 
 export default function Products() {
     const [products, setProducts] = useState([]);
-    const [filteredProducts, setFilteredProducts] = useState([]);
+    const [filteredProducts, setFilteredProducts] = useState([]);    
+
 
     function applyFilters(filters) {
         setFilteredProducts(products.filter(p => {
