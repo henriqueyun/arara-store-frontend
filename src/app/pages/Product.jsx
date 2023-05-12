@@ -1,26 +1,15 @@
 import { Container, Grid, Stack, Typography, Button, Divider, IconButton, Chip } from "@mui/material";
 import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import {  useNavigate, useParams } from 'react-router-dom';
+import {   useParams } from 'react-router-dom';
 import { Showcase } from "../components"
-import {   useContext, useEffect, useState } from "react";
+import {    useEffect, useState } from "react";
 import { client } from "../../client";
 import { calculateDiscount, formatCurrency } from "../util";
-import { Context } from "../context/AuthContext";
 
 export default function Product() {
     const { id } = useParams();
     const [product, setProduct] = useState({});
-    const navigate = useNavigate()
-    const { loading, logged } = useContext(Context);
-    console.log("🚀 ~ file: Product.jsx:16 ~ Product ~ loading:", loading)
-    console.log("🚀 ~ file: Product.jsx:16 ~ Product ~ logged:", logged)
-        if (loading) {
-            <h1>Loading...</h1>;
-        }
-        if(!logged) {
-             navigate('/login')
-        } 
 
     useEffect(() => {   
         
@@ -33,9 +22,7 @@ export default function Product() {
     }, [id])
 
     return (
-        <>
-         {loading && <h1>Loading...</h1>}           
-            
+        <>           
             <ProductExhibition>
                 <ProductInfo product={product}></ProductInfo>
             </ProductExhibition>
