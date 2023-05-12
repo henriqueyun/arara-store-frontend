@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 import { createTheme } from '@mui/material/styles';
 
 const theme = createTheme({
@@ -34,4 +35,4 @@ const theme = createTheme({
   },
 });
 
-export { theme };
+export default theme;

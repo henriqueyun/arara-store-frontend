@@ -1,5 +1,5 @@
-export const AuthService = (http) => ({
-  signIn: async ({ email, password }) => {
-    return await http.post('/login', { email, password });
-  },
+const AuthService = (http) => ({
+  signIn: async ({ email, password }) => http.post('/login', { email, password }),
 });
+
+export default AuthService;

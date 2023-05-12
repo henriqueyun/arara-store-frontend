@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-no-useless-fragment */
 import React, { useState, useEffect } from 'react';
 import { Grid, Link, Typography } from '@mui/material';
 import ProductItem from './ProductItem';
@@ -15,7 +14,7 @@ export default function Showcase() {
   }, []);
 
   return (
-    <>
+    <Grid>
       {
                 // TODO: adjust when showcase backend is done to not use hardcoded six products
                 products.length ? products.slice(0, 6).map((product) => (
@@ -27,6 +26,6 @@ export default function Showcase() {
                 ))
                   : <Typography variant="h6">Houve um problema ao buscar os produtos</Typography>
             }
-    </>
+    </Grid>
   );
 }

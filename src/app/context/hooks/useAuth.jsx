@@ -10,7 +10,7 @@ export default function useAuth() {
     const token = sessionStorage.getItem('token');
 
     if (token) {
-      setAuth(`Bearer ${JSON.parse(token)}`)
+      setAuth(`Bearer ${JSON.parse(token)}`);
       setLogged(true);
     }
 
@@ -20,19 +20,21 @@ export default function useAuth() {
   // TODO: refactor to use navigate inside here
   async function signIn(email, password) {
     try {
-      const { data: { access_token } } = await client.auth.signIn({ email, password });
-      sessionStorage.setItem('token', JSON.stringify(access_token));
+      const { data: { accessToken } } = await client.auth.signIn({ email, password });
+      sessionStorage.setItem('token', JSON.stringify(accessToken));
       setLogged(true);
-      return true
+      return true;
     } catch (error) {
-      return false
+      return false;
     }
   }
 
   function signOut() {
-    setAuth(undefined)
+    setAuth(undefined);
     setLogged(false);
   }
 
-  return { logged, loading, signIn, signOut };
+  return {
+    logged, loading, signIn, signOut,
+  };
 }
