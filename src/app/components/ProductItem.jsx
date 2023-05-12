@@ -2,12 +2,12 @@ import { Typography } from '@mui/material';
 import React from 'react';
 import { calculateDiscount, formatCurrency } from '../util';
 
-export default function ProductItem(props) {
-  const { product } = props;
+export default function ProductItem({ product }) {
+  console.log('🚀 ~ file: ProductItem.jsx:6 ~ ProductItem ~ product:', product);
   return (
     <div>
       <img
-        src={product.image}
+        src={product.images[0].imageUrl || ''}
         alt="Um homem estiloso olhando para a camêra de costas para uma parede preta"
         style={{ width: '300px', height: '450px' }}
       />
@@ -22,18 +22,18 @@ function Price(props) {
   return (
     <div>
       {
-                discount > 0
-                  ? (
-                    <>
-                      <Typography variant="caption">
-                        <s>{formatCurrency(parseFloat(price))}</s>
-                      </Typography>
-                      <Typography variant="h6">{formatCurrency(calculateDiscount(price, discount))}</Typography>
-                    </>
-                  ) : (
-                    <Typography variant="h6">{formatCurrency(parseFloat(price))}</Typography>
-                  )
-            }
+        discount > 0
+          ? (
+            <>
+              <Typography variant="caption">
+                <s>{formatCurrency(parseFloat(price))}</s>
+              </Typography>
+              <Typography variant="h6">{formatCurrency(calculateDiscount(price, discount))}</Typography>
+            </>
+          ) : (
+            <Typography variant="h6">{formatCurrency(parseFloat(price))}</Typography>
+          )
+      }
     </div>
   );
 }

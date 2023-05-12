@@ -5,7 +5,7 @@ function excludeNotFilterableFields(fields) {
     'quantity',
     'description',
     'id',
-    'image',
+    'images',
   ];
   return fields.filter((field) => !excludedFields.includes(field));
 }

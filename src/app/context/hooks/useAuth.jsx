@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react';
-
-import { Navigate } from 'react-router-dom';
-import { client } from '../../../client';
 import { setAuth } from '../../../client/client';
+import { client } from '../../../client';
 
 export default function useAuth() {
   const [logged, setLogged] = useState(false);
@@ -19,21 +17,24 @@ export default function useAuth() {
     setLoading(false);
   }, []);
 
-  async function handleLogin(email, password) {
-    const { data: { accessToken } } = await client.users.login({ email, password });
-    sessionStorage.setItem('token', JSON.stringify(accessToken));
-    setLogged(true);
-    return Navigate('/home');
+  // TODO: refactor to use navigate inside here
+  async function signIn(email, password) {
+    try {
+      const { data: { accessToken } } = await client.auth.signIn({ email, password });
+      sessionStorage.setItem('token', JSON.stringify(accessToken));
+      setLogged(true);
+      return true;
+    } catch (error) {
+      return false;
+    }
   }
 
-  function handleLogout() {
-    setLogged(false);
-    sessionStorage.removeItem('token');
+  function signOut() {
     setAuth(undefined);
-    return Navigate('/home');
+    setLogged(false);
   }
 
   return {
-    logged, loading, handleLogin, handleLogout,
+    logged, loading, signIn, signOut,
   };
 }

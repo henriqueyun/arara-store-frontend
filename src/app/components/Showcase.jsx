@@ -14,7 +14,7 @@ export default function Showcase() {
   }, []);
 
   return (
-    <div>
+    <Grid>
       {
                 // TODO: adjust when showcase backend is done to not use hardcoded six products
                 products.length ? products.slice(0, 6).map((product) => (
@@ -26,6 +26,6 @@ export default function Showcase() {
                 ))
                   : <Typography variant="h6">Houve um problema ao buscar os produtos</Typography>
             }
-    </div>
+    </Grid>
   );
 }

@@ -54,7 +54,7 @@ export default function ProductsFilter({ products, handleFilter }) {
     return values.filter((v) => v !== value);
   }
 
-  function handleFieldChange(event) {
+  const handleFieldChange = (event) => {
     const [field, value] = event.target.value.split('-');
     setActiveFilters((oldActiveFilters) => {
       const newOldActiveFilters = oldActiveFilters;
@@ -68,7 +68,7 @@ export default function ProductsFilter({ products, handleFilter }) {
       }
       return { ...newOldActiveFilters };
     });
-  }
+  };
 
   const getCheckedFieldValue = (field, value) => {
     if (activeFilters[field]) {
@@ -106,7 +106,7 @@ export default function ProductsFilter({ products, handleFilter }) {
                     label={<Typography color="background.default">{formatLabelByField(filter.field, value)}</Typography>}
                     value={`${filter.field}-${value}`}
                     checked={getCheckedFieldValue(filter.field, value)}
-                    onChange={handleFieldChange()}
+                    onChange={handleFieldChange}
                   />
                 ))}
               </Stack>

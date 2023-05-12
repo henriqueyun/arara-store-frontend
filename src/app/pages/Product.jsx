@@ -79,7 +79,7 @@ function ProductInfo({ product }) {
   return (
     <>
       <Grid container alignItems="center">
-        <ProductImages imageUrl={product.image} />
+        <ProductImages imageUrl={product.images[0].imageUrl} />
         <Grid display="flex" justifyContent="center" sx={{ margin: '0 auto' }}>
           <Grid display="flex" flexDirection="column" gap={4}>
             <Title>

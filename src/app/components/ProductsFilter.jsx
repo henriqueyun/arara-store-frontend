@@ -6,9 +6,9 @@ import {
 import AddIcon from '@mui/icons-material/Add';
 import { formatCurrency } from '../util';
 
-export default function ProductsFilter(props) {
-  const { products } = props;
+export default function ProductsFilter({ products }) {
   const [productsFilters, setProductsFilters] = useState([]);
+
   function removeDuplicatedValues(values) {
     return [...new Set([...values])];
   }
@@ -45,7 +45,7 @@ export default function ProductsFilter(props) {
       'quantity',
       'description',
       'id',
-      'image',
+      'images',
     ];
     return fields.filter((field) => !excludedFields.includes(field));
   }

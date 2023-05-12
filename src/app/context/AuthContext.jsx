@@ -6,10 +6,11 @@ const Context = createContext();
 
 function AuthProvider({ children }) {
   const {
-    logged, loading, handleLogin, handleLogout,
+    logged, loading, signIn, signOut,
   } = useAuth();
+
   const providerValue = useMemo(() => ({
-    loading, logged, handleLogin, handleLogout,
+    loading, logged, signIn, signOut,
   }), []);
 
   return (

@@ -1,4 +1,4 @@
-import UserService from './user';
+import AuthService from './auth';
 import ProductService from './product';
 
-export { UserService, ProductService };
+export { AuthService, ProductService };
