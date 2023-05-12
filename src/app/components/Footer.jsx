@@ -15,8 +15,22 @@ export default function Footer() {
         color: (theme) => theme.palette.background.default,
       }}
     >
-      <FooterSection title="ARARASTORE" links={[{ title: 'Sobre', href: '#' }, { title: 'Ajuda', href: '#' }, { title: 'Nossas Lojas', href: '#' }, { title: 'Trocas e Deveoluções', href: '#' }, { title: 'Central e Privacidade', href: '#' }, { title: 'Política de Privacidade', href: '#' }]} />
-      <FooterSection title="SOCIAL MEDIA" links={[{ title: 'Instagram', href: '#' }, { title: 'Linkedin', href: '#' }, { title: 'Facebook', href: '#' }, { title: 'Twitter', href: '#' }]} />
+      <FooterSection
+        title="ARARASTORE"
+        links={[{ title: 'Sobre', href: '#' },
+          { title: 'Ajuda', href: '#' },
+          { title: 'Nossas Lojas', href: '#' },
+          { title: 'Trocas e Deveoluções', href: '#' },
+          { title: 'Central e Privacidade', href: '#' },
+          { title: 'Política de Privacidade', href: '#' }]}
+      />
+      <FooterSection
+        title="SOCIAL MEDIA"
+        links={[{ title: 'Instagram', href: '#' },
+          { title: 'Linkedin', href: '#' },
+          { title: 'Facebook', href: '#' },
+          { title: 'Twitter', href: '#' }]}
+      />
     </Grid>
   );
 }
@@ -31,13 +45,13 @@ function FooterSection(props) {
     return [firstHalf, secondHalf];
   }
 
-  const splittedLinks = splitArrInTwo(links);
+  const splitedLinks = splitArrInTwo(links);
 
   return (
     <Grid display="flex" gap={2} flexDirection="column">
       <Typography variant="h4">{title}</Typography>
       <Grid display="flex" gap={3}>
-        {splittedLinks.map((halfLinks) => (
+        {splitedLinks.map((halfLinks) => (
           <Stack gap={1} key={`half-links-${halfLinks[0].title}`}>
             {halfLinks.map((link) => <Link key={link.title} color="inherit" underline="none" href={link.href} variant="h6">{link.title}</Link>)}
           </Stack>

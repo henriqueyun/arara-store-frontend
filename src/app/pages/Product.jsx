@@ -22,7 +22,6 @@ export default function Product() {
   }, [id]);
 
   useEffect(() => {
-    console.log('OLÁAAAAAAAA');
     const getProducts = async () => {
       const response = await client.products.findById(id);
       setProduct(response);

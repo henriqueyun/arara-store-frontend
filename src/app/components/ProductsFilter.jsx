@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
   Checkbox, FormControlLabel, Grid, Stack,
-  Accordion, AccordionSummary, AccordionDetails,
+  Accordion, AccordionSummary, AccordionDetails, Typography,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { formatCurrency } from '../util';
@@ -32,8 +32,9 @@ export default function ProductsFilter(props) {
       discount: 'Desconto',
     };
     return filters.map((filter) => {
-      filter.field = translatedToPortugueseFields[filter.field];
-      return filter;
+      const newFilter = filter;
+      newFilter.field = translatedToPortugueseFields[filter.field];
+      return newFilter;
     });
   }
 
@@ -94,7 +95,7 @@ export default function ProductsFilter(props) {
             </AccordionDetails>
           </Accordion>
         )
-        : null))}
+        : <Typography>Erro ao montar os filtros, recarregue a página</Typography>))}
     </Grid>
   );
 }

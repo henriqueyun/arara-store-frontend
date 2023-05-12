@@ -19,7 +19,6 @@ export default function Products() {
   };
 
   useEffect(() => {
-    console.log('useEffect products global');
     const getProducts = async () => {
       const response = await client.products.findAll();
       setProducts(response);

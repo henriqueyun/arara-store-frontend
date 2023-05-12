@@ -25,7 +25,6 @@ export default function ProductsFilter({ products, handleFilter }) {
   }
 
   useEffect(() => {
-    console.log('useEffect products filter products');
     if (products.length) { setProductsFilters(setupFiltersData(products)); }
   }, [products]);
 
@@ -41,10 +40,9 @@ export default function ProductsFilter({ products, handleFilter }) {
   }
 
   function removeFieldFromFiltersWhenValueAreEmpty(filters, field) {
-    // const newFilters = filters;
+    const newFilters = filters;
     if (filters[field].length === 0) {
-      // eslint-disable-next-line no-param-reassign
-      delete filters[field];
+      delete newFilters[field];
     }
   }
 
@@ -59,18 +57,16 @@ export default function ProductsFilter({ products, handleFilter }) {
   function handleFieldChange(event) {
     const [field, value] = event.target.value.split('-');
     setActiveFilters((oldActiveFilters) => {
-      // const newOldActiveFilters = oldActiveFilters;
+      const newOldActiveFilters = oldActiveFilters;
       const fieldValues = oldActiveFilters[field]
         ? Object.values(oldActiveFilters[field]) : [];
       if (event.target.checked) {
-        // eslint-disable-next-line no-param-reassign
-        oldActiveFilters[field] = addFieldValue(fieldValues, value);
+        newOldActiveFilters[field] = addFieldValue(fieldValues, value);
       } else {
-        // eslint-disable-next-line no-param-reassign
-        oldActiveFilters[field] = removeValueFromValues(value, fieldValues);
-        removeFieldFromFiltersWhenValueAreEmpty(oldActiveFilters, field);
+        newOldActiveFilters[field] = removeValueFromValues(value, fieldValues);
+        removeFieldFromFiltersWhenValueAreEmpty(newOldActiveFilters, field);
       }
-      return { ...oldActiveFilters };
+      return { ...newOldActiveFilters };
     });
   }
 
@@ -92,8 +88,7 @@ export default function ProductsFilter({ products, handleFilter }) {
         ? (
           <Accordion key={filter.field}>
             <AccordionSummary
-              // eslint-disable-next-line no-shadow
-              expandIcon={<AddIcon sx={{ color: (theme) => theme.palette.background.default }} />}
+              expandIcon={<AddIcon sx={{ color: (th) => th.palette.background.default }} />}
             >
               <Typography color="background.default">{getTranslatedField(filter.field)}</Typography>
             </AccordionSummary>
@@ -111,16 +106,15 @@ export default function ProductsFilter({ products, handleFilter }) {
                     label={<Typography color="background.default">{formatLabelByField(filter.field, value)}</Typography>}
                     value={`${filter.field}-${value}`}
                     checked={getCheckedFieldValue(filter.field, value)}
-                    // eslint-disable-next-line react/jsx-no-bind
-                    onChange={handleFieldChange}
+                    onChange={handleFieldChange()}
                   />
                 ))}
               </Stack>
             </AccordionDetails>
           </Accordion>
         )
-        // eslint-disable-next-line react/jsx-no-useless-fragment
-        : <></>))}
+
+        : <Typography>Erro ao montar os filtros, recarregue a página</Typography>))}
 
       <Grid py={2}>
         <Button onClick={cleanFilters} variant="outlined" fullWidth>Limpar Filtros</Button>
