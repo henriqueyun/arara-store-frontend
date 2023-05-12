@@ -8,11 +8,6 @@ import './App.css';
 import { AuthProvider } from './context/AuthContext';
 
 function App() {
-  // const [token, setToken] = useState();
-
-  // if (!token) {
-  //   return <Login setToken={setToken} />;
-  // }
   return (
     <AuthProvider>
       <ThemeProvider theme={theme}>
@@ -22,7 +17,7 @@ function App() {
         <Footer />
       </ThemeProvider>
     </AuthProvider>
-    
+
   );
 }
 

@@ -1,8 +1,3 @@
-/* eslint-disable react/jsx-no-useless-fragment */
-/* eslint-disable max-len */
-/* eslint-disable no-param-reassign */
-/* eslint-disable react/prop-types */
-/* eslint-disable no-use-before-define */
 import React, { useEffect, useState } from 'react';
 import {
   Checkbox, FormControlLabel, Grid, Stack,

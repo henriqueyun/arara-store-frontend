@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { Typography } from '@mui/material';
 import React from 'react';
 import { calculateDiscount, formatCurrency } from '../util';
@@ -23,18 +22,18 @@ function Price(props) {
   return (
     <div>
       {
-                discount > 0
-                  ? (
-                    <>
-                      <Typography variant="caption">
-                        <s>{formatCurrency(parseFloat(price))}</s>
-                      </Typography>
-                      <Typography variant="h6">{formatCurrency(calculateDiscount(price, discount))}</Typography>
-                    </>
-                  ) : (
-                    <Typography variant="h6">{formatCurrency(parseFloat(price))}</Typography>
-                  )
-            }
+        discount > 0
+          ? (
+            <>
+              <Typography variant="caption">
+                <s>{formatCurrency(parseFloat(price))}</s>
+              </Typography>
+              <Typography variant="h6">{formatCurrency(calculateDiscount(price, discount))}</Typography>
+            </>
+          ) : (
+            <Typography variant="h6">{formatCurrency(parseFloat(price))}</Typography>
+          )
+      }
     </div>
   );
 }

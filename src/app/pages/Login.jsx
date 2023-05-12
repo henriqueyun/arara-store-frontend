@@ -1,11 +1,11 @@
 import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Container } from '@mui/material';
+import { Container, Grid, Typography, TextField, Button } from '@mui/material';
 import { Context } from '../context/AuthContext';
 
 export default function Login() {
-  const [email, setEmail] = useState('felipe@gmail.com');
-  const [password, setPassword] = useState('12345678');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const { signIn } = useContext(Context);
   const navigate = useNavigate()
 
@@ -21,20 +21,13 @@ export default function Login() {
 
   return (
     <>
-      <Container maxWidth="xl">
-        <form >
-          <label htmlFor="username">
-            <p>Username</p>
-            <input type="text" id="username" onChange={(e) => setEmail(e.target.value)} />
-          </label>
-          <label htmlFor="password">
-            <p>Password</p>
-            <input type="password" id="password" onChange={(e) => setPassword(e.target.value)} />
-          </label>
-          <div>
-            <button type="button" onClick={submitLogin}>Login</button>
-          </div>
-        </form>
+      <Container maxWidth="xs">
+        <Grid container flexDirection="column" gap={2} p={4}>
+          <Typography variant="h4">Login</Typography>
+          <TextField label="username" variant="outlined" onChange={(e) => setEmail(e.target.value)} />
+          <TextField label="password" variant="outlined" onChange={(e) => setPassword(e.target.value)} type="password" />
+          <Button variant="contained" onClick={submitLogin} sx={{ my: 1 }}>Login</Button>
+        </Grid>
       </Container>
     </>
   )
