@@ -1,37 +1,38 @@
 import { useState, useEffect } from 'react';
-
-import { client } from '../../../client';
-import { Navigate } from 'react-router-dom';
 import { setAuth } from '../../../client/client';
+import { client } from '../../../client';
 
 export default function useAuth() {
   const [logged, setLogged] = useState(false);
   const [loading, setLoading] = useState(true);
-  
+
   useEffect(() => {
     const token = sessionStorage.getItem('token');
-    
+
     if (token) {
       setAuth(`Bearer ${JSON.parse(token)}`)
       setLogged(true);
-    } 
+    }
 
     setLoading(false);
   }, []);
-  
-  async function handleLogin(email, password) {
-    const { data: { access_token } } = await client.users.login({ email, password });
-    sessionStorage.setItem('token', JSON.stringify(access_token));
-    setLogged(true);
-    return Navigate('/home')
+
+  // TODO: refactor to use navigate inside here
+  async function signIn(email, password) {
+    try {
+      const { data: { access_token } } = await client.auth.signIn({ email, password });
+      sessionStorage.setItem('token', JSON.stringify(access_token));
+      setLogged(true);
+      return true
+    } catch (error) {
+      return false
+    }
   }
 
-  function handleLogout() {
-    setLogged(false);
-    sessionStorage.removeItem('token');
+  function signOut() {
     setAuth(undefined)
-    return Navigate('/home')
+    setLogged(false);
   }
-  
-  return { logged, loading, handleLogin, handleLogout };
+
+  return { logged, loading, signIn, signOut };
 }

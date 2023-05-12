@@ -1,3 +1,4 @@
+// TODO: remove eslint disabler
 /* eslint-disable import/prefer-default-export */
 export const ProductService = (http) => ({
   findAll: async () => {

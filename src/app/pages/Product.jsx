@@ -1,26 +1,17 @@
 import { Container, Grid, Stack, Typography, Button, Divider, IconButton, Chip } from "@mui/material";
 import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import {  useNavigate, useParams } from 'react-router-dom';
 import { Showcase } from "../components"
-import {   useContext, useEffect, useState } from "react";
 import { client } from "../../client";
 import { calculateDiscount, formatCurrency } from "../util";
-import { Context } from "../context/AuthContext";
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 export default function Product() {
     const { id } = useParams();
     const [product, setProduct] = useState({});
-    const navigate = useNavigate()
-    const { loading, authenticated } = useContext(Context);
 
-    useEffect(() => {   
-        if(loading) {
-             // FAZER UM COMPONENTE DE LOADING
-        }
-        if(!authenticated) {
-            return navigate('/login')
-        }  
+    useEffect(() => {
         const getProducts = async () => {
             const product = await client.products.findById(id);
             setProduct(product);

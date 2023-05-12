@@ -1,16 +1,27 @@
-import {  Container } from '@mui/material';
 import React, { useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Container } from '@mui/material';
 import { Context } from '../context/AuthContext';
 
 export default function Login() {
   const [email, setEmail] = useState('felipe@gmail.com');
   const [password, setPassword] = useState('12345678');
-  const { handleLogin } = useContext(Context);
+  const { signIn } = useContext(Context);
+  const navigate = useNavigate()
 
+  async function submitLogin() {
+    // TODO: refactor to use navigate inside useAuth
+    if (await signIn(email, password)) {
+      navigate("/")
+    }
+    else {
+      alert("Falha no login")
+    }
+  }
 
   return (
     <>
-     <Container maxWidth="xl" justifyContent="center" >
+      <Container maxWidth="xl">
         <form >
           <label htmlFor="username">
             <p>Username</p>
@@ -21,10 +32,10 @@ export default function Login() {
             <input type="password" id="password" onChange={(e) => setPassword(e.target.value)} />
           </label>
           <div>
-            <button type="button" onClick={handleLogin(email, password)}>Login</button>
+            <button type="button" onClick={submitLogin}>Login</button>
           </div>
         </form>
-     </Container>
+      </Container>
     </>
   )
 }
