@@ -7,7 +7,7 @@ export default function useAuth() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = sessionStorage.getItem('token');
+    const token = localStorage.getItem('token');
 
     if (token) {
       setAuth(`Bearer ${JSON.parse(token)}`);
@@ -20,7 +20,7 @@ export default function useAuth() {
   async function signIn(email, password) {
     try {
       const { data: { accessToken } } = await client.auth.signIn({ email, password });
-      sessionStorage.setItem('token', JSON.stringify(accessToken));
+      localStorage.setItem('token', JSON.stringify(accessToken));
       setLogged(true);
       return true;
     } catch (error) {
@@ -29,8 +29,14 @@ export default function useAuth() {
   }
 
   function signOut() {
-    setAuth(undefined);
-    setLogged(false);
+    try {
+      localStorage.removeItem('token');
+      setAuth(undefined);
+      setLogged(false);
+      return true;
+    } catch (error) {
+      return false;
+    }
   }
 
   return {
