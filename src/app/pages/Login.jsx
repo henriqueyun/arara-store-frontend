@@ -16,6 +16,7 @@ export default function Login() {
     if (await signIn(email, password)) {
       navigate('/');
     } else {
+      // eslint-disable-next-line no-alert
       alert('Falha no login');
     }
   };

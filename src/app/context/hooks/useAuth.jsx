@@ -13,7 +13,6 @@ export default function useAuth() {
       setAuth(`Bearer ${JSON.parse(token)}`);
       setLogged(true);
     }
-
     setLoading(false);
   }, []);
 

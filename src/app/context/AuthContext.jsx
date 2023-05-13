@@ -1,4 +1,4 @@
-import React, { createContext, useMemo } from 'react';
+import React, { createContext } from 'react';
 
 import useAuth from './hooks/useAuth';
 
@@ -9,12 +9,13 @@ function AuthProvider({ children }) {
     logged, loading, signIn, signOut,
   } = useAuth();
 
-  const providerValue = useMemo(() => ({
-    loading, logged, signIn, signOut,
-  }), []);
-
   return (
-    <Context.Provider value={providerValue}>
+    <Context.Provider
+      // eslint-disable-next-line react/jsx-no-constructed-context-values
+      value={{
+        logged, loading, signIn, signOut,
+      }}
+    >
       {children}
     </Context.Provider>
   );

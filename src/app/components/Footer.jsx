@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import {
   Grid, Link, Stack, Typography,
 } from '@mui/material';

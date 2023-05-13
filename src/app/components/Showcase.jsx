@@ -14,18 +14,18 @@ export default function Showcase() {
   }, []);
 
   return (
-    <Grid>
+    <Grid container display="flex" justifyContent="center" my={4} gap={4}>
       {
-                // TODO: adjust when showcase backend is done to not use hardcoded six products
-                products.length ? products.slice(0, 6).map((product) => (
-                  <Grid key={product.id} item>
-                    <Link color="inherit" underline="none" href={`/products/${product.id}`}>
-                      <ProductItem key={product.id} product={product} />
-                    </Link>
-                  </Grid>
-                ))
-                  : <Typography variant="h6">Houve um problema ao buscar os produtos</Typography>
-            }
+        // TODO: adjust when showcase backend is done to not use hardcoded six products
+        products.length ? products.slice(0, 6).map((product) => (
+          <Grid key={product.id} item>
+            <Link color="inherit" underline="none" href={`/products/${product.id}`}>
+              <ProductItem key={product.id} product={product} />
+            </Link>
+          </Grid>
+        ))
+          : <Typography variant="h6">Houve um problema ao buscar os produtos</Typography>
+      }
     </Grid>
   );
 }
