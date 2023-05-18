@@ -32,7 +32,7 @@ const router = createBrowserRouter([
   {
     path: '/cart',
     Component() {
-      return <Component variant={<Cart />} />;
+      return <Component isPrivate variant={<Cart />} />;
     },
   },
 ]);
