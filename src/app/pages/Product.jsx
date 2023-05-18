@@ -1,5 +1,12 @@
 import {
-  Container, Grid, Stack, Typography, Button, Divider, IconButton, Chip,
+  Container,
+  Grid,
+  Stack,
+  Typography,
+  Button,
+  Divider,
+  IconButton,
+  Chip,
 } from '@mui/material';
 import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
@@ -37,15 +44,21 @@ export default function Product() {
       {/* TODO:
       see how product exhibition bottom showcases should work then remove hardcoded showcases */}
       <Grid container py={8} justifyContent="center" gap={8}>
-        <Typography variant="h4" sx={{ fontWeight: 'bold' }}>Promoções</Typography>
+        <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
+          Promoções
+        </Typography>
         <Grid container justifyContent="center" gap={2}>
           <Showcase />
         </Grid>
-        <Typography variant="h4" sx={{ fontWeight: 'bold' }}>Produtos Similares</Typography>
+        <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
+          Produtos Similares
+        </Typography>
         <Grid container justifyContent="center" gap={2}>
           <Showcase />
         </Grid>
-        <Typography variant="h4" sx={{ fontWeight: 'bold' }}>Lançamentos</Typography>
+        <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
+          Lançamentos
+        </Typography>
         <Grid container justifyContent="center" gap={2}>
           <Showcase />
         </Grid>
@@ -69,7 +82,14 @@ function ProductImages({ imageUrl }) {
   return (
     <Grid display="flex" gap={2}>
       <Grid>
-        <img src={imageUrl || 'https://images.unsplash.com/photo-1553002401-c0945c2ff0b0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NDV8fG1pc3NpbmclMjBzaWdufGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60'} alt="Highlighted product" style={{ width: '350px', height: '100%' }} />
+        <img
+          src={
+            imageUrl ||
+            'https://images.unsplash.com/photo-1553002401-c0945c2ff0b0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NDV8fG1pc3NpbmclMjBzaWdufGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60'
+          }
+          alt="Highlighted product"
+          style={{ width: '350px', height: '100%' }}
+        />
       </Grid>
     </Grid>
   );
@@ -79,16 +99,14 @@ function ProductInfo({ product }) {
   return (
     <>
       <Grid container alignItems="center">
-        <ProductImages imageUrl={product?.images && product?.images[0]?.imageUrl} />
+        <ProductImages
+          imageUrl={product?.images && product?.images[0]?.imageUrl}
+        />
         <Grid display="flex" justifyContent="center" sx={{ margin: '0 auto' }}>
           <Grid display="flex" flexDirection="column" gap={4}>
-            <Title>
-              {product.name}
-            </Title>
+            <Title>{product.name}</Title>
             <Amounts price={product.price} discount={product.discount} />
-            <OptativeDetail detailTitle="COR">
-              {product.color}
-            </OptativeDetail>
+            <OptativeDetail detailTitle="COR">{product.color}</OptativeDetail>
             <OptativeDetail detailTitle="TAMANHO">
               {product.size}
             </OptativeDetail>
@@ -111,7 +129,9 @@ function Title({ children }) {
   return (
     <Grid display="flex" gap={1} alignItems="center">
       <Typography variant="h4">{children}</Typography>
-      <IconButton><ShareOutlinedIcon /></IconButton>
+      <IconButton>
+        <ShareOutlinedIcon />
+      </IconButton>
     </Grid>
   );
 }
@@ -120,20 +140,17 @@ function Amounts({ price, discount }) {
   return (
     <Grid display="flex" gap={1}>
       <Grid>
-        {discount > 0
-          ? (
-            <>
-              <Price price={calculateDiscount(price, discount)} noDiscountPrice={price} />
-              <Discount>
-                {discount}
-              </Discount>
-            </>
-          )
-          : (
-            <NoDiscountPrice>
-              {price}
-            </NoDiscountPrice>
-          )}
+        {discount > 0 ? (
+          <>
+            <Price
+              price={calculateDiscount(price, discount)}
+              noDiscountPrice={price}
+            />
+            <Discount>{discount}</Discount>
+          </>
+        ) : (
+          <NoDiscountPrice>{price}</NoDiscountPrice>
+        )}
       </Grid>
       <InstallmentsOptions price={calculateDiscount(price, discount)} />
     </Grid>
@@ -143,8 +160,19 @@ function Amounts({ price, discount }) {
 function NoDiscountPrice({ children }) {
   return (
     <Grid display="flex" justifyContent="end">
-      <Grid display="flex" gap={1} px={1} alignItems="center" sx={{ color: (theme) => theme.palette.common.white, backgroundColor: (theme) => theme.palette.common.black }}>
-        <Typography variant="h5">{formatCurrency(parseFloat(children))}</Typography>
+      <Grid
+        display="flex"
+        gap={1}
+        px={1}
+        alignItems="center"
+        sx={{
+          color: (theme) => theme.palette.common.white,
+          backgroundColor: (theme) => theme.palette.common.black,
+        }}
+      >
+        <Typography variant="h5">
+          {formatCurrency(parseFloat(children))}
+        </Typography>
       </Grid>
     </Grid>
   );
@@ -153,29 +181,38 @@ function NoDiscountPrice({ children }) {
 function Price({ noDiscountPrice, price }) {
   return (
     <Grid display="flex" justifyContent="end">
-      <Grid display="flex" gap={1} px={1} alignItems="center" sx={{ color: (theme) => theme.palette.common.white, backgroundColor: (theme) => theme.palette.common.black }}>
-        <Typography><s>{formatCurrency(parseFloat(noDiscountPrice))}</s></Typography>
-        <Typography variant="h5">{formatCurrency(parseFloat(price))}</Typography>
+      <Grid
+        display="flex"
+        gap={1}
+        px={1}
+        alignItems="center"
+        sx={{
+          color: (theme) => theme.palette.common.white,
+          backgroundColor: (theme) => theme.palette.common.black,
+        }}
+      >
+        <Typography>
+          <s>{formatCurrency(parseFloat(noDiscountPrice))}</s>
+        </Typography>
+        <Typography variant="h5">
+          {formatCurrency(parseFloat(price))}
+        </Typography>
       </Grid>
     </Grid>
   );
 }
 
 function Discount({ children }) {
-  return (
-    children
-      ? (
-        <Grid display="flex" flexDirection="row-reverse">
-          <Grid sx={{ backgroundColor: (theme) => theme.palette.warning.main }} px={1.5}>
-            <Typography sx={{ fontWeight: 'bold' }}>
-              {children}
-              % OFF
-            </Typography>
-          </Grid>
-        </Grid>
-      )
-      : null
-  );
+  return children ? (
+    <Grid display="flex" flexDirection="row-reverse">
+      <Grid
+        sx={{ backgroundColor: (theme) => theme.palette.warning.main }}
+        px={1.5}
+      >
+        <Typography sx={{ fontWeight: 'bold' }}>{children}% OFF</Typography>
+      </Grid>
+    </Grid>
+  ) : null;
 }
 
 // TODO: replace for real installments option
@@ -188,9 +225,8 @@ function InstallmentsOptions({ price }) {
         <Typography>
           <b>
             2x de
-            {formatCurrency((price / 2))}
-          </b>
-          {' '}
+            {formatCurrency(price / 2)}
+          </b>{' '}
           no cartão de crédito
         </Typography>
       </Typography>
@@ -213,8 +249,12 @@ function OptativeDetail({ children, detailTitle }) {
 function BuyButtons() {
   return (
     <Grid display="flex" gap={1}>
-      <Button size="large" variant="outlined" startIcon={<ShoppingCartIcon />}>ADICIONAR AO CARRINHO</Button>
-      <Button size="large" variant="contained">COMPRAR AGORA</Button>
+      <Button size="large" variant="outlined" startIcon={<ShoppingCartIcon />}>
+        ADICIONAR AO CARRINHO
+      </Button>
+      <Button size="large" variant="contained">
+        COMPRAR AGORA
+      </Button>
     </Grid>
   );
 }
@@ -227,7 +267,6 @@ function LargeDescription() {
       CAMISETA OVERSIZE PRETA
       <br />
       <br />
-
       Modelagem: Reta
       <br />
       Gola: Redonda
@@ -239,7 +278,6 @@ function LargeDescription() {
       Detalhes: Possui logo frontal.
       <br />
       <br />
-
       Medidas da peça no tamanho G:
       <br />
       • Ombro: 15cm
@@ -257,22 +295,14 @@ function LargeDescription() {
       Medidas do Modelo: Altura: 1,89m/ Tórax: 103cm/ Manequim: 42.
       <br />
       <br />
-
       CLÁSSICA E ATEMPORAL:
       <br />
-      As camisetas são itens indispensáveis em um guarda-roupa moderno!
-      {' '}
-      <br />
-      Elas são extremamente coringas,
-      {' '}
-      <br />
-      combinam com diversas composições
-      {' '}
-      <br />
-      e são perfeitas para dar aquele toque urbano e descolado com personalidade!
-      {' '}
-      <br />
-      Aposte com peças mais estruturadas para criar um look que vai desde o trabalho ao happy hour!
+      As camisetas são itens indispensáveis em um guarda-roupa moderno! <br />
+      Elas são extremamente coringas, <br />
+      combinam com diversas composições <br />e são perfeitas para dar aquele
+      toque urbano e descolado com personalidade! <br />
+      Aposte com peças mais estruturadas para criar um look que vai desde o
+      trabalho ao happy hour!
       <br />
     </Grid>
   );

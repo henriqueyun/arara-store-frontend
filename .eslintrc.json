@@ -5,7 +5,8 @@
     },
     "extends": [
         "plugin:react/recommended",
-        "airbnb"
+        "airbnb",
+        "plugin:prettier/recommended"
     ],
     "overrides": [
     ],
@@ -14,9 +15,16 @@
         "sourceType": "module"
     },
     "plugins": [
-        "react"
+        "react",
+        "prettier"
     ],
     "rules": {
-        "react/prop-types": 0
+        "react/prop-types": 0,
+        "prettier/prettier": [
+            "error",
+            {
+            "endOfLine": "auto"
+            }
+        ]
     }
 }

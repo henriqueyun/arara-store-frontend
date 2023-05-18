@@ -1,8 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  Container, Grid, Typography, TextField, Button,
-} from '@mui/material';
+import { Container, Grid, Typography, TextField, Button } from '@mui/material';
 import { Context } from '../context/AuthContext';
 
 export default function Login() {
@@ -25,9 +23,20 @@ export default function Login() {
     <Container maxWidth="xs">
       <Grid container flexDirection="column" gap={2} p={4}>
         <Typography variant="h4">Login</Typography>
-        <TextField label="username" variant="outlined" onChange={(e) => setEmail(e.target.value)} />
-        <TextField label="password" variant="outlined" onChange={(e) => setPassword(e.target.value)} type="password" />
-        <Button variant="contained" onClick={submitLogin} sx={{ my: 1 }}>Login</Button>
+        <TextField
+          label="username"
+          variant="outlined"
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <TextField
+          label="password"
+          variant="outlined"
+          onChange={(e) => setPassword(e.target.value)}
+          type="password"
+        />
+        <Button variant="contained" onClick={submitLogin} sx={{ my: 1 }}>
+          Login
+        </Button>
       </Grid>
     </Container>
   );
