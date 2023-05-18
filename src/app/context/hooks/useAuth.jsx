@@ -19,7 +19,9 @@ export default function useAuth() {
   // TODO: refactor to use navigate inside here
   async function signIn(email, password) {
     try {
-      const { data: { accessToken } } = await client.auth.signIn({ email, password });
+      const {
+        data: { accessToken },
+      } = await client.auth.signIn({ email, password });
       sessionStorage.setItem('token', JSON.stringify(accessToken));
       setLogged(true);
       return true;
@@ -34,6 +36,9 @@ export default function useAuth() {
   }
 
   return {
-    logged, loading, signIn, signOut,
+    logged,
+    loading,
+    signIn,
+    signOut,
   };
 }

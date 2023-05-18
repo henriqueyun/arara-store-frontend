@@ -1,5 +1,10 @@
 import {
-  Grid, Typography, TextField, Button, InputAdornment, Link,
+  Grid,
+  Typography,
+  TextField,
+  Button,
+  InputAdornment,
+  Link,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import React from 'react';
@@ -16,7 +21,9 @@ export default function Menubar() {
         color: (theme) => theme.palette.background.default,
       }}
     >
-      <Link color="inherit" underline="none" href="/" variant="h3">Ararastore</Link>
+      <Link color="inherit" underline="none" href="/" variant="h3">
+        Ararastore
+      </Link>
       <TextField
         variant="outlined"
         InputProps={{
@@ -36,8 +43,12 @@ export default function Menubar() {
         </Button>
       </Grid>
       <Grid sx={{ display: 'flex' }}>
-        <Button href="/login"><Typography color="background.default">Entrar</Typography></Button>
-        <Button href="/cart"><Typography color="background.default">Carrinho</Typography></Button>
+        <Button href="/login">
+          <Typography color="background.default">Entrar</Typography>
+        </Button>
+        <Button href="/cart">
+          <Typography color="background.default">Carrinho</Typography>
+        </Button>
       </Grid>
     </Grid>
   );

@@ -33,11 +33,16 @@ function getFilterFieldValuesFromProducts(fields, products) {
 }
 
 export default function setupFiltersData(products) {
-  const fields = products
-    .reduce((accProducts, product) => [...accProducts, ...Object.keys(product)], []);
+  const fields = products.reduce(
+    (accProducts, product) => [...accProducts, ...Object.keys(product)],
+    [],
+  );
 
   const uniqueFields = removeDuplicatedFields([...fields]);
   const filterableFields = excludeNotFilterableFields(uniqueFields);
-  const fieldsWithFilterableValues = getFilterFieldValuesFromProducts(filterableFields, products);
+  const fieldsWithFilterableValues = getFilterFieldValuesFromProducts(
+    filterableFields,
+    products,
+  );
   return fieldsWithFilterableValues;
 }
