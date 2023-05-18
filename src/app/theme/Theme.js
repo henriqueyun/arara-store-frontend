@@ -24,11 +24,18 @@ const theme = createTheme({
     },
   },
   components: {
-    MuiTextField: {
+    MuiOutlinedInput: {
       styleOverrides: {
         root: {
           backgroundColor: '#F5F5F5',
           borderRadius: '50px',
+        },
+      },
+    },
+    MuiTableContainer: {
+      styleOverrides: {
+        root: {
+          boxShadow: 'none',
         },
       },
     },
