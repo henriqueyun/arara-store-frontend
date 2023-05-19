@@ -1,13 +1,13 @@
 function excludeNotFilterableFields(fields) {
   const excludedFields = [
-    'createdAt',
-    'updatedAt',
-    'quantity',
-    'description',
-    'id',
-    'images',
+    'name',
+    'color',
+    'size',
+    'brand',
+    'price',
+    'discount',
   ];
-  return fields.filter((field) => !excludedFields.includes(field));
+  return fields.filter((field) => excludedFields.includes(field));
 }
 function removeDuplicatedValues(values) {
   return [...new Set([...values])];
