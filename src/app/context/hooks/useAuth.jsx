@@ -23,7 +23,7 @@ export default function useAuth() {
       sessionStorage.setItem('token', JSON.stringify(accessToken));
       setLogged(true);
       return true;
-    } catch (error) {
+    } catch ({ response }) {
       return false;
     }
   }

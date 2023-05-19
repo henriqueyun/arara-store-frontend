@@ -4,8 +4,13 @@ const ProductService = (http) => ({
     return data;
   },
   findById: async (id) => {
-    const { data } = await http.get(`/products/${id}`);
-    return data;
+    try {
+      const { data } = await http.get(`/products/${id}`);
+      return data;
+    } catch ({ response }) {
+      if (response.data.statusCode === 401) localStorage.removeItem('token');
+      return 
+    }
   },
   hello: () => 'Hello!',
 });
