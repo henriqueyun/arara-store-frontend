@@ -1,13 +1,13 @@
-function excludeNotFilterableFields(fields) {
-  const excludedFields = [
-    'createdAt',
-    'updatedAt',
-    'quantity',
-    'description',
-    'id',
-    'images',
+function includeFilterableFields(fields) {
+  const includeFields = [
+    'name',
+    'color',
+    'size',
+    'brand',
+    'price',
+    'discount',
   ];
-  return fields.filter((field) => !excludedFields.includes(field));
+  return fields.filter((field) => includeFields.includes(field));
 }
 function removeDuplicatedValues(values) {
   return [...new Set([...values])];
@@ -39,7 +39,7 @@ export default function setupFiltersData(products) {
   );
 
   const uniqueFields = removeDuplicatedFields([...fields]);
-  const filterableFields = excludeNotFilterableFields(uniqueFields);
+  const filterableFields = includeFilterableFields(uniqueFields);
   const fieldsWithFilterableValues = getFilterFieldValuesFromProducts(
     filterableFields,
     products,
