@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Button,
   Container,
@@ -18,61 +18,69 @@ import {
   FormControlLabel,
   Radio,
   Divider,
+  IconButton,
 } from '@mui/material';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCartOutlined';
 import PercentIcon from '@mui/icons-material/Percent';
 import ArrowForwardOutlinedIcon from '@mui/icons-material/ArrowForwardIosOutlined';
+import { Clear } from '@mui/icons-material';
+import { Link } from 'react-router-dom';
 import KeepBuyingButton from '../components/KeepBuyingButton';
 import { formatCurrency } from '../util';
 
 import { client } from '../../client';
 
 export default function Cart() {
-  const [cartItems, setCartItems] = React.useState([]);
-  useEffect(() => {
-    if (!cartItems) {
-      setCartItems([]);
-    }
-  }, [cartItems]);
-
-  useEffect(() => {
-    const listItems = async () => {
-      const response = await client.cart.items.list();
-      setCartItems(response);
-    };
-    listItems();
-  }, []);
   return (
     <Container>
       <Grid container py={8}>
         <NavAction>
           <KeepBuyingButton />
         </NavAction>
-        <CartTable cartItems={cartItems} />
+        <CartTable />
         <CartOrderOptions />
       </Grid>
     </Container>
   );
 }
 
-function CartTableRow({ cartItem }) {
+function CartTableRow({ cartItem, onUpdate }) {
+  const removeCartItem = async () => {
+    await client.cart.items.remove(cartItem.id);
+    await onUpdate();
+  };
+  const [removeButtonVisibilty, setRemoveButtonVisibilty] = useState('hidden');
   return (
-    <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+    <TableRow
+      onMouseEnter={() =>
+        setTimeout(() => setRemoveButtonVisibilty('visible'), 25)
+      }
+      onMouseLeave={() =>
+        setTimeout(() => setRemoveButtonVisibilty('hidden'), 25)
+      }
+      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+    >
       <TableCell
-        component="a"
-        href={`/products/${cartItem.product.id}`}
         sx={{ backgroundColor: (theme) => theme.palette.common.white }}
         scope="row"
       >
-        <img
-          style={{ width: '130px', height: '170px' }}
-          src={
-            (cartItem?.product?.images &&
-              cartItem?.product?.images[0]?.imageUrl) ||
-            'https://images.unsplash.com/photo-1553002401-c0945c2ff0b0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NDV8fG1pc3NpbmclMjBzaWdufGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60'
-          }
-          alt={cartItem.product.description}
-        />
+        <Grid display="flex" alignItems="center" gap={2}>
+          <RemoveCartItemButton
+            onClick={removeCartItem}
+            visibility={removeButtonVisibilty}
+          />
+          <Link href={`/products/${cartItem.product.id}`}>
+            <img
+              style={{ width: '130px', height: '170px' }}
+              src={
+                (cartItem?.product?.images &&
+                  cartItem?.product?.images[0]?.imageUrl) ||
+                'https://images.unsplash.com/photo-1553002401-c0945c2ff0b0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NDV8fG1pc3NpbmclMjBzaWdufGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60'
+              }
+              alt={cartItem.product.description}
+            />
+          </Link>
+        </Grid>
       </TableCell>
       <TableCell
         component="a"
@@ -112,6 +120,14 @@ function CartTableRow({ cartItem }) {
   );
 }
 
+function RemoveCartItemButton({ onClick, visibility }) {
+  return (
+    <IconButton onClick={onClick} sx={{ visibility }}>
+      <Clear />
+    </IconButton>
+  );
+}
+
 function CartTableAction({ children }) {
   return (
     <>
@@ -139,7 +155,22 @@ function CartTableAction({ children }) {
   );
 }
 
-function CartTable({ cartItems }) {
+function CartTable() {
+  const [cartItems, setCartItems] = useState([]);
+  useEffect(() => {
+    if (!cartItems) {
+      setCartItems([]);
+    }
+  }, [cartItems]);
+
+  const listItems = async () => {
+    const response = await client.cart.items.list();
+    setCartItems(response);
+  };
+
+  useEffect(() => {
+    listItems();
+  }, []);
   const calculateCartPrice = () => {
     return cartItems.reduce((acc, cartItem) => {
       return acc + parseFloat(cartItem.product.price) * cartItem.quantity;
@@ -160,7 +191,7 @@ function CartTable({ cartItems }) {
         <TableContainer component={Paper}>
           <Table>
             <CartTableHead />
-            <CartTableBody cartItems={cartItems} />
+            <CartTableBody cartItems={cartItems} onUpdate={listItems} />
           </Table>
           <CartTableFooter cartPrice={calculateCartPrice()} />
         </TableContainer>
@@ -214,12 +245,13 @@ function CartTableHead() {
   );
 }
 
-function CartTableBody(props) {
-  const { cartItems } = props;
+function CartTableBody({ cartItems, onUpdate }) {
   return (
     <TableBody>
       {cartItems.length &&
-        cartItems.map((cartItem) => <CartTableRow cartItem={cartItem} />)}
+        cartItems.map((cartItem) => (
+          <CartTableRow cartItem={cartItem} onUpdate={onUpdate} />
+        ))}
     </TableBody>
   );
 }
