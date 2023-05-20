@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Button,
   Container,
@@ -23,22 +23,39 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCartOutlined';
 import PercentIcon from '@mui/icons-material/Percent';
 import ArrowForwardOutlinedIcon from '@mui/icons-material/ArrowForwardIosOutlined';
 import KeepBuyingButton from '../components/KeepBuyingButton';
+import { formatCurrency } from '../util';
+
+import { client } from '../../client';
 
 export default function Cart() {
+  const [cartItems, setCartItems] = React.useState([]);
+  useEffect(() => {
+    if (!cartItems) {
+      setCartItems([]);
+    }
+  }, [cartItems]);
+
+  useEffect(() => {
+    const listItems = async () => {
+      const response = await client.cart.items.list();
+      setCartItems(response);
+    };
+    listItems();
+  }, []);
   return (
     <Container>
       <Grid container py={8}>
         <NavAction>
           <KeepBuyingButton />
         </NavAction>
-        <CartTable />
+        <CartTable cartItems={cartItems} />
         <CartOrderOptions />
       </Grid>
     </Container>
   );
 }
 
-function CartTableRow() {
+function CartTableRow({ cartItem }) {
   return (
     <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
       <TableCell
@@ -56,8 +73,10 @@ function CartTableRow() {
         sx={{ backgroundColor: (theme) => theme.palette.common.white }}
         align="left"
       >
-        <Typography>CAMISETA OVERSIZED PRETA</Typography>
-        <Typography>R$ 159,90</Typography>
+        <Typography>{cartItem.product.description}</Typography>
+        <Typography>
+          {formatCurrency(parseFloat(cartItem.product.price))}
+        </Typography>
       </TableCell>
       <TableCell
         sx={{ backgroundColor: (theme) => theme.palette.common.white }}
@@ -66,7 +85,7 @@ function CartTableRow() {
         <Typography>
           <Grid>
             <Typography sx={{ fontWeight: 'bold' }}>QUANTIDADE</Typography>
-            <Chip label="TODO" variant="outlined" />
+            <Chip label={cartItem.quantity} variant="outlined" />
           </Grid>
         </Typography>
       </TableCell>
@@ -74,13 +93,15 @@ function CartTableRow() {
         sx={{ backgroundColor: (theme) => theme.palette.common.white }}
         align="right"
       >
-        <Typography>R$ 159,90</Typography>
+        <Typography>
+          {formatCurrency(cartItem.product.price * cartItem.quantity)}
+        </Typography>
       </TableCell>
     </TableRow>
   );
 }
 
-function CartTableAction() {
+function CartTableAction({ children }) {
   return (
     <>
       <Grid container py={4} flexDirection="column">
@@ -101,30 +122,45 @@ function CartTableAction() {
             Carrinho
           </Typography>
         </Grid>
-        <Button startIcon={<PercentIcon />} variant="outlined">
-          APLICAR CUPOM DE DESCONTO
-        </Button>
+        {children}
       </Grid>
     </>
   );
 }
 
-function CartTable() {
+function CartTable({ cartItems }) {
+  const calculateCartPrice = () => {
+    return cartItems.reduce((acc, cartItem) => {
+      return acc + parseFloat(cartItem.product.price) * cartItem.quantity;
+    }, 0);
+  };
   return (
     <>
-      <CartTableAction />
-      <TableContainer component={Paper}>
-        <Table>
-          <CartTableHead />
-          <CartTableBody />
-        </Table>
-        <CartTableFooter />
-      </TableContainer>
+      <CartTableAction>
+        {cartItems.length ? (
+          <Button startIcon={<PercentIcon />} variant="outlined">
+            APLICAR CUPOM DE DESCONTO
+          </Button>
+        ) : (
+          ''
+        )}
+      </CartTableAction>
+      {cartItems.length ? (
+        <TableContainer component={Paper}>
+          <Table>
+            <CartTableHead />
+            <CartTableBody cartItems={cartItems} />
+          </Table>
+          <CartTableFooter cartPrice={calculateCartPrice()} />
+        </TableContainer>
+      ) : (
+        <Typography variant="h5">Não há items no carrinho</Typography>
+      )}
     </>
   );
 }
 
-function CartTableFooter() {
+function CartTableFooter({ cartPrice }) {
   return (
     <Grid
       sx={{
@@ -138,7 +174,7 @@ function CartTableFooter() {
       alignItems="center"
     >
       <Typography variant="h4">SUBTOTAL</Typography>
-      <Typography variant="h4">R$ 159,90</Typography>
+      <Typography variant="h4">{formatCurrency(cartPrice)}</Typography>
     </Grid>
   );
 }
@@ -167,13 +203,12 @@ function CartTableHead() {
   );
 }
 
-function CartTableBody() {
+function CartTableBody(props) {
+  const { cartItems } = props;
   return (
     <TableBody>
-      <CartTableRow />
-      <CartTableRow />
-      <CartTableRow />
-      <CartTableRow />
+      {cartItems.length &&
+        cartItems.map((cartItem) => <CartTableRow cartItem={cartItem} />)}
     </TableBody>
   );
 }

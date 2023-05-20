@@ -26,14 +26,6 @@ export default function Product() {
       setProduct(response);
     };
     getProducts();
-  }, [id]);
-
-  useEffect(() => {
-    const getProducts = async () => {
-      const response = await client.products.findById(id);
-      setProduct(response);
-    };
-    getProducts();
   }, []);
 
   return (
@@ -115,7 +107,7 @@ function ProductInfo({ product }) {
               <Typography sx={{ fontWeight: 'bold' }}>QUANTIDADE</Typography>
               <Chip label="TODO" variant="outlined" />
             </Grid>
-            <BuyButtons />
+            <BuyButtons productId={product.id} />
           </Grid>
         </Grid>
       </Grid>
@@ -246,10 +238,16 @@ function OptativeDetail({ children, detailTitle }) {
   );
 }
 
-function BuyButtons() {
+function BuyButtons({ productId }) {
+  const addToCart = async () => client.cart.items.add(productId, 1);
   return (
     <Grid display="flex" gap={1}>
-      <Button size="large" variant="outlined" startIcon={<ShoppingCartIcon />}>
+      <Button
+        onClick={addToCart}
+        size="large"
+        variant="outlined"
+        startIcon={<ShoppingCartIcon />}
+      >
         ADICIONAR AO CARRINHO
       </Button>
       <Button size="large" variant="contained">
