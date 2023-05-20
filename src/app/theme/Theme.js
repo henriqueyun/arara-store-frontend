@@ -13,9 +13,12 @@ const theme = createTheme({
     warning: {
       main: '#FFD873',
     },
+    info: {
+      main: '#F5F5F5',
+    },
     text: {
       primary: '#000000',
-      secondary: '#000000',
+      secondary: '#F5F5F5',
       disabled: '#CCCCCC',
     },
     background: {

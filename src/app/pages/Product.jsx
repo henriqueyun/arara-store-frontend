@@ -10,12 +10,13 @@ import {
 } from '@mui/material';
 import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import { Showcase } from '../components';
 import { client } from '../../client';
 import { calculateDiscount, formatCurrency } from '../util';
 import QuantityChanger from '../components/QuantityChanger';
+import BuyOptionsModal from '../components/BuyOptionsModal';
 
 export default function Product() {
   const { id } = useParams();
@@ -242,9 +243,10 @@ function InstallmentsOptions({ price }) {
         <br />
         <Typography>
           <b>
+            {`
             2x de
-            {formatCurrency(price / 2)}
-          </b>{' '}
+            ${formatCurrency(price / 2)} `}
+          </b>
           no cartão de crédito
         </Typography>
       </Typography>
@@ -265,18 +267,44 @@ function OptativeDetail({ children, detailTitle }) {
 }
 
 function BuyButtons({ productId, quantity }) {
-  const addToCart = async () => client.cart.items.add(productId, quantity);
+  const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+  const addToCart = async () => {
+    return client.cart.items.add(productId, quantity);
+  };
+
+  const showBuyOptions = () => {
+    setOpen(true);
+  };
+
+  const goToCart = () => {
+    navigate('/cart');
+  };
+
   return (
     <Grid display="flex" gap={1}>
+      <BuyOptionsModal open={open} handleClose={() => setOpen(false)} />
       <Button
-        onClick={addToCart}
+        onClick={async () => {
+          if (await addToCart()) {
+            showBuyOptions();
+          }
+        }}
         size="large"
         variant="outlined"
         startIcon={<ShoppingCartIcon />}
       >
         ADICIONAR AO CARRINHO
       </Button>
-      <Button size="large" variant="contained">
+      <Button
+        onClick={async () => {
+          if (await addToCart()) {
+            goToCart();
+          }
+        }}
+        size="large"
+        variant="contained"
+      >
         COMPRAR AGORA
       </Button>
     </Grid>

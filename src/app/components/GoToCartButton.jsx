@@ -1,17 +1,17 @@
 import React from 'react';
 import { Button } from '@mui/material';
-import ArrowBackIcon from '@mui/icons-material/ArrowBackIos';
+import { ShoppingCart } from '@mui/icons-material';
 
-export default function KeepBuyingButton({ href = '/products', ...props }) {
+export default function GoToCartButton(props) {
   return (
     <Button
-      href={href}
-      startIcon={<ArrowBackIcon />}
+      href="/cart"
+      endIcon={<ShoppingCart />}
       variant="outlined"
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...props}
     >
-      CONTINUAR COMPRANDO
+      PROSSEGUIR COM PEDIDO
     </Button>
   );
 }
