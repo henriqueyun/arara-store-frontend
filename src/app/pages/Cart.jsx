@@ -59,18 +59,28 @@ function CartTableRow({ cartItem }) {
   return (
     <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
       <TableCell
+        component="a"
+        href={`/products/${cartItem.product.id}`}
         sx={{ backgroundColor: (theme) => theme.palette.common.white }}
-        component="th"
         scope="row"
       >
         <img
           style={{ width: '130px', height: '170px' }}
-          src="https://images.unsplash.com/photo-1586478069437-e324bcfbe9fc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxjb2xsZWN0aW9uLXBhZ2V8MjZ8MzM1NjU3Nnx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60"
-          alt="Flowered shirt guy"
+          src={
+            (cartItem?.product?.images &&
+              cartItem?.product?.images[0]?.imageUrl) ||
+            'https://images.unsplash.com/photo-1553002401-c0945c2ff0b0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NDV8fG1pc3NpbmclMjBzaWdufGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60'
+          }
+          alt={cartItem.product.description}
         />
       </TableCell>
       <TableCell
-        sx={{ backgroundColor: (theme) => theme.palette.common.white }}
+        component="a"
+        href={`/products/${cartItem.product.id}`}
+        sx={{
+          backgroundColor: (theme) => theme.palette.common.white,
+          textDecoration: 'none',
+        }}
         align="left"
       >
         <Typography>{cartItem.product.description}</Typography>
@@ -85,6 +95,7 @@ function CartTableRow({ cartItem }) {
         <Typography>
           <Grid>
             <Typography sx={{ fontWeight: 'bold' }}>QUANTIDADE</Typography>
+            {/* TODO: change here to QuantityChanger and implement actual changing with it */}
             <Chip label={cartItem.quantity} variant="outlined" />
           </Grid>
         </Typography>
