@@ -15,11 +15,11 @@ import React, { useEffect, useState } from 'react';
 import { Showcase } from '../components';
 import { client } from '../../client';
 import { calculateDiscount, formatCurrency } from '../util';
+import QuantityChanger from '../components/QuantityChanger';
 
 export default function Product() {
   const { id } = useParams();
   const [product, setProduct] = useState({});
-
   useEffect(() => {
     const getProducts = async () => {
       const response = await client.products.findById(id);
@@ -88,6 +88,7 @@ function ProductImages({ imageUrl }) {
 }
 
 function ProductInfo({ product }) {
+  const [quantity, setQuantity] = useState(1);
   return (
     <>
       <Grid container alignItems="center">
@@ -102,12 +103,37 @@ function ProductInfo({ product }) {
             <OptativeDetail detailTitle="TAMANHO">
               {product.size}
             </OptativeDetail>
-            {/* TODO: quantity component */}
             <Grid>
               <Typography sx={{ fontWeight: 'bold' }}>QUANTIDADE</Typography>
-              <Chip label="TODO" variant="outlined" />
+              {/* TODO: discuss field rules, which max. value makes sense (if we should have a max. value etc.) */}
+              <QuantityChanger
+                value={quantity}
+                onIncrease={() =>
+                  setQuantity((oldQty) => (oldQty < 25 ? oldQty + 1 : 25))
+                }
+                onDecrease={() =>
+                  setQuantity((oldQty) => (oldQty > 1 ? oldQty - 1 : 1))
+                }
+                onChange={(event) => {
+                  const qty = parseInt(event.target.value, 10);
+                  // eslint-disable-next-line no-restricted-globals
+                  if (isNaN(qty)) {
+                    setQuantity(1);
+                    return;
+                  }
+                  if (qty < 1) {
+                    setQuantity(1);
+                    return;
+                  }
+                  if (qty > 25) {
+                    setQuantity(25);
+                    return;
+                  }
+                  setQuantity(qty);
+                }}
+              />
             </Grid>
-            <BuyButtons productId={product.id} />
+            <BuyButtons productId={product.id} quantity={quantity} />
           </Grid>
         </Grid>
       </Grid>
@@ -238,8 +264,8 @@ function OptativeDetail({ children, detailTitle }) {
   );
 }
 
-function BuyButtons({ productId }) {
-  const addToCart = async () => client.cart.items.add(productId, 1);
+function BuyButtons({ productId, quantity }) {
+  const addToCart = async () => client.cart.items.add(productId, quantity);
   return (
     <Grid display="flex" gap={1}>
       <Button
