@@ -21,6 +21,7 @@ import BuyOptionsModal from '../components/BuyOptionsModal';
 export default function Product() {
   const { id } = useParams();
   const [product, setProduct] = useState({});
+
   useEffect(() => {
     const getProducts = async () => {
       const response = await client.products.findById(id);
@@ -34,8 +35,7 @@ export default function Product() {
       <ProductExhibition>
         <ProductInfo product={product} />
       </ProductExhibition>
-      {/* TODO:
-      see how product exhibition bottom showcases should work then remove hardcoded showcases */}
+      {/* TODO: see how product exhibition bottom showcases should work then remove hardcoded showcases */}
       <Grid container py={8} justifyContent="center" gap={8}>
         <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
           Promoções

@@ -31,13 +31,27 @@ import { formatCurrency } from '../util';
 import { client } from '../../client';
 
 export default function Cart() {
+  const [cartItems, setCartItems] = React.useState([]);
+  useEffect(() => {
+    if (!cartItems) {
+      setCartItems([]);
+    }
+  }, [cartItems]);
+
+  useEffect(() => {
+    const listItems = async () => {
+      const response = await client.cart.items.list();
+      setCartItems(response);
+    };
+    listItems();
+  }, []);
   return (
     <Container>
       <Grid container py={8}>
         <NavAction>
           <KeepBuyingButton />
         </NavAction>
-        <CartTable />
+        <CartTable cartItems={cartItems} />
         <CartOrderOptions />
       </Grid>
     </Container>
