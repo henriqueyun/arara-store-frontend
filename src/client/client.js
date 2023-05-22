@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import { ProductService, AuthService } from './services';
 
 axios.defaults.baseURL = 'http://localhost:3000';
@@ -7,9 +8,10 @@ axios.interceptors.response.use(
     return response;
   },
   async function (error) {
+    const navigate = useNavigate();
     if (error.response.status === 401) {
       localStorage.removeItem('token');
-
+      navigate('/login');
       return Promise.reject(error);
     }
 
