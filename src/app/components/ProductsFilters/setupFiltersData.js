@@ -1,12 +1,5 @@
 function includeFilterableFields(fields) {
-  const includeFields = [
-    'name',
-    'color',
-    'size',
-    'brand',
-    'price',
-    'discount',
-  ];
+  const includeFields = ['name', 'color', 'size', 'brand', 'price', 'discount'];
   return fields.filter((field) => includeFields.includes(field));
 }
 function removeDuplicatedValues(values) {

@@ -1,7 +1,7 @@
 import { CircularProgress, Grid, Typography } from '@mui/material';
 import { createBrowserRouter, useNavigate } from 'react-router-dom';
 import React, { useContext } from 'react';
-import { Home, Products, Product, Login, Cart } from './pages';
+import { Home, Products, Product, Login } from './pages';
 import { Context } from './context/AuthContext';
 
 const router = createBrowserRouter([
@@ -27,12 +27,6 @@ const router = createBrowserRouter([
     path: '/login',
     Component() {
       return <Component variant={<Login />} />;
-    },
-  },
-  {
-    path: '/cart',
-    Component() {
-      return <Component variant={<Cart />} />;
     },
   },
 ]);
