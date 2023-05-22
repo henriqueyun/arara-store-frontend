@@ -16,6 +16,10 @@ const CartService = (http) => ({
       const { data } = await http.get('/items');
       return data;
     },
+    shipping: async (cep) => {
+      const { data } = await http.post(`/cart/shipping/${cep}`);
+      return data;
+    },
   },
 });
 

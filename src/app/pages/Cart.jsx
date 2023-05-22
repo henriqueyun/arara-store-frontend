@@ -29,6 +29,7 @@ import KeepBuyingButton from '../components/KeepBuyingButton';
 import { formatCurrency } from '../util';
 
 import { client } from '../../client';
+import getAddress from '../util/shipping';
 
 export default function Cart() {
   return (
@@ -291,21 +292,48 @@ function DeliveryInfo() {
   );
 }
 
+function handleCEP(cep) {
+  return getAddress(cep);
+}
+
+function setData(value, set) {
+  set(value);
+}
+
 function DeliveryAddressInfo() {
+  const [cep, setCep] = useState();
+  const [address, setAddress] = useState();
+  const [state, setState] = useState();
+  const [city, setCity] = useState();
+
   return (
     <Grid>
       <Typography variant="h4">FRETE</Typography>
       <Grid container gap={2} flexDirection="column">
         <Stack direction="row" spacing={6}>
-          <TextField label="CEP" variant="outlined" />
-          <Button variant="outlined">BUSCAR</Button>
+          <TextField
+            label="CEP"
+            variant="outlined"
+            onChange={(event) => setData(event.target.value, setCep)}
+          />
+          <Button
+            onClick={async () => {
+              const { logradouro, uf, localidade } = await handleCEP(cep);
+              setData(logradouro, setAddress);
+              setData(uf, setState);
+              setData(localidade, setCity);
+            }}
+            variant="outlined"
+          >
+            BUSCAR
+          </Button>
         </Stack>
         <Stack direction="row" spacing={6}>
-          <TextField label="Cidade" variant="outlined" />
-          <TextField label="Estado" variant="outlined" />
+          <TextField value={city} label="Cidade" variant="outlined" />
+          <TextField value={state} label="Estado" variant="outlined" />
         </Stack>
         <Stack direction="row" spacing={6}>
-          <TextField label="Endereço" variant="outlined" />
+          <TextField value={address} label="Endereço" variant="outlined" />
           <TextField label="Número" variant="outlined" />
         </Stack>
       </Grid>
