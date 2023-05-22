@@ -15,7 +15,7 @@ export default function Menubar() {
 
   const handleSingOut = async () => {
     if (await signOut()) {
-      // TODO: fazer ele redirecionar para a tela de login useNavigate não funciona aqui
+      window.location.reload(true);
     } else {
       // eslint-disable-next-line no-alert
       alert('Falha ao sair');
@@ -55,16 +55,18 @@ export default function Menubar() {
         </Button>
       </Grid>
       <Grid sx={{ display: 'flex' }}>
-        {
-          logged
-            ? (
-              <Button onClick={handleSingOut}>
-                <Typography color="background.default">Sair</Typography>
-              </Button>
-            )
-            : <Button href="/login"><Typography color="background.default">Entrar</Typography></Button>
-        }
-        <Button href="/cart"><Typography color="background.default">Carrinho</Typography></Button>
+        {logged ? (
+          <Button onClick={handleSingOut}>
+            <Typography color="background.default">Sair</Typography>
+          </Button>
+        ) : (
+          <Button href="/login">
+            <Typography color="background.default">Entrar</Typography>
+          </Button>
+        )}
+        <Button href="/cart">
+          <Typography color="background.default">Carrinho</Typography>
+        </Button>
       </Grid>
     </Grid>
   );

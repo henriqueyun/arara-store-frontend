@@ -22,9 +22,11 @@ export default function useAuth() {
       const {
         data: { accessToken, loggedUser },
       } = await client.auth.signIn({ email, password });
+
       localStorage.setItem('token', JSON.stringify(accessToken));
       localStorage.setItem('loggedUser', JSON.stringify(loggedUser));
       setLogged(true);
+
       return true;
     } catch (error) {
       return false;
@@ -34,8 +36,11 @@ export default function useAuth() {
   function signOut() {
     try {
       localStorage.removeItem('token');
+      localStorage.removeItem('loggedUser');
+
       setAuth(undefined);
       setLogged(false);
+
       return true;
     } catch (error) {
       return false;
