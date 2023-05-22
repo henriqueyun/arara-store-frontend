@@ -7,14 +7,9 @@ axios.interceptors.response.use(
     return response;
   },
   async function (error) {
-    const originalRequest = error.config;
+    if (error.response.status === 401) {
+      localStorage.removeItem('token');
 
-    if (
-      error.response.status === 401 &&
-      originalRequest.url === 'http://localhost:3000/login/'
-    ) {
-      localStorage.removeItem('token')
-      // TODO: mandar para o login aqui
       return Promise.reject(error);
     }
 
