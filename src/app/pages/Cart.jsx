@@ -19,12 +19,12 @@ import {
   Radio,
   Divider,
   IconButton,
+  Link,
 } from '@mui/material';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCartOutlined';
 import PercentIcon from '@mui/icons-material/Percent';
 import ArrowForwardOutlinedIcon from '@mui/icons-material/ArrowForwardIosOutlined';
 import { Clear } from '@mui/icons-material';
-import { Link } from 'react-router-dom';
 import { KeepBuyingButton, Price } from '../components';
 import { calculateDiscount, formatCurrency } from '../util';
 
@@ -32,6 +32,7 @@ import { client } from '../../client';
 
 export default function Cart() {
   const [cartItems, setCartItems] = React.useState([]);
+
   useEffect(() => {
     if (!cartItems) {
       setCartItems([]);
@@ -40,8 +41,9 @@ export default function Cart() {
 
   useEffect(() => {
     const listItems = async () => {
-      const response = await client.cart.items.list();
-      setCartItems(response);
+      const { id } = JSON.parse(localStorage.getItem('loggedUser'));
+      const cart = await client.cart.find(id);
+      setCartItems(cart.items);
     };
     listItems();
   }, []);
@@ -97,31 +99,33 @@ function CartTableRow({ cartItem, onUpdate }) {
         </Grid>
       </TableCell>
       <TableCell
-        component="a"
-        href={`/products/${cartItem.product.id}`}
         sx={{
           backgroundColor: (theme) => theme.palette.common.white,
           textDecoration: 'none',
         }}
         align="left"
       >
-        <Typography>{cartItem.product.description}</Typography>
-        <Price
-          price={cartItem.product.price}
-          discount={cartItem.product.discount}
-        />
+        <Link
+          color="inherit"
+          underline="none"
+          href={`/products/${cartItem.product.id}`}
+        >
+          <Typography>{cartItem.product.description}</Typography>
+          <Price
+            price={cartItem.product.price}
+            discount={cartItem.product.discount}
+          />
+        </Link>
       </TableCell>
       <TableCell
         sx={{ backgroundColor: (theme) => theme.palette.common.white }}
         align="right"
       >
-        <Typography>
-          <Grid>
-            <Typography sx={{ fontWeight: 'bold' }}>QUANTIDADE</Typography>
-            {/* TODO: change here to QuantityChanger and implement actual changing with it */}
-            <Chip label={cartItem.quantity} variant="outlined" />
-          </Grid>
-        </Typography>
+        <Grid>
+          <Typography sx={{ fontWeight: 'bold' }}>QUANTIDADE</Typography>
+          {/* TODO: change here to QuantityChanger and implement actual changing with it */}
+          <Chip label={cartItem.quantity} variant="outlined" />
+        </Grid>
       </TableCell>
       <TableCell
         sx={{ backgroundColor: (theme) => theme.palette.common.white }}
@@ -184,8 +188,9 @@ function CartTable() {
   }, [cartItems]);
 
   const listItems = async () => {
-    const response = await client.cart.items.list();
-    setCartItems(response);
+    const { id } = JSON.parse(localStorage.getItem('loggedUser'));
+    const cart = await client.cart.find(id);
+    setCartItems(cart.items);
   };
 
   useEffect(() => {
@@ -277,7 +282,11 @@ function CartTableBody({ cartItems, onUpdate }) {
     <TableBody>
       {cartItems.length &&
         cartItems.map((cartItem) => (
-          <CartTableRow cartItem={cartItem} onUpdate={onUpdate} />
+          <CartTableRow
+            key={cartItem.id}
+            cartItem={cartItem}
+            onUpdate={onUpdate}
+          />
         ))}
     </TableBody>
   );

@@ -270,7 +270,9 @@ function BuyButtons({ productId, quantity }) {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const addToCart = async () => {
-    return client.cart.items.add(productId, quantity);
+    const { id } = JSON.parse(localStorage.getItem('loggedUser'));
+    const cart = await client.cart.find(id);
+    return client.cart.items.add(productId, quantity, cart.id);
   };
 
   const showBuyOptions = () => {
