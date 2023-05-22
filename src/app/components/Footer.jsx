@@ -1,7 +1,4 @@
-/* eslint-disable react/prop-types */
-import {
-  Grid, Link, Stack, Typography,
-} from '@mui/material';
+import { Grid, Link, Stack, Typography } from '@mui/material';
 import React from 'react';
 
 export default function Footer() {
@@ -18,19 +15,23 @@ export default function Footer() {
     >
       <FooterSection
         title="ARARASTORE"
-        links={[{ title: 'Sobre', href: '#' },
+        links={[
+          { title: 'Sobre', href: '#' },
           { title: 'Ajuda', href: '#' },
           { title: 'Nossas Lojas', href: '#' },
           { title: 'Trocas e Deveoluções', href: '#' },
           { title: 'Central e Privacidade', href: '#' },
-          { title: 'Política de Privacidade', href: '#' }]}
+          { title: 'Política de Privacidade', href: '#' },
+        ]}
       />
       <FooterSection
         title="SOCIAL MEDIA"
-        links={[{ title: 'Instagram', href: '#' },
+        links={[
+          { title: 'Instagram', href: '#' },
           { title: 'Linkedin', href: '#' },
           { title: 'Facebook', href: '#' },
-          { title: 'Twitter', href: '#' }]}
+          { title: 'Twitter', href: '#' },
+        ]}
       />
     </Grid>
   );
@@ -54,7 +55,17 @@ function FooterSection(props) {
       <Grid display="flex" gap={3}>
         {splittedLinks.map((halfLinks) => (
           <Stack gap={1} key={`half-links-${halfLinks[0].title}`}>
-            {halfLinks.map((link) => <Link key={link.title} color="inherit" underline="none" href={link.href} variant="h6">{link.title}</Link>)}
+            {halfLinks.map((link) => (
+              <Link
+                key={link.title}
+                color="inherit"
+                underline="none"
+                href={link.href}
+                variant="h6"
+              >
+                {link.title}
+              </Link>
+            ))}
           </Stack>
         ))}
       </Grid>

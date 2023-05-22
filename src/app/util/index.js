@@ -8,6 +8,6 @@ function formatCurrency(value) {
 }
 
 function calculateDiscount(price, discount) {
-  return price - ((price / 100) * discount);
+  return price - (price / 100) * discount;
 }
 export { formatCurrency, calculateDiscount };

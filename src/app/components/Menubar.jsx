@@ -1,5 +1,10 @@
 import {
-  Grid, Typography, TextField, Button, InputAdornment, Link,
+  Grid,
+  Typography,
+  TextField,
+  Button,
+  InputAdornment,
+  Link,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import React, { useContext } from 'react';
@@ -28,7 +33,9 @@ export default function Menubar() {
         color: (theme) => theme.palette.background.default,
       }}
     >
-      <Link color="inherit" underline="none" href="/" variant="h3">Ararastore</Link>
+      <Link color="inherit" underline="none" href="/" variant="h3">
+        Ararastore
+      </Link>
       <TextField
         variant="outlined"
         InputProps={{

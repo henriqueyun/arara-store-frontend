@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Button, Checkbox, FormControlLabel, Grid, Stack, Typography,
-  Accordion, AccordionSummary, AccordionDetails,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  Grid,
+  Stack,
+  Typography,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { formatCurrency } from '../../util';
@@ -25,7 +32,9 @@ export default function ProductsFilter({ products, handleFilter }) {
   }
 
   useEffect(() => {
-    if (products.length) { setProductsFilters(setupFiltersData(products)); }
+    if (products.length) {
+      setProductsFilters(setupFiltersData(products));
+    }
   }, [products]);
 
   useEffect(() => {
@@ -59,7 +68,8 @@ export default function ProductsFilter({ products, handleFilter }) {
     setActiveFilters((oldActiveFilters) => {
       const newOldActiveFilters = oldActiveFilters;
       const fieldValues = oldActiveFilters[field]
-        ? Object.values(oldActiveFilters[field]) : [];
+        ? Object.values(oldActiveFilters[field])
+        : [];
       if (event.target.checked) {
         newOldActiveFilters[field] = addFieldValue(fieldValues, value);
       } else {
@@ -84,40 +94,57 @@ export default function ProductsFilter({ products, handleFilter }) {
   return (
     // TODO: refactor and split in components
     <Grid>
-      {productsFilters.length && productsFilters.map((filter) => (filter.values
-        ? (
-          <Accordion key={filter.field}>
-            <AccordionSummary
-              expandIcon={<AddIcon sx={{ color: (th) => th.palette.background.default }} />}
-            >
-              <Typography color="background.default">{getTranslatedField(filter.field)}</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Stack>
-                {filter.values.map((value) => (
-                  <FormControlLabel
-                    key={`${filter.field}-${value}`}
-                    control={(
-                      <Checkbox style={{
-                        color: theme.palette.background.default,
-                      }}
-                      />
-                    )}
-                    label={<Typography color="background.default">{formatLabelByField(filter.field, value)}</Typography>}
-                    value={`${filter.field}-${value}`}
-                    checked={getCheckedFieldValue(filter.field, value)}
-                    onChange={handleFieldChange}
+      {productsFilters.length &&
+        productsFilters.map((filter) =>
+          filter.values ? (
+            <Accordion key={filter.field}>
+              <AccordionSummary
+                expandIcon={
+                  <AddIcon
+                    sx={{ color: (th) => th.palette.background.default }}
                   />
-                ))}
-              </Stack>
-            </AccordionDetails>
-          </Accordion>
-        )
-
-        : <Typography>Erro ao montar os filtros, recarregue a página</Typography>))}
+                }
+              >
+                <Typography color="background.default">
+                  {getTranslatedField(filter.field)}
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Stack>
+                  {filter.values.map((value) => (
+                    <FormControlLabel
+                      key={`${filter.field}-${value}`}
+                      control={
+                        <Checkbox
+                          style={{
+                            color: theme.palette.background.default,
+                          }}
+                        />
+                      }
+                      label={
+                        <Typography color="background.default">
+                          {formatLabelByField(filter.field, value)}
+                        </Typography>
+                      }
+                      value={`${filter.field}-${value}`}
+                      checked={getCheckedFieldValue(filter.field, value)}
+                      onChange={handleFieldChange}
+                    />
+                  ))}
+                </Stack>
+              </AccordionDetails>
+            </Accordion>
+          ) : (
+            <Typography>
+              Erro ao montar os filtros, recarregue a página
+            </Typography>
+          ),
+        )}
 
       <Grid py={2}>
-        <Button onClick={cleanFilters} variant="outlined" fullWidth>Limpar Filtros</Button>
+        <Button onClick={cleanFilters} variant="outlined" fullWidth>
+          Limpar Filtros
+        </Button>
       </Grid>
     </Grid>
   );

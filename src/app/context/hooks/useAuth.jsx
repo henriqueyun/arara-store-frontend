@@ -19,8 +19,11 @@ export default function useAuth() {
   // TODO: refactor to use navigate inside here
   async function signIn(email, password) {
     try {
-      const { data: { accessToken } } = await client.auth.signIn({ email, password });
+      const {
+        data: { accessToken, loggedUser },
+      } = await client.auth.signIn({ email, password });
       localStorage.setItem('token', JSON.stringify(accessToken));
+      localStorage.setItem('loggedUser', JSON.stringify(loggedUser));
       setLogged(true);
       return true;
     } catch (error) {
@@ -40,6 +43,9 @@ export default function useAuth() {
   }
 
   return {
-    logged, loading, signIn, signOut,
+    logged,
+    loading,
+    signIn,
+    signOut,
   };
 }
