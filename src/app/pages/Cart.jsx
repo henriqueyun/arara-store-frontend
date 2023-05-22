@@ -25,8 +25,8 @@ import PercentIcon from '@mui/icons-material/Percent';
 import ArrowForwardOutlinedIcon from '@mui/icons-material/ArrowForwardIosOutlined';
 import { Clear } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
-import KeepBuyingButton from '../components/KeepBuyingButton';
-import { formatCurrency } from '../util';
+import { KeepBuyingButton, Price } from '../components';
+import { calculateDiscount, formatCurrency } from '../util';
 
 import { client } from '../../client';
 
@@ -106,9 +106,10 @@ function CartTableRow({ cartItem, onUpdate }) {
         align="left"
       >
         <Typography>{cartItem.product.description}</Typography>
-        <Typography>
-          {formatCurrency(parseFloat(cartItem.product.price))}
-        </Typography>
+        <Price
+          price={cartItem.product.price}
+          discount={cartItem.product.discount}
+        />
       </TableCell>
       <TableCell
         sx={{ backgroundColor: (theme) => theme.palette.common.white }}
@@ -127,7 +128,12 @@ function CartTableRow({ cartItem, onUpdate }) {
         align="right"
       >
         <Typography>
-          {formatCurrency(cartItem.product.price * cartItem.quantity)}
+          {formatCurrency(
+            calculateDiscount(
+              parseFloat(cartItem.product.price),
+              parseFloat(cartItem.product.discount),
+            ) * cartItem.quantity,
+          )}
         </Typography>
       </TableCell>
     </TableRow>
@@ -187,7 +193,14 @@ function CartTable() {
   }, []);
   const calculateCartPrice = () => {
     return cartItems.reduce((acc, cartItem) => {
-      return acc + parseFloat(cartItem.product.price) * cartItem.quantity;
+      return (
+        acc +
+        calculateDiscount(
+          parseFloat(cartItem.product.price),
+          parseFloat(cartItem.product.discount),
+        ) *
+          cartItem.quantity
+      );
     }, 0);
   };
   return (
