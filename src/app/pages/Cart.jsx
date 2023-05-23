@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React, { useEffect, useState } from 'react';
 import {
   Button,
@@ -19,6 +20,7 @@ import {
   Divider,
   IconButton,
   Link,
+  CircularProgress,
 } from '@mui/material';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCartOutlined';
 import PercentIcon from '@mui/icons-material/Percent';
@@ -28,6 +30,7 @@ import { KeepBuyingButton, Price, QuantityChanger } from '../components';
 import { calculateDiscount, formatCurrency } from '../util';
 
 import { client } from '../../client';
+import getAddress from '../util/shipping';
 
 export default function Cart() {
   const [cartItems, setCartItems] = React.useState([]);
@@ -254,7 +257,7 @@ function CartTable() {
           parseFloat(cartItem.product.price),
           parseFloat(cartItem.product.discount),
         ) *
-          cartItem.quantity
+        cartItem.quantity
       );
     }, 0);
   };
@@ -369,29 +372,59 @@ function CartOrderOptions() {
 }
 
 function DeliveryInfo() {
+  const [cep, setCep] = useState();
+  useEffect(() => {
+
+  }, [cep])
   return (
-    <Grid container pt={6} gap={8} flexDirection="column">
-      <DeliveryAddressInfo />
-      <DeliveryValueInfo />
+    <Grid container pt={6} gap={4} flexDirection="column">
+      <DeliveryAddressInfo onSearch={async (newCep) => {
+        setCep(newCep)
+        return getAddress(newCep);
+      }} />
+      <DeliveryValueInfo cep={cep} />
     </Grid>
   );
 }
 
-function DeliveryAddressInfo() {
+function DeliveryAddressInfo({ onSearch }) {
+  const [address, setAddress] = useState('');
+  const [state, setState] = useState('');
+  const [city, setCity] = useState('');
+  const [cep, setCep] = useState('');
+
+  const search = async () => {
+    const { logradouro, uf, localidade } = await onSearch(cep)
+    setAddress(logradouro);
+    setState(uf);
+    setCity(localidade);
+  }
+
   return (
     <Grid>
       <Typography variant="h4">FRETE</Typography>
       <Grid container gap={2} flexDirection="column">
         <Stack direction="row" spacing={6}>
-          <TextField label="CEP" variant="outlined" />
-          <Button variant="outlined">BUSCAR</Button>
+          <TextField
+            label="CEP"
+            variant="outlined"
+            value={cep}
+            onChange={(event) => setCep(event.target.value)}
+          />
+          <Button
+            onClick={search}
+            variant="outlined"
+          >
+            BUSCAR
+          </Button>
+        </Stack>
+        {/* TODO: FAZENDO O LABEL SUBIR AO SETAR UM VALOR */}
+        <Stack direction="row" spacing={6}>
+          <TextField value={city} label="Cidade" variant="outlined" />
+          <TextField value={state} label="Estado" variant="outlined" />
         </Stack>
         <Stack direction="row" spacing={6}>
-          <TextField label="Cidade" variant="outlined" />
-          <TextField label="Estado" variant="outlined" />
-        </Stack>
-        <Stack direction="row" spacing={6}>
-          <TextField label="Endereço" variant="outlined" />
+          <TextField value={address} label="Endereço" variant="outlined" />
           <TextField label="Número" variant="outlined" />
         </Stack>
       </Grid>
@@ -399,58 +432,55 @@ function DeliveryAddressInfo() {
   );
 }
 
-function DeliveryValueInfo() {
+function DeliveryValueInfo({ cep }) {
+  const [shippings, setShippings] = useState([]);
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    const getShippingMethods = async () => {
+      if (cep) {
+        setLoading(true);
+        const response = await client.shipping.listForCep(cep);
+        setLoading(false);
+        setShippings(response);
+
+      }
+    };
+    getShippingMethods()
+  }, [cep]);
+
   return (
     <Grid>
-      <Typography variant="h4">VALOR FRETE</Typography>
-      <RadioGroup
-        aria-labelledby="demo-radio-buttons-group-label"
-        defaultValue="female"
-        name="radio-buttons-group"
-      >
-        <FormControlLabel
-          value="entrega"
-          control={<Radio />}
-          label={
-            <>
-              <Typography display="inline">
-                Zezé Delivery - Entrega entre 01/01/2050 e Nunca -{' '}
-              </Typography>
-              <Typography display="inline" color="warning.main">
-                R$ 1,000,00
-              </Typography>
-            </>
+      {shippings.length ?
+      <>
+        <Typography variant="h4">VALOR FRETE</Typography>
+        <RadioGroup
+          aria-labelledby="demo-radio-buttons-group-label"
+          defaultValue="female"
+          name="radio-buttons-group"
+        >
+          {shippings
+            .map((shipping, index) => (
+              <FormControlLabel
+                key={shipping.Codigo}
+                value={shipping.Codigo}
+                control={<Radio />}
+                label={
+                  <>
+                    <Typography display="inline">
+                      {`[Correios] Opção ${index + 1}  - Entrega em até ${shipping.PrazoEntrega} dias úteis `}
+                    </Typography>
+                    <Typography display="inline" color="success.main">
+                      {formatCurrency(parseFloat(shipping.Valor))}
+                    </Typography>
+                  </>
+                }
+              />
+            ))
           }
-        />
-        <FormControlLabel
-          value="entrega"
-          control={<Radio />}
-          label={
-            <>
-              <Typography display="inline">
-                Edimilson Entregas - Entrega até 09/12/2022 -{' '}
-              </Typography>
-              <Typography display="inline" color="success.main">
-                GRATUITO
-              </Typography>
-            </>
-          }
-        />
-        <FormControlLabel
-          value="entrega"
-          control={<Radio />}
-          label={
-            <>
-              <Typography display="inline">
-                Raimundinha Envios - Entrega até 11/12/2022 -{' '}
-              </Typography>
-              <Typography display="inline" color="warning.main">
-                R$ 91,34
-              </Typography>
-            </>
-          }
-        />
-      </RadioGroup>
+        </RadioGroup>
+      </>
+      : (loading && <CircularProgress/>)
+      }
     </Grid>
   );
 }
