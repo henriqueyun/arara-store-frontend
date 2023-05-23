@@ -1,10 +1,7 @@
-/* eslint-disable no-use-before-define */
-import { consultarCep } from 'correios-brasil';
-
 const getAddress = async (cep) => {
-  const { logradouro, uf, localidade } = await consultarCep(cep).then(
-    (res) => res,
-  );
+  const { logradouro, uf, localidade } = await fetch(
+    `https://viacep.com.br/ws/${cep}/json/`,
+  ).then((res) => res.json());
   return { logradouro, uf, localidade };
 };
 
