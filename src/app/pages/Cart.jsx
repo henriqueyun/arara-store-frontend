@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React, { useEffect, useState } from 'react';
 import {
   Button,
@@ -19,26 +20,42 @@ import {
   Radio,
   Divider,
   IconButton,
+  Link,
 } from '@mui/material';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCartOutlined';
 import PercentIcon from '@mui/icons-material/Percent';
 import ArrowForwardOutlinedIcon from '@mui/icons-material/ArrowForwardIosOutlined';
 import { Clear } from '@mui/icons-material';
-import { Link } from 'react-router-dom';
-import KeepBuyingButton from '../components/KeepBuyingButton';
-import { formatCurrency } from '../util';
+import { KeepBuyingButton, Price } from '../components';
+import { calculateDiscount, formatCurrency } from '../util';
 
 import { client } from '../../client';
 import getAddress from '../util/shipping';
 
 export default function Cart() {
+  const [cartItems, setCartItems] = React.useState([]);
+
+  useEffect(() => {
+    if (!cartItems) {
+      setCartItems([]);
+    }
+  }, [cartItems]);
+
+  useEffect(() => {
+    const listItems = async () => {
+      const { id } = JSON.parse(localStorage.getItem('loggedUser'));
+      const cart = await client.cart.find(id);
+      setCartItems(cart.items);
+    };
+    listItems();
+  }, []);
   return (
     <Container>
       <Grid container py={8}>
         <NavAction>
           <KeepBuyingButton />
         </NavAction>
-        <CartTable />
+        <CartTable cartItems={cartItems} />
         <CartOrderOptions />
       </Grid>
     </Container>
@@ -84,37 +101,45 @@ function CartTableRow({ cartItem, onUpdate }) {
         </Grid>
       </TableCell>
       <TableCell
-        component="a"
-        href={`/products/${cartItem.product.id}`}
         sx={{
           backgroundColor: (theme) => theme.palette.common.white,
           textDecoration: 'none',
         }}
         align="left"
       >
-        <Typography>{cartItem.product.description}</Typography>
-        <Typography>
-          {formatCurrency(parseFloat(cartItem.product.price))}
-        </Typography>
+        <Link
+          color="inherit"
+          underline="none"
+          href={`/products/${cartItem.product.id}`}
+        >
+          <Typography>{cartItem.product.description}</Typography>
+          <Price
+            price={cartItem.product.price}
+            discount={cartItem.product.discount}
+          />
+        </Link>
+      </TableCell>
+      <TableCell
+        sx={{ backgroundColor: (theme) => theme.palette.common.white }}
+        align="right"
+      >
+        <Grid>
+          <Typography sx={{ fontWeight: 'bold' }}>QUANTIDADE</Typography>
+          {/* TODO: change here to QuantityChanger and implement actual changing with it */}
+          <Chip label={cartItem.quantity} variant="outlined" />
+        </Grid>
       </TableCell>
       <TableCell
         sx={{ backgroundColor: (theme) => theme.palette.common.white }}
         align="right"
       >
         <Typography>
-          <Grid>
-            <Typography sx={{ fontWeight: 'bold' }}>QUANTIDADE</Typography>
-            {/* TODO: change here to QuantityChanger and implement actual changing with it */}
-            <Chip label={cartItem.quantity} variant="outlined" />
-          </Grid>
-        </Typography>
-      </TableCell>
-      <TableCell
-        sx={{ backgroundColor: (theme) => theme.palette.common.white }}
-        align="right"
-      >
-        <Typography>
-          {formatCurrency(cartItem.product.price * cartItem.quantity)}
+          {formatCurrency(
+            calculateDiscount(
+              parseFloat(cartItem.product.price),
+              parseFloat(cartItem.product.discount),
+            ) * cartItem.quantity,
+          )}
         </Typography>
       </TableCell>
     </TableRow>
@@ -165,8 +190,9 @@ function CartTable() {
   }, [cartItems]);
 
   const listItems = async () => {
-    const response = await client.cart.items.list();
-    setCartItems(response);
+    const { id } = JSON.parse(localStorage.getItem('loggedUser'));
+    const cart = await client.cart.find(id);
+    setCartItems(cart.items);
   };
 
   useEffect(() => {
@@ -174,7 +200,14 @@ function CartTable() {
   }, []);
   const calculateCartPrice = () => {
     return cartItems.reduce((acc, cartItem) => {
-      return acc + parseFloat(cartItem.product.price) * cartItem.quantity;
+      return (
+        acc +
+        calculateDiscount(
+          parseFloat(cartItem.product.price),
+          parseFloat(cartItem.product.discount),
+        ) *
+        cartItem.quantity
+      );
     }, 0);
   };
   return (
@@ -251,7 +284,11 @@ function CartTableBody({ cartItems, onUpdate }) {
     <TableBody>
       {cartItems.length &&
         cartItems.map((cartItem) => (
-          <CartTableRow cartItem={cartItem} onUpdate={onUpdate} />
+          <CartTableRow
+            key={cartItem.id}
+            cartItem={cartItem}
+            onUpdate={onUpdate}
+          />
         ))}
     </TableBody>
   );
@@ -284,24 +321,19 @@ function CartOrderOptions() {
 }
 
 function DeliveryInfo() {
+  const [cep, setCep] = useState();
+  const [search, setSearch] = useState();
+
+  // TODO: DAR UM JEITO DE USAR VARIAVEIS MAIS BONITO?
   return (
     <Grid container pt={6} gap={8} flexDirection="column">
-      <DeliveryAddressInfo />
-      <DeliveryValueInfo />
+      <DeliveryAddressInfo setCep={setCep} cep={cep} setSearch={setSearch} />
+      <DeliveryValueInfo cep={cep} search={search} />
     </Grid>
   );
 }
 
-function handleCEP(cep) {
-  return getAddress(cep);
-}
-
-function setData(value, set) {
-  set(value);
-}
-
-function DeliveryAddressInfo() {
-  const [cep, setCep] = useState();
+function DeliveryAddressInfo({ setCep, cep, setSearch }) {
   const [address, setAddress] = useState();
   const [state, setState] = useState();
   const [city, setCity] = useState();
@@ -314,20 +346,22 @@ function DeliveryAddressInfo() {
           <TextField
             label="CEP"
             variant="outlined"
-            onChange={(event) => setData(event.target.value, setCep)}
+            onChange={(event) => setCep(event.target.value)}
           />
           <Button
             onClick={async () => {
-              const { logradouro, uf, localidade } = await handleCEP(cep);
-              setData(logradouro, setAddress);
-              setData(uf, setState);
-              setData(localidade, setCity);
+              const { logradouro, uf, localidade } = await getAddress(cep);
+              setSearch(true)
+              setAddress(logradouro);
+              setState(uf);
+              setCity(localidade);
             }}
             variant="outlined"
           >
             BUSCAR
           </Button>
         </Stack>
+        {/* TODO: FAZENDO O LABEL SUBIR AO SETAR UM VALOR */}
         <Stack direction="row" spacing={6}>
           <TextField value={city} label="Cidade" variant="outlined" />
           <TextField value={state} label="Estado" variant="outlined" />
@@ -341,7 +375,17 @@ function DeliveryAddressInfo() {
   );
 }
 
-function DeliveryValueInfo() {
+function DeliveryValueInfo({ cep }) {
+  const [shippings, setShippings] = useState([])
+  useEffect(() => {
+    (async () => {
+      console.log("🚀 ~ file: Cart.jsx:375 ~ DeliveryValueInfo ~ cep:", cep)
+      const response = await client.cart.shipping(cep);
+      setShippings(response);
+      console.log("🚀 ~ file: Cart.jsx:376 ~ DeliveryValueInfo ~ shippings:", shippings)
+    })();
+  }, []);
+
   return (
     <Grid>
       <Typography variant="h4">VALOR FRETE</Typography>
@@ -350,48 +394,33 @@ function DeliveryValueInfo() {
         defaultValue="female"
         name="radio-buttons-group"
       >
-        <FormControlLabel
-          value="entrega"
-          control={<Radio />}
-          label={
-            <>
-              <Typography display="inline">
-                Zezé Delivery - Entrega entre 01/01/2050 e Nunca -{' '}
-              </Typography>
-              <Typography display="inline" color="warning.main">
-                R$ 1,000,00
-              </Typography>
-            </>
-          }
-        />
-        <FormControlLabel
-          value="entrega"
-          control={<Radio />}
-          label={
-            <>
-              <Typography display="inline">
-                Edimilson Entregas - Entrega até 09/12/2022 -{' '}
-              </Typography>
-              <Typography display="inline" color="success.main">
-                GRATUITO
-              </Typography>
-            </>
-          }
-        />
-        <FormControlLabel
-          value="entrega"
-          control={<Radio />}
-          label={
-            <>
-              <Typography display="inline">
-                Raimundinha Envios - Entrega até 11/12/2022 -{' '}
-              </Typography>
-              <Typography display="inline" color="warning.main">
-                R$ 91,34
-              </Typography>
-            </>
-          }
-        />
+        {
+          shippings.length ? (
+            shippings.map((shipping) => (
+              <FormControlLabel
+                value={shipping.Codigo}
+                control={<Radio />}
+                label={
+                  <>
+                    <Typography display="inline">
+                      {`Entra ${shipping.Codigo} - Entrega em até ${shipping.PrazoEntrega} dias úteis `}
+                    </Typography>
+                    <Typography display="inline" color="warning.main">
+                      {shipping.Valor}
+                    </Typography>
+                  </>
+                }
+              />
+            ))
+
+          ) : (
+            <Typography variant="h6">
+              Houve um problema ao buscar preços de frete
+            </Typography>
+          )
+        }
+
+
       </RadioGroup>
     </Grid>
   );
