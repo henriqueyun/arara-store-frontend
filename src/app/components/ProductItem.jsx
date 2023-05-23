@@ -20,7 +20,7 @@ export default function ProductItem({ product }) {
   );
 }
 
-function Price(props) {
+export function Price(props) {
   const { price, discount } = props;
   return (
     <div>
