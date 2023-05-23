@@ -17,11 +17,6 @@ const CartService = (http) => ({
     const { data } = await http.get(`/carts/${userId}`);
     return data;
   },
-  shipping: async (cep) => {
-    console.log('🚀 ~ file: cart.js:21 ~ shipping: ~ cep:', cep);
-    const { data } = await http.post(`/carts/shipping/${cep}`);
-    return data;
-  },
 });
 
 export default CartService;

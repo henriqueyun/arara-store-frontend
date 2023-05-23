@@ -21,6 +21,7 @@ import {
   Divider,
   IconButton,
   Link,
+  CircularProgress,
 } from '@mui/material';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCartOutlined';
 import PercentIcon from '@mui/icons-material/Percent';
@@ -322,21 +323,32 @@ function CartOrderOptions() {
 
 function DeliveryInfo() {
   const [cep, setCep] = useState();
-  const [search, setSearch] = useState();
+  useEffect(() => {
 
-  // TODO: DAR UM JEITO DE USAR VARIAVEIS MAIS BONITO?
+  }, [cep])
   return (
-    <Grid container pt={6} gap={8} flexDirection="column">
-      <DeliveryAddressInfo setCep={setCep} cep={cep} setSearch={setSearch} />
-      <DeliveryValueInfo cep={cep} search={search} />
+    <Grid container pt={6} gap={4} flexDirection="column">
+      <DeliveryAddressInfo onSearch={async (newCep) => {
+        setCep(newCep)
+        return getAddress(newCep);
+      }} />
+      <DeliveryValueInfo cep={cep} />
     </Grid>
   );
 }
 
-function DeliveryAddressInfo({ setCep, cep, setSearch }) {
-  const [address, setAddress] = useState();
-  const [state, setState] = useState();
-  const [city, setCity] = useState();
+function DeliveryAddressInfo({ onSearch }) {
+  const [address, setAddress] = useState('');
+  const [state, setState] = useState('');
+  const [city, setCity] = useState('');
+  const [cep, setCep] = useState('');
+
+  const search = async () => {
+    const { logradouro, uf, localidade } = await onSearch(cep)
+    setAddress(logradouro);
+    setState(uf);
+    setCity(localidade);
+  }
 
   return (
     <Grid>
@@ -346,16 +358,11 @@ function DeliveryAddressInfo({ setCep, cep, setSearch }) {
           <TextField
             label="CEP"
             variant="outlined"
+            value={cep}
             onChange={(event) => setCep(event.target.value)}
           />
           <Button
-            onClick={async () => {
-              const { logradouro, uf, localidade } = await getAddress(cep);
-              setSearch(true)
-              setAddress(logradouro);
-              setState(uf);
-              setCity(localidade);
-            }}
+            onClick={search}
             variant="outlined"
           >
             BUSCAR
@@ -376,52 +383,54 @@ function DeliveryAddressInfo({ setCep, cep, setSearch }) {
 }
 
 function DeliveryValueInfo({ cep }) {
-  const [shippings, setShippings] = useState([])
+  const [shippings, setShippings] = useState([]);
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
-    (async () => {
-      console.log("🚀 ~ file: Cart.jsx:375 ~ DeliveryValueInfo ~ cep:", cep)
-      const response = await client.cart.shipping(cep);
-      setShippings(response);
-      console.log("🚀 ~ file: Cart.jsx:376 ~ DeliveryValueInfo ~ shippings:", shippings)
-    })();
-  }, []);
+    const getShippingMethods = async () => {
+      if (cep) {
+        setLoading(true);
+        const response = await client.shipping.listForCep(cep);
+        setLoading(false);
+        setShippings(response);
+
+      }
+    };
+    getShippingMethods()
+  }, [cep]);
 
   return (
     <Grid>
-      <Typography variant="h4">VALOR FRETE</Typography>
-      <RadioGroup
-        aria-labelledby="demo-radio-buttons-group-label"
-        defaultValue="female"
-        name="radio-buttons-group"
-      >
-        {
-          shippings.length ? (
-            shippings.map((shipping) => (
+      {shippings.length ?
+      <>
+        <Typography variant="h4">VALOR FRETE</Typography>
+        <RadioGroup
+          aria-labelledby="demo-radio-buttons-group-label"
+          defaultValue="female"
+          name="radio-buttons-group"
+        >
+          {shippings
+            .map((shipping, index) => (
               <FormControlLabel
+                key={shipping.Codigo}
                 value={shipping.Codigo}
                 control={<Radio />}
                 label={
                   <>
                     <Typography display="inline">
-                      {`Entra ${shipping.Codigo} - Entrega em até ${shipping.PrazoEntrega} dias úteis `}
+                      {`[Correios] Opção ${index + 1}  - Entrega em até ${shipping.PrazoEntrega} dias úteis `}
                     </Typography>
-                    <Typography display="inline" color="warning.main">
-                      {shipping.Valor}
+                    <Typography display="inline" color="success.main">
+                      {formatCurrency(parseFloat(shipping.Valor))}
                     </Typography>
                   </>
                 }
               />
             ))
-
-          ) : (
-            <Typography variant="h6">
-              Houve um problema ao buscar preços de frete
-            </Typography>
-          )
-        }
-
-
-      </RadioGroup>
+          }
+        </RadioGroup>
+      </>
+      : (loading && <CircularProgress/>)
+      }
     </Grid>
   );
 }
