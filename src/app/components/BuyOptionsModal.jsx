@@ -22,7 +22,9 @@ export default function BuyOptionsModal({ open, handleClose }) {
     <div>
       <Modal open={open} onClose={handleClose}>
         <Box sx={{ ...style, width: '400px' }}>
-          <Typography variant="h5">Como deseja prosseguir?</Typography>
+          <Typography color="background.default" variant="h5">
+            Como deseja prosseguir?
+          </Typography>
           <Grid display="flex" gap={2}>
             <KeepBuyingButton color="info" href="#" onClick={handleClose} />
             <GoToCartButton color="info" />
