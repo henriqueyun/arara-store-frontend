@@ -24,12 +24,12 @@ export default function Login() {
       <Grid container flexDirection="column" gap={2} p={4}>
         <Typography variant="h4">Login</Typography>
         <TextField
-          label="username"
+          label="E-mail"
           variant="outlined"
           onChange={(e) => setEmail(e.target.value)}
         />
         <TextField
-          label="password"
+          label="Senha"
           variant="outlined"
           onChange={(e) => setPassword(e.target.value)}
           type="password"
