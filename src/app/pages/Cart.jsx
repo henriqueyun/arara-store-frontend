@@ -10,7 +10,6 @@ import {
   TableCell,
   Typography,
   TableBody,
-  Chip,
   Grid,
   TextField,
   Stack,
@@ -25,7 +24,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCartOutlined';
 import PercentIcon from '@mui/icons-material/Percent';
 import ArrowForwardOutlinedIcon from '@mui/icons-material/ArrowForwardIosOutlined';
 import { Clear } from '@mui/icons-material';
-import { KeepBuyingButton, Price } from '../components';
+import { KeepBuyingButton, Price, QuantityChanger } from '../components';
 import { calculateDiscount, formatCurrency } from '../util';
 
 import { client } from '../../client';
@@ -61,10 +60,59 @@ export default function Cart() {
 }
 
 function CartTableRow({ cartItem, onUpdate }) {
+  const [qtyChangeDisabled, setQtyChangeDisabled] = useState(false);
   const removeCartItem = async () => {
+    setQtyChangeDisabled(true);
     await client.cart.items.remove(cartItem.id);
-    await onUpdate();
+    onUpdate();
+    setQtyChangeDisabled(false);
   };
+
+  const increaseQuantity = async () => {
+    if (cartItem.quantity < 25) {
+      setQtyChangeDisabled(true);
+      await client.cart.items.update(cartItem.id, {
+        quantity: cartItem.quantity + 1,
+      });
+      onUpdate();
+      setQtyChangeDisabled(false);
+    }
+  };
+
+  const decreaseQuantity = async () => {
+    if (cartItem.quantity > 1) {
+      setQtyChangeDisabled(true);
+      await client.cart.items.update(cartItem.id, {
+        quantity: cartItem.quantity - 1,
+      });
+      onUpdate();
+      setQtyChangeDisabled(false);
+    }
+  };
+
+  const changeQuantity = async (event) => {
+    setQtyChangeDisabled(true);
+    const newQuantity = parseInt(event.target.value, 10);
+    // eslint-disable-next-line no-restricted-globals
+    if (isNaN(newQuantity)) {
+      setQtyChangeDisabled(false);
+      return;
+    }
+    if (newQuantity < 1) {
+      setQtyChangeDisabled(false);
+      return;
+    }
+    if (newQuantity > 25) {
+      setQtyChangeDisabled(false);
+      return;
+    }
+    await client.cart.items.update(cartItem.id, {
+      quantity: newQuantity,
+    });
+    onUpdate();
+    setQtyChangeDisabled(false);
+  };
+
   const [removeButtonVisibilty, setRemoveButtonVisibilty] = useState('hidden');
   return (
     <TableRow
@@ -121,11 +169,13 @@ function CartTableRow({ cartItem, onUpdate }) {
         sx={{ backgroundColor: (theme) => theme.palette.common.white }}
         align="right"
       >
-        <Grid>
-          <Typography sx={{ fontWeight: 'bold' }}>QUANTIDADE</Typography>
-          {/* TODO: change here to QuantityChanger and implement actual changing with it */}
-          <Chip label={cartItem.quantity} variant="outlined" />
-        </Grid>
+        <QuantityChanger
+          value={cartItem.quantity}
+          onIncrease={increaseQuantity}
+          onDecrease={decreaseQuantity}
+          onChange={changeQuantity}
+          disabled={qtyChangeDisabled}
+        />
       </TableCell>
       <TableCell
         sx={{ backgroundColor: (theme) => theme.palette.common.white }}

@@ -7,6 +7,7 @@ export default function QuantityChanger({
   onIncrease,
   onDecrease,
   onChange,
+  disabled = false,
 }) {
   return (
     <Grid>
@@ -17,6 +18,7 @@ export default function QuantityChanger({
           maxHeight: '40px',
         }}
         onClick={onDecrease}
+        disabled={disabled}
       >
         <Remove />
       </IconButton>
@@ -24,6 +26,7 @@ export default function QuantityChanger({
         size="small"
         sx={{ width: '6ch', textAlign: 'center' }}
         variant="outlined"
+        disabled={disabled}
         inputProps={{
           min: 0,
           style: {
@@ -51,6 +54,7 @@ export default function QuantityChanger({
           maxHeight: '40px',
         }}
         onClick={onIncrease}
+        disabled={disabled}
       >
         <Add />
       </IconButton>

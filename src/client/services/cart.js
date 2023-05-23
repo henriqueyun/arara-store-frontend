@@ -12,6 +12,10 @@ const CartService = (http) => ({
       const { data } = await http.delete(`/items/${id}`);
       return data;
     },
+    update: async (id, item) => {
+      const { data } = await http.patch(`/items/${id}`, item);
+      return data;
+    },
   },
   find: async (userId) => {
     const { data } = await http.get(`/carts/${userId}`);

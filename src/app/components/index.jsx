@@ -5,6 +5,7 @@ import Footer from './Footer';
 import ProductsFilter from './ProductsFilters/ProductsFilter';
 import ProductsGrid from './ProductsGrid';
 import KeepBuyingButton from './KeepBuyingButton';
+import QuantityChanger from './QuantityChanger';
 
 export {
   Menubar,
@@ -15,4 +16,5 @@ export {
   ProductsFilter,
   ProductsGrid,
   KeepBuyingButton,
+  QuantityChanger,
 };
