@@ -7,9 +7,21 @@ import {
   Link,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import React from 'react';
+import React, { useContext } from 'react';
+import { Context } from '../context/AuthContext';
 
 export default function Menubar() {
+  const { logged, signOut } = useContext(Context);
+
+  const handleSingOut = async () => {
+    if (await signOut()) {
+      window.location.reload(true);
+    } else {
+      // eslint-disable-next-line no-alert
+      alert('Falha ao sair');
+    }
+  };
+
   return (
     <Grid
       container
@@ -43,9 +55,15 @@ export default function Menubar() {
         </Button>
       </Grid>
       <Grid sx={{ display: 'flex' }}>
-        <Button href="/login">
-          <Typography color="background.default">Entrar</Typography>
-        </Button>
+        {logged ? (
+          <Button onClick={handleSingOut}>
+            <Typography color="background.default">Sair</Typography>
+          </Button>
+        ) : (
+          <Button href="/login">
+            <Typography color="background.default">Entrar</Typography>
+          </Button>
+        )}
         <Button href="/cart">
           <Typography color="background.default">Carrinho</Typography>
         </Button>

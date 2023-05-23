@@ -10,23 +10,17 @@ import {
 } from '@mui/material';
 import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import { Showcase } from '../components';
 import { client } from '../../client';
 import { calculateDiscount, formatCurrency } from '../util';
+import QuantityChanger from '../components/QuantityChanger';
+import BuyOptionsModal from '../components/BuyOptionsModal';
 
 export default function Product() {
   const { id } = useParams();
   const [product, setProduct] = useState({});
-
-  useEffect(() => {
-    const getProducts = async () => {
-      const response = await client.products.findById(id);
-      setProduct(response);
-    };
-    getProducts();
-  }, [id]);
 
   useEffect(() => {
     const getProducts = async () => {
@@ -41,8 +35,7 @@ export default function Product() {
       <ProductExhibition>
         <ProductInfo product={product} />
       </ProductExhibition>
-      {/* TODO:
-      see how product exhibition bottom showcases should work then remove hardcoded showcases */}
+      {/* TODO: see how product exhibition bottom showcases should work then remove hardcoded showcases */}
       <Grid container py={8} justifyContent="center" gap={8}>
         <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
           Promoções
@@ -96,6 +89,7 @@ function ProductImages({ imageUrl }) {
 }
 
 function ProductInfo({ product }) {
+  const [quantity, setQuantity] = useState(1);
   return (
     <>
       <Grid container alignItems="center">
@@ -110,12 +104,37 @@ function ProductInfo({ product }) {
             <OptativeDetail detailTitle="TAMANHO">
               {product.size}
             </OptativeDetail>
-            {/* TODO: quantity component */}
             <Grid>
               <Typography sx={{ fontWeight: 'bold' }}>QUANTIDADE</Typography>
-              <Chip label="TODO" variant="outlined" />
+              {/* TODO: discuss field rules, which max. value makes sense (if we should have a max. value etc.) */}
+              <QuantityChanger
+                value={quantity}
+                onIncrease={() =>
+                  setQuantity((oldQty) => (oldQty < 25 ? oldQty + 1 : 25))
+                }
+                onDecrease={() =>
+                  setQuantity((oldQty) => (oldQty > 1 ? oldQty - 1 : 1))
+                }
+                onChange={(event) => {
+                  const qty = parseInt(event.target.value, 10);
+                  // eslint-disable-next-line no-restricted-globals
+                  if (isNaN(qty)) {
+                    setQuantity(1);
+                    return;
+                  }
+                  if (qty < 1) {
+                    setQuantity(1);
+                    return;
+                  }
+                  if (qty > 25) {
+                    setQuantity(25);
+                    return;
+                  }
+                  setQuantity(qty);
+                }}
+              />
             </Grid>
-            <BuyButtons />
+            <BuyButtons productId={product.id} quantity={quantity} />
           </Grid>
         </Grid>
       </Grid>
@@ -224,9 +243,10 @@ function InstallmentsOptions({ price }) {
         <br />
         <Typography>
           <b>
+            {`
             2x de
-            {formatCurrency(price / 2)}
-          </b>{' '}
+            ${formatCurrency(price / 2)} `}
+          </b>
           no cartão de crédito
         </Typography>
       </Typography>
@@ -246,13 +266,47 @@ function OptativeDetail({ children, detailTitle }) {
   );
 }
 
-function BuyButtons() {
+function BuyButtons({ productId, quantity }) {
+  const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+  const addToCart = async () => {
+    const { id } = JSON.parse(localStorage.getItem('loggedUser'));
+    const cart = await client.cart.find(id);
+    return client.cart.items.add(productId, quantity, cart.id);
+  };
+
+  const showBuyOptions = () => {
+    setOpen(true);
+  };
+
+  const goToCart = () => {
+    navigate('/cart');
+  };
+
   return (
     <Grid display="flex" gap={1}>
-      <Button size="large" variant="outlined" startIcon={<ShoppingCartIcon />}>
+      <BuyOptionsModal open={open} handleClose={() => setOpen(false)} />
+      <Button
+        onClick={async () => {
+          if (await addToCart()) {
+            showBuyOptions();
+          }
+        }}
+        size="large"
+        variant="outlined"
+        startIcon={<ShoppingCartIcon />}
+      >
         ADICIONAR AO CARRINHO
       </Button>
-      <Button size="large" variant="contained">
+      <Button
+        onClick={async () => {
+          if (await addToCart()) {
+            goToCart();
+          }
+        }}
+        size="large"
+        variant="contained"
+      >
         COMPRAR AGORA
       </Button>
     </Grid>

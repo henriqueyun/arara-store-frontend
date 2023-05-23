@@ -29,6 +29,12 @@ const router = createBrowserRouter([
       return <Component variant={<Login />} />;
     },
   },
+  {
+    path: '/cart',
+    Component() {
+      return <Component isPrivate variant={<Cart />} />;
+    },
+  },
 ]);
 
 function Component({ isPrivate, variant }) {

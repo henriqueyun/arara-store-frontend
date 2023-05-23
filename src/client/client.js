@@ -1,6 +1,11 @@
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { ProductService, AuthService } from './services';
+import {
+  ProductService,
+  AuthService,
+  CartService,
+  ShippingService,
+} from './services';
 
 function setAxiosConfig() {
   axios.defaults.baseURL = 'http://localhost:3000';
@@ -26,6 +31,8 @@ setAxiosConfig();
 const client = {
   products: ProductService(axios),
   auth: AuthService(axios),
+  cart: CartService(axios),
+  shipping: ShippingService(axios),
 };
 
 function setAuth(token) {

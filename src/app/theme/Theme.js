@@ -13,9 +13,12 @@ const theme = createTheme({
     warning: {
       main: '#FFD873',
     },
+    info: {
+      main: '#F5F5F5',
+    },
     text: {
       primary: '#000000',
-      secondary: '#000000',
+      secondary: '#323232',
       disabled: '#CCCCCC',
     },
     background: {
@@ -24,11 +27,18 @@ const theme = createTheme({
     },
   },
   components: {
-    MuiTextField: {
+    MuiOutlinedInput: {
       styleOverrides: {
         root: {
           backgroundColor: '#F5F5F5',
           borderRadius: '50px',
+        },
+      },
+    },
+    MuiTableContainer: {
+      styleOverrides: {
+        root: {
+          boxShadow: 'none',
         },
       },
     },
