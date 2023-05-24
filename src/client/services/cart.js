@@ -1,8 +1,8 @@
 const CartService = (http) => ({
   items: {
-    add: async (id, quantity, cartId) => {
+    add: async (id, quantity, userId) => {
       const { data } = await http.post('/items', {
-        cartId,
+        userId,
         productId: id,
         quantity,
       });
