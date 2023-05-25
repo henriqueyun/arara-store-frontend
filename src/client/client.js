@@ -12,7 +12,7 @@ function setAxiosConfig() {
     (response) => {
       return response;
     },
-    async function (error) {
+    async function clearLocalStorageAuth(error) {
       if (error.response.status === 401) {
         localStorage.removeItem('token');
         localStorage.removeItem('loggedUser');
