@@ -237,18 +237,18 @@ function Discount({ children }) {
 // TODO: replace for real installments option
 function InstallmentsOptions({ price }) {
   return (
-    <Grid display="flex" alignItems="flex-end">
+    <Grid display="flex" flexDirection="column">
       <Typography>
         em até
         <br />
-        <Typography>
-          <b>
-            {`
+      </Typography>
+      <Typography>
+        <b>
+          {`
             2x de
             ${formatCurrency(price / 2)} `}
-          </b>
-          no cartão de crédito
-        </Typography>
+        </b>
+        no cartão de crédito
       </Typography>
     </Grid>
   );
@@ -284,7 +284,6 @@ function BuyButtons({ productId, quantity }) {
 
   return (
     <Grid display="flex" gap={1}>
-      <BuyOptionsModal open={open} handleClose={() => setOpen(false)} />
       <Button
         onClick={async () => {
           if (await addToCart()) {
@@ -308,6 +307,7 @@ function BuyButtons({ productId, quantity }) {
       >
         COMPRAR AGORA
       </Button>
+      <BuyOptionsModal open={open} handleClose={() => setOpen(false)} />
     </Grid>
   );
 }
