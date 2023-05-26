@@ -10,4 +10,12 @@ function formatCurrency(value) {
 function calculateDiscount(price, discount) {
   return price - (price / 100) * discount;
 }
-export { formatCurrency, calculateDiscount };
+
+const getAddressInfoByCep = async (cep) => {
+  const { logradouro, uf, localidade } = await fetch(
+    `https://viacep.com.br/ws/${cep}/json/`,
+  ).then((res) => res.json());
+  return { state: uf, city: localidade, address: logradouro };
+};
+
+export { formatCurrency, calculateDiscount, getAddressInfoByCep };
