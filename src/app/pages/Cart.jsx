@@ -22,10 +22,10 @@ import { Clear } from '@mui/icons-material';
 import { KeepBuyingButton, Price, QuantityChanger } from '../components';
 import { calculateDiscount, formatCurrency } from '../util';
 import { client } from '../../client';
-import userStorage from '../storage/userStorage';
 
 export default function Cart() {
-  const [cartItems, setCartItems] = React.useState([]);
+  const [cartItems, setCartItems] = useState([]);
+  const [canBuy, setCanBuy] = useState(false);
 
   useEffect(() => {
     if (!cartItems) {
@@ -34,11 +34,20 @@ export default function Cart() {
   }, [cartItems]);
 
   useEffect(() => {
-    const listItems = async () => {
-      const { id } = JSON.parse(localStorage.getItem('loggedUser'));
-      const cart = await client.cart.find(id);
-      setCartItems(cart.items);
-    };
+    if (cartItems.length) {
+      setCanBuy(true);
+      return;
+    }
+    setCanBuy(false);
+  }, [cartItems]);
+
+  const listItems = async () => {
+    const { id } = JSON.parse(localStorage.getItem('loggedUser'));
+    const cart = await client.cart.find(id);
+    setCartItems(cart.items);
+  };
+
+  useEffect(() => {
     listItems();
   }, []);
   return (
@@ -47,8 +56,8 @@ export default function Cart() {
         <NavAction>
           <KeepBuyingButton />
         </NavAction>
-        <CartTable cartItems={cartItems} />
-        <CartOrderOptions />
+        <CartTable cartItems={cartItems} onChange={listItems} />
+        <CartOrderOptions disabled={!canBuy} />
       </Grid>
     </Container>
   );
@@ -224,23 +233,7 @@ function CartTableAction({ children }) {
   );
 }
 
-function CartTable() {
-  const [cartItems, setCartItems] = useState([]);
-  useEffect(() => {
-    if (!cartItems) {
-      setCartItems([]);
-    }
-  }, [cartItems]);
-
-  const listItems = async () => {
-    const userId = userStorage.getId();
-    const cart = await client.cart.find(userId);
-    setCartItems(cart.items);
-  };
-
-  useEffect(() => {
-    listItems();
-  }, []);
+function CartTable({ cartItems, onChange }) {
   const calculateCartPrice = () => {
     return cartItems.reduce((acc, cartItem) => {
       return (
@@ -268,7 +261,7 @@ function CartTable() {
         <TableContainer component={Paper}>
           <Table>
             <CartTableHead />
-            <CartTableBody cartItems={cartItems} onUpdate={listItems} />
+            <CartTableBody cartItems={cartItems} onUpdate={onChange} />
           </Table>
           <CartTableFooter cartPrice={calculateCartPrice()} />
         </TableContainer>
@@ -337,7 +330,7 @@ function CartTableBody({ cartItems, onUpdate }) {
   );
 }
 
-function CartOrderOptions() {
+function CartOrderOptions({ disabled }) {
   return (
     <>
       <Grid container py={4} flexDirection="column">
@@ -354,6 +347,7 @@ function CartOrderOptions() {
           href="/order"
           endIcon={<ArrowForwardOutlinedIcon />}
           variant="contained"
+          disabled={disabled}
         >
           COMPRAR AGORA
         </Button>
