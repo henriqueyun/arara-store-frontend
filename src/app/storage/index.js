@@ -1,4 +1,4 @@
-import addressStorage from './addressStorage';
 import userStorage from './userStorage';
 
-export { addressStorage, userStorage };
+// eslint-disable-next-line import/prefer-default-export
+export { userStorage };
