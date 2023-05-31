@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Container, Grid, Typography, TextField, Button } from '@mui/material';
+import Swal from 'sweetalert2';
 import { Context } from '../context/AuthContext';
 
 export default function Login() {
@@ -14,8 +15,11 @@ export default function Login() {
     if (await signIn(email, password)) {
       navigate('/');
     } else {
-      // eslint-disable-next-line no-alert
-      alert('Falha no login');
+      Swal.fire({
+        icon: 'error',
+        title: 'Erro',
+        text: 'Falha no login!',
+      });
     }
   };
 
@@ -37,6 +41,10 @@ export default function Login() {
         <Button variant="contained" onClick={submitLogin} sx={{ my: 1 }}>
           Login
         </Button>
+        <Typography>Não tem uma conta?</Typography>
+        <Link underline="none" to="/singUp">
+          Cadastre-se aqui
+        </Link>
       </Grid>
     </Container>
   );
