@@ -1,5 +1,5 @@
 const UserService = (http) => ({
-  singUp: async (data) => http.post('/users', data),
+  signUp: async (data) => http.post('/users', data),
 });
 
 export default UserService;

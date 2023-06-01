@@ -42,7 +42,7 @@ export default function Login() {
           Login
         </Button>
         <Typography>Não tem uma conta?</Typography>
-        <Link underline="none" to="/singUp">
+        <Link underline="none" to="/signUp">
           Cadastre-se aqui
         </Link>
       </Grid>

@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Grid, Typography, TextField, Button } from '@mui/material';
@@ -9,7 +8,7 @@ import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { client } from '../../client';
 
-export default function SingUp() {
+export default function SignUp() {
   const navigate = useNavigate();
   const [disableButton, setDisableButton] = useState(true);
   const [input, setInput] = useState({
@@ -121,11 +120,11 @@ export default function SingUp() {
     }
   };
 
-  const submitSingUp = async () => {
+  const submitSignUp = async () => {
     delete input.confirmPassword;
 
     try {
-      await client.user.singUp(input);
+      await client.user.signUp(input);
       Swal.fire({
         icon: 'success',
         title: 'Sucesso',
@@ -216,7 +215,7 @@ export default function SingUp() {
         <Button
           disabled={disableButton}
           variant="contained"
-          onClick={submitSingUp}
+          onClick={submitSignUp}
           sx={{ my: 1 }}
         >
           Cadastrar

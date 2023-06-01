@@ -3,7 +3,7 @@ import { createBrowserRouter, useNavigate } from 'react-router-dom';
 import React, { useContext } from 'react';
 import { Home, Products, Product, Login, Cart } from './pages';
 import { Context } from './context/AuthContext';
-import SingUp from './pages/SingUp';
+import SignUp from './pages/SignUp';
 
 const router = createBrowserRouter([
   {
@@ -31,9 +31,9 @@ const router = createBrowserRouter([
     },
   },
   {
-    path: '/singUp',
+    path: '/signUp',
     Component() {
-      return <Component variant={<SingUp />} />;
+      return <Component variant={<SignUp />} />;
     },
   },
   {
