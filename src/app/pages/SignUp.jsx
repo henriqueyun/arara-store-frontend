@@ -124,7 +124,7 @@ export default function SignUp() {
     delete input.confirmPassword;
 
     try {
-      await client.user.signUp(input);
+      await client.auth.signUp(input);
       Swal.fire({
         icon: 'success',
         title: 'Sucesso',
