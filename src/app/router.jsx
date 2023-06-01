@@ -3,6 +3,7 @@ import { createBrowserRouter, useNavigate } from 'react-router-dom';
 import React, { useContext } from 'react';
 import { Home, Products, Product, Login, Cart } from './pages';
 import { Context } from './context/AuthContext';
+import SignUp from './pages/SignUp';
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,12 @@ const router = createBrowserRouter([
     path: '/login',
     Component() {
       return <Component variant={<Login />} />;
+    },
+  },
+  {
+    path: '/signUp',
+    Component() {
+      return <Component variant={<SignUp />} />;
     },
   },
   {
