@@ -4,6 +4,8 @@ import {
   AuthService,
   CartService,
   ShippingService,
+  AddressService,
+  OrderService,
 } from './services';
 
 function setAxiosConfig() {
@@ -32,6 +34,8 @@ const client = {
   auth: AuthService(axios),
   cart: CartService(axios),
   shipping: ShippingService(axios),
+  address: AddressService(axios),
+  order: OrderService(axios),
 };
 
 function setAuth(token) {

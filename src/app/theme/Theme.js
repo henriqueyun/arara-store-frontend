@@ -42,6 +42,18 @@ const theme = createTheme({
         },
       },
     },
+    MuiMenuItem: {
+      styleOverrides: {
+        root: {
+          backgroundColor: '#323232',
+          color: '#FFFFFF',
+          '&.Mui-selected': {
+            backgroundColor: '#323232',
+            color: '#FFFFFF',
+          },
+        },
+      },
+    },
   },
 });
 

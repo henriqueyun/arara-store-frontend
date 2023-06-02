@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import React, { useEffect, useState } from 'react';
 import {
   Button,
@@ -12,15 +11,9 @@ import {
   Typography,
   TableBody,
   Grid,
-  TextField,
-  Stack,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
   Divider,
   IconButton,
   Link,
-  CircularProgress,
 } from '@mui/material';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCartOutlined';
 import PercentIcon from '@mui/icons-material/Percent';
@@ -28,12 +21,11 @@ import ArrowForwardOutlinedIcon from '@mui/icons-material/ArrowForwardIosOutline
 import { Clear } from '@mui/icons-material';
 import { KeepBuyingButton, Price, QuantityChanger } from '../components';
 import { calculateDiscount, formatCurrency } from '../util';
-
 import { client } from '../../client';
-import getAddress from '../util/shipping';
 
 export default function Cart() {
-  const [cartItems, setCartItems] = React.useState([]);
+  const [cartItems, setCartItems] = useState([]);
+  const [canBuy, setCanBuy] = useState(false);
 
   useEffect(() => {
     if (!cartItems) {
@@ -42,11 +34,20 @@ export default function Cart() {
   }, [cartItems]);
 
   useEffect(() => {
-    const listItems = async () => {
-      const { id } = JSON.parse(localStorage.getItem('loggedUser'));
-      const cart = await client.cart.find(id);
-      setCartItems(cart.items);
-    };
+    if (cartItems.length) {
+      setCanBuy(true);
+      return;
+    }
+    setCanBuy(false);
+  }, [cartItems]);
+
+  const listItems = async () => {
+    const { id } = JSON.parse(localStorage.getItem('loggedUser'));
+    const cart = await client.cart.find(id);
+    setCartItems(cart.items);
+  };
+
+  useEffect(() => {
     listItems();
   }, []);
   return (
@@ -55,8 +56,8 @@ export default function Cart() {
         <NavAction>
           <KeepBuyingButton />
         </NavAction>
-        <CartTable cartItems={cartItems} />
-        <CartOrderOptions />
+        <CartTable cartItems={cartItems} onChange={listItems} />
+        <CartOrderOptions disabled={!canBuy} />
       </Grid>
     </Container>
   );
@@ -232,23 +233,7 @@ function CartTableAction({ children }) {
   );
 }
 
-function CartTable() {
-  const [cartItems, setCartItems] = useState([]);
-  useEffect(() => {
-    if (!cartItems) {
-      setCartItems([]);
-    }
-  }, [cartItems]);
-
-  const listItems = async () => {
-    const { id } = JSON.parse(localStorage.getItem('loggedUser'));
-    const cart = await client.cart.find(id);
-    setCartItems(cart.items);
-  };
-
-  useEffect(() => {
-    listItems();
-  }, []);
+function CartTable({ cartItems, onChange }) {
   const calculateCartPrice = () => {
     return cartItems.reduce((acc, cartItem) => {
       return (
@@ -257,7 +242,7 @@ function CartTable() {
           parseFloat(cartItem.product.price),
           parseFloat(cartItem.product.discount),
         ) *
-        cartItem.quantity
+          cartItem.quantity
       );
     }, 0);
   };
@@ -276,7 +261,7 @@ function CartTable() {
         <TableContainer component={Paper}>
           <Table>
             <CartTableHead />
-            <CartTableBody cartItems={cartItems} onUpdate={listItems} />
+            <CartTableBody cartItems={cartItems} onUpdate={onChange} />
           </Table>
           <CartTableFooter cartPrice={calculateCartPrice()} />
         </TableContainer>
@@ -345,13 +330,9 @@ function CartTableBody({ cartItems, onUpdate }) {
   );
 }
 
-function CartOrderOptions() {
+function CartOrderOptions({ disabled }) {
   return (
     <>
-      <NavAction gridProps={{ pt: 6 }}>
-        <KeepBuyingButton />
-      </NavAction>
-      <DeliveryInfo />
       <Grid container py={4} flexDirection="column">
         <Divider />
       </Grid>
@@ -359,129 +340,19 @@ function CartOrderOptions() {
         gridProps={{
           container: true,
           display: 'flex',
-          justifyContent: 'space-between',
+          justifyContent: 'end',
         }}
       >
-        <KeepBuyingButton />
-        <Button endIcon={<ArrowForwardOutlinedIcon />} variant="contained">
+        <Button
+          href="/order"
+          endIcon={<ArrowForwardOutlinedIcon />}
+          variant="contained"
+          disabled={disabled}
+        >
           COMPRAR AGORA
         </Button>
       </NavAction>
     </>
-  );
-}
-
-function DeliveryInfo() {
-  const [cep, setCep] = useState();
-  useEffect(() => {
-
-  }, [cep])
-  return (
-    <Grid container pt={6} gap={4} flexDirection="column">
-      <DeliveryAddressInfo onSearch={async (newCep) => {
-        setCep(newCep)
-        return getAddress(newCep);
-      }} />
-      <DeliveryValueInfo cep={cep} />
-    </Grid>
-  );
-}
-
-function DeliveryAddressInfo({ onSearch }) {
-  const [address, setAddress] = useState('');
-  const [state, setState] = useState('');
-  const [city, setCity] = useState('');
-  const [cep, setCep] = useState('');
-
-  const search = async () => {
-    const { logradouro, uf, localidade } = await onSearch(cep)
-    setAddress(logradouro);
-    setState(uf);
-    setCity(localidade);
-  }
-
-  return (
-    <Grid>
-      <Typography variant="h4">FRETE</Typography>
-      <Grid container gap={2} flexDirection="column">
-        <Stack direction="row" spacing={6}>
-          <TextField
-            label="CEP"
-            variant="outlined"
-            value={cep}
-            onChange={(event) => setCep(event.target.value)}
-          />
-          <Button
-            onClick={search}
-            variant="outlined"
-          >
-            BUSCAR
-          </Button>
-        </Stack>
-        {/* TODO: FAZENDO O LABEL SUBIR AO SETAR UM VALOR */}
-        <Stack direction="row" spacing={6}>
-          <TextField value={city} label="Cidade" variant="outlined" />
-          <TextField value={state} label="Estado" variant="outlined" />
-        </Stack>
-        <Stack direction="row" spacing={6}>
-          <TextField value={address} label="Endereço" variant="outlined" />
-          <TextField label="Número" variant="outlined" />
-        </Stack>
-      </Grid>
-    </Grid>
-  );
-}
-
-function DeliveryValueInfo({ cep }) {
-  const [shippings, setShippings] = useState([]);
-  const [loading, setLoading] = useState(false);
-  useEffect(() => {
-    const getShippingMethods = async () => {
-      if (cep) {
-        setLoading(true);
-        const response = await client.shipping.listForCep(cep);
-        setLoading(false);
-        setShippings(response);
-
-      }
-    };
-    getShippingMethods()
-  }, [cep]);
-
-  return (
-    <Grid>
-      {shippings.length ?
-      <>
-        <Typography variant="h4">VALOR FRETE</Typography>
-        <RadioGroup
-          aria-labelledby="demo-radio-buttons-group-label"
-          defaultValue="female"
-          name="radio-buttons-group"
-        >
-          {shippings
-            .map((shipping, index) => (
-              <FormControlLabel
-                key={shipping.Codigo}
-                value={shipping.Codigo}
-                control={<Radio />}
-                label={
-                  <>
-                    <Typography display="inline">
-                      {`[Correios] Opção ${index + 1}  - Entrega em até ${shipping.PrazoEntrega} dias úteis `}
-                    </Typography>
-                    <Typography display="inline" color="success.main">
-                      {formatCurrency(parseFloat(shipping.Valor))}
-                    </Typography>
-                  </>
-                }
-              />
-            ))
-          }
-        </RadioGroup>
-      </>
-      : (loading && <CircularProgress/>)
-      }
-    </Grid>
   );
 }
 
