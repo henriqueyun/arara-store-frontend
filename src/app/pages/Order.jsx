@@ -7,6 +7,7 @@ import {
   FormControlLabel,
   Grid,
   InputLabel,
+  Link,
   MenuItem,
   Radio,
   RadioGroup,
@@ -19,6 +20,7 @@ import { formatCurrency } from '../util';
 import { client } from '../../client';
 import AddressForm from '../components/AddressForm';
 import { userStorage } from '../storage';
+import { Price } from '../components';
 
 function Order() {
   const [order, setOrder] = useState({
@@ -302,23 +304,30 @@ function DeliveryRadioButton({ shippingMethod, value, number }) {
 
 function OrderItem({ item }) {
   return (
-    <Grid container alignItems="center" gap={4}>
-      <img
-        style={{ height: '150px', width: '120px' }}
-        src={
-          (item.product?.images && item.product.images[0]?.imageUrl) ||
-          'https://images.unsplash.com/photo-1553002401-c0945c2ff0b0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NDV8fG1pc3NpbmclMjBzaWdufGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60'
-        }
-        alt="Product"
-      />
-      <Grid>
-        <Typography variant="h5">{item.product.description}</Typography>
-        <Typography>
-          {formatCurrency(parseFloat(item.product.price))}
-        </Typography>
-        <Typography>{item.quantity} unidades</Typography>
+    <Link
+      underline="none"
+      color="inherit"
+      href={`/products/${item.product.id}`}
+    >
+      <Grid container alignItems="center" gap={4}>
+        <img
+          style={{ height: '150px', width: '120px' }}
+          src={
+            (item.product?.images && item.product.images[0]?.imageUrl) ||
+            'https://images.unsplash.com/photo-1553002401-c0945c2ff0b0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NDV8fG1pc3NpbmclMjBzaWdufGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60'
+          }
+          alt="Product"
+        />
+        <Grid>
+          <Typography variant="h5">{item.product.description}</Typography>
+          <Price
+            price={parseFloat(item.product.price)}
+            discount={item.product.discount}
+          />
+          <Typography>{item.quantity} unidades</Typography>
+        </Grid>
       </Grid>
-    </Grid>
+    </Link>
   );
 }
 
