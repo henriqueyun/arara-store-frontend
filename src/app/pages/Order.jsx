@@ -205,7 +205,7 @@ function AddressSelect({ onSelect, onNewAddress, addresses, disabled }) {
             {addresses.length ? (
               addresses.map((addr) => (
                 <MenuItem key={addr.id} value={addr}>
-                  {addr.address}
+                  {addr.description ? addr.description : addr.address}
                 </MenuItem>
               ))
             ) : (

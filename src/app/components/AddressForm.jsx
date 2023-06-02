@@ -24,7 +24,14 @@ function AddressForm({ onSave, onCancel, display }) {
   };
 
   function mandatoryFieldsAreValidated() {
-    const fieldsToValidate = ['cep', 'state', 'city', 'address', 'number'];
+    const fieldsToValidate = [
+      'cep',
+      'state',
+      'city',
+      'address',
+      'number',
+      'description',
+    ];
     function isValid(field) {
       const value = fullAddress[field];
       return value || value.length;
@@ -68,6 +75,16 @@ function AddressForm({ onSave, onCancel, display }) {
           </Tooltip>
         </Stack>
         <Stack direction="row" spacing={6}>
+          <TextField
+            onChange={(e) =>
+              setFullAddress((oldState) => {
+                return { ...oldState, description: e.target.value };
+              })
+            }
+            value={fullAddress.description}
+            label="Descrição (ex.: casa, trabalho etc.)"
+            variant="outlined"
+          />
           <Tooltip title="Esse campo só pode ser editado ao preencher o CEP e realizar a busca">
             <TextField
               value={fullAddress.city}
