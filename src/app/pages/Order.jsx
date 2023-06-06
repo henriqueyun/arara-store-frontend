@@ -16,7 +16,7 @@ import {
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { formatCurrency } from '../util';
+import { calculateOrderPrice, formatCurrency } from '../util';
 import { client } from '../../client';
 import AddressForm from '../components/AddressForm';
 import { userStorage } from '../storage';
@@ -59,17 +59,6 @@ function Order() {
       return { ...oldState, addressId: address?.id };
     });
   }, [address]);
-
-  function calculateOrderPrice() {
-    if (!cart.items?.length) {
-      return 0;
-    }
-    const itemsPrice = cart.items.reduce(
-      (acc, item) => acc + item.product.price * item.quantity,
-      0,
-    );
-    return itemsPrice;
-  }
 
   const validateFields = () => {
     const fields = ['addressId', 'payment', 'shippingPrice'];
@@ -135,10 +124,10 @@ function Order() {
         <Grid container flexDirection="column" gap={2}>
           <Typography variant="h3">3. PAGAMENTO</Typography>
           <Payment
-            orderPrice={formatCurrency(calculateOrderPrice())}
+            orderPrice={formatCurrency(calculateOrderPrice(cart))}
             shippingPrice={formatCurrency(parseFloat(order.shippingPrice))}
             totalPrice={formatCurrency(
-              parseFloat(calculateOrderPrice()) +
+              parseFloat(calculateOrderPrice(cart)) +
                 parseFloat(order.shippingPrice),
             )}
             onPaymentChange={(e) =>

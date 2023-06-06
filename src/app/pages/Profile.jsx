@@ -10,6 +10,7 @@ import ListItemText from '@mui/material/ListItemText';
 import { Container, Grid, Typography } from '@mui/material/';
 import ProfileContent from '../components/ProfileContent';
 import AddressContent from '../components/AddressContent';
+import OrderContent from '../components/OrderContent';
 
 export default function Profile() {
   const [pageContent, setPageContent] = React.useState('');
@@ -42,6 +43,7 @@ export default function Profile() {
         <Box component="main">
           {pageContent === 'profile' && <ProfileContent />}
           {pageContent === 'address' && <AddressContent />}
+          {pageContent === 'order' && <OrderContent />}
         </Box>
       </Grid>
     </Container>

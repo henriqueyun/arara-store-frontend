@@ -7,6 +7,10 @@ const OrderService = (http) => ({
     const { data } = await http.get('/orders');
     return data;
   },
+  findByUser: async (userId) => {
+    const { data } = await http.get(`/orders/${userId}`);
+    return data;
+  },
 });
 
 export default OrderService;
