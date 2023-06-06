@@ -1,10 +1,10 @@
 import { Box, Button, Grid, Stack, TextField, Tooltip } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { client } from '../../client';
 import { userStorage } from '../storage';
 import { getAddressInfoByCep } from '../util';
 
-function AddressForm({ onSave, onCancel, display }) {
+function AddressForm({ onSave, onCancel, display, updateAddress = null }) {
   const clearState = {
     cep: '',
     state: '',
@@ -13,11 +13,20 @@ function AddressForm({ onSave, onCancel, display }) {
     number: '',
     complement: '',
     country: 'Brazil',
+    description: '',
   };
   const [fullAddress, setFullAddress] = useState(clearState);
 
+  useEffect(() => {
+    if (updateAddress) {
+      setFullAddress(updateAddress);
+    }
+  }, [updateAddress]);
+
   const search = async () => {
-    const { state, city, address } = await getAddressInfoByCep(fullAddress.cep);
+    const { state, city, address } = await getAddressInfoByCep(
+      fullAddress?.cep,
+    );
     setFullAddress((oldState) => {
       return { ...oldState, state, city, address };
     });
@@ -47,7 +56,15 @@ function AddressForm({ onSave, onCancel, display }) {
       );
       return;
     }
-    await client.address.add({ ...fullAddress }, userStorage.getId());
+    if (fullAddress?.id) {
+      const { id } = fullAddress;
+      delete fullAddress?.id;
+      delete fullAddress?.createdAt;
+      delete fullAddress?.updatedAt;
+      await client.address.update({ ...fullAddress }, id);
+    } else {
+      await client.address.add({ ...fullAddress }, userStorage.getId());
+    }
     await onSave();
     setFullAddress(clearState);
   };
@@ -57,7 +74,7 @@ function AddressForm({ onSave, onCancel, display }) {
       <Grid container gap={2} flexDirection="column">
         <Stack direction="row" spacing={6}>
           <TextField
-            value={fullAddress.cep}
+            value={fullAddress?.cep}
             onChange={(e) =>
               setFullAddress((oldState) => {
                 return { ...oldState, cep: e.target.value };
@@ -81,19 +98,19 @@ function AddressForm({ onSave, onCancel, display }) {
                 return { ...oldState, description: e.target.value };
               })
             }
-            value={fullAddress.description}
+            value={fullAddress?.description}
             label="Descrição (ex.: casa, trabalho etc.)"
             variant="outlined"
           />
           <Tooltip title="Esse campo só pode ser editado ao preencher o CEP e realizar a busca">
             <TextField
-              value={fullAddress.city}
+              value={fullAddress?.city}
               label="Cidade"
               variant="outlined"
             />
           </Tooltip>
           <Tooltip
-            value={fullAddress.state}
+            value={fullAddress?.state}
             title="Esse campo só pode ser editado ao preencher o CEP e realizar a busca"
           >
             <TextField label="Estado" variant="outlined" />
@@ -101,13 +118,13 @@ function AddressForm({ onSave, onCancel, display }) {
         </Stack>
         <Stack direction="row" spacing={6}>
           <Tooltip
-            value={fullAddress.address}
+            value={fullAddress?.address}
             title="Esse campo só pode ser editado ao preencher o CEP e realizar a busca"
           >
             <TextField label="Endereço" variant="outlined" />
           </Tooltip>
           <TextField
-            value={fullAddress.number}
+            value={fullAddress?.number}
             onChange={(e) => {
               setFullAddress((oldState) => {
                 return { ...oldState, number: parseFloat(e.target.value) };
@@ -117,7 +134,7 @@ function AddressForm({ onSave, onCancel, display }) {
             variant="outlined"
           />
           <TextField
-            value={fullAddress.complement}
+            value={fullAddress?.complement}
             onChange={(e) => {
               setFullAddress((oldState) => {
                 return { ...oldState, complement: e.target.value };

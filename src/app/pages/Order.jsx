@@ -39,7 +39,7 @@ function Order() {
   };
 
   const getAddresses = async () => {
-    const response = await client.address.findAll();
+    const response = await client.address.findByUser(userStorage.getId());
     setAddresses(response);
   };
 
