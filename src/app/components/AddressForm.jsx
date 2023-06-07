@@ -1,5 +1,6 @@
 import { Box, Button, Grid, Stack, TextField, Tooltip } from '@mui/material';
 import React, { useState } from 'react';
+import Swal from 'sweetalert2';
 import { client } from '../../client';
 import { userStorage } from '../storage';
 import { getAddressInfoByCep } from '../util';
@@ -41,10 +42,11 @@ function AddressForm({ onSave, onCancel, display }) {
 
   const saveAddress = async () => {
     if (!mandatoryFieldsAreValidated()) {
-      // eslint-disable-next-line no-alert
-      alert(
-        'Para salvar preencha os campos obrigatórios: CEP, cidade, estado, endereço (logradouro) e número',
-      );
+      Swal.fire({
+        icon: 'error',
+        title: 'Erro',
+        text: 'Para salvar preencha os campos obrigatórios: CEP, cidade, estado, endereço (logradouro) e número!',
+      });
       return;
     }
     await client.address.add({ ...fullAddress }, userStorage.getId());
