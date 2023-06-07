@@ -1,8 +1,8 @@
-/* eslint-disable no-unused-vars */
 import {
   Container,
   Divider,
   Grid,
+  Link,
   Table,
   TableBody,
   TableCell,
@@ -14,14 +14,8 @@ import {
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import moment from 'moment';
-import { Price, ProductsFilter, ProductsGrid } from '../components';
-
 import { client } from '../../client';
-import {
-  calculateDiscount,
-  calculateOrderPrice,
-  formatCurrency,
-} from '../util';
+import { calculateOrderPrice, formatCurrency } from '../util';
 
 export default function OrderDetails() {
   const { id } = useParams();
@@ -56,28 +50,24 @@ function PaymentInfos({ order }) {
         <Divider />
         <Typography variant="h4">Pagamento</Typography>
         <Typography>
-          Data da Compra: {moment(order?.createdAt).format('DD/MM/YYYY')}
+          Data da Compra: <b>{moment(order?.createdAt).format('DD/MM/YYYY')}</b>
         </Typography>
         <Typography>
           Total dos produtos:{' '}
-          {formatCurrency(calculateOrderPrice(order?.cart || []))}
+          <b>{formatCurrency(calculateOrderPrice(order?.cart || []))} </b>
         </Typography>
         <Typography>
-          Valor do frete:
-          <Typography
-            sx={{
-              fontWeight: 'bold',
-            }}
-          >
-            {order?.shippingPrice}
-          </Typography>
+          Valor do frete:{' '}
+          <b>{formatCurrency(parseFloat(order?.shippingPrice))}</b>
         </Typography>
         <Typography>
           Valor total:{' '}
-          {formatCurrency(
-            parseFloat(calculateOrderPrice(order?.cart || [])) +
-              parseFloat(order.shippingPrice),
-          )}
+          <b>
+            {formatCurrency(
+              parseFloat(calculateOrderPrice(order?.cart || [])) +
+                parseFloat(order.shippingPrice),
+            )}
+          </b>
         </Typography>
       </Grid>
     </Container>
@@ -89,16 +79,12 @@ function ShippingInfos({ order }) {
     <Container>
       <Grid container flexDirection="column" gap={2}>
         <Typography variant="h4">Entrega</Typography>
-        <Grid container flexDirection="row" gap={2}>
-          <Typography>{order?.address?.cep}</Typography>
-          <Typography>{order?.address?.address}</Typography>
-          <Typography>{order?.address?.number}</Typography>
-          <Typography>{order?.address?.complement}</Typography>
-          <Typography>{order?.address?.city}</Typography>
-        </Grid>
-        <Typography>Entrega: Sedex</Typography>
+        <Typography>{`${order?.address?.cep} - ${order?.address?.address}, ${order?.address?.number} - ${order?.address?.complement} - ${order?.address?.city}`}</Typography>
         <Typography>
-          Data de envio: {moment(order?.updatedAt).format('DD/MM/YYYY')}
+          Entrega: <b>Sedex</b>
+        </Typography>
+        <Typography>
+          Data de envio: <b>{moment(order?.updatedAt).format('DD/MM/YYYY')}</b>
         </Typography>
       </Grid>
     </Container>
@@ -117,29 +103,14 @@ function ItemsInfos({ order }) {
         >
           <TableHead>
             <TableRow>
-              <TableCell
-                sx={{
-                  fontWeight: 'bold',
-                }}
-                align="left"
-              >
-                Nome
+              <TableCell align="left">
+                <b> Nome</b>
               </TableCell>
-              <TableCell
-                sx={{
-                  fontWeight: 'bold',
-                }}
-                align="left"
-              >
-                Quantidade
+              <TableCell align="left">
+                <b> Quantidade</b>
               </TableCell>
-              <TableCell
-                sx={{
-                  fontWeight: 'bold',
-                }}
-                align="left"
-              >
-                Total
+              <TableCell align="left">
+                <b>Total</b>
               </TableCell>
             </TableRow>
           </TableHead>
@@ -152,7 +123,15 @@ function ItemsInfos({ order }) {
                   fontWeight: 'bold',
                 }}
               >
-                <TableCell align="left">{item.product.name}</TableCell>
+                <TableCell align="left">
+                  <Link
+                    sx={{ color: '#00FF' }}
+                    underline="none"
+                    href={`/products/${item.product.id}`}
+                  >
+                    {item.product.name}
+                  </Link>
+                </TableCell>
                 <TableCell align="left">{item.quantity}</TableCell>
                 <TableCell align="left">
                   {' '}
@@ -163,7 +142,10 @@ function ItemsInfos({ order }) {
               </TableRow>
             ))}
             <TableRow>
-              <TableCell align="left">Valor total do pedido:</TableCell>
+              <TableCell align="left">
+                {' '}
+                <b>Valor total do pedido: </b>
+              </TableCell>
               <TableCell align="left" />
               <TableCell
                 sx={{
