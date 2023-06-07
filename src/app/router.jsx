@@ -13,6 +13,7 @@ import {
   SignUp,
 } from './pages';
 import Profile from './pages/Profile';
+import OrderDetails from './pages/OrderDetails';
 
 const router = createBrowserRouter([
   {
@@ -49,6 +50,12 @@ const router = createBrowserRouter([
     path: '/profile',
     Component() {
       return <Component isPrivate variant={<Profile />} />;
+    },
+  },
+  {
+    path: '/orderDetails/:id',
+    Component() {
+      return <Component isPrivate variant={<OrderDetails />} />;
     },
   },
   {

@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import {
   Container,
   Grid,
@@ -9,8 +8,6 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  TextField,
-  Typography,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
@@ -28,16 +25,12 @@ export default function OrderContent() {
   };
 
   useEffect(() => {
-    const getUser = async () => {
+    const getOrders = async () => {
       const response = await client.order.findByUser(userStorage.getId());
-      console.log(
-        '🚀 ~ file: OrderContent.jsx:33 ~ getUser ~ response:',
-        response,
-      );
 
       setOrders(response);
     };
-    getUser();
+    getOrders();
   }, []);
 
   return (
@@ -86,7 +79,7 @@ export default function OrderContent() {
                       {moment(order?.createdAt).format('DD/MM/YYYY')}
                     </TableCell>
                     <TableCell align="center">
-                      <IconButton href={`/order/${order.id}`}>
+                      <IconButton href={`/OrderDetails/${order.id}`}>
                         <PlaylistPlayIcon />
                       </IconButton>
                     </TableCell>
