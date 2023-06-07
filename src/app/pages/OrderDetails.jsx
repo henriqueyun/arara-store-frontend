@@ -1,3 +1,8 @@
+/* eslint-disable react/jsx-no-useless-fragment */
+/* eslint-disable no-nested-ternary */
+/* eslint-disable no-unused-vars */
+// eslint-disable-next-line react/jsx-no-useless-fragment
+
 import {
   Container,
   Divider,
@@ -10,6 +15,7 @@ import {
   TableHead,
   TableRow,
   Typography,
+  CircularProgress,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -37,6 +43,7 @@ export default function OrderDetails() {
         <ShippingInfos order={order} />
         <Divider />
         <ItemsInfos order={order} />
+        <TrackingList order={order} />
       </Grid>
     </Container>
   );
@@ -162,5 +169,43 @@ function ItemsInfos({ order }) {
         </Table>
       </TableContainer>
     </Container>
+  );
+}
+
+function TrackingList({ order }) {
+  const [tracking, setTracking] = useState();
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const getTracking = async () => {
+      setLoading(true);
+      const response = await client.shipping.tracking(order?.trackingCode);
+      setTracking(response);
+      setLoading(false);
+    };
+    getTracking();
+  }, []);
+
+  return (
+    <Grid container flexDirection="column" gap={4}>
+      <Typography variant="h4">Rastreio do Pedido</Typography>
+      {loading ? (
+        <CircularProgress />
+      ) : (
+        !!tracking &&
+        tracking[0]?.eventos?.map((event) => (
+          <Grid key={event.codigo} container flexDirection="column" gap={1}>
+            <Typography>
+              <b>{event.descricao}</b>
+            </Typography>
+            <Typography>
+              {moment(event.dtHrCriado).format('DD/MM/YYYY HH:MM')}
+            </Typography>
+            <Typography>{`${event.unidade.tipo} - ${event.unidade.endereco.cidade}, ${event.unidade.endereco.uf}`}</Typography>
+            <Divider />
+          </Grid>
+        ))
+      )}
+    </Grid>
   );
 }

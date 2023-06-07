@@ -79,7 +79,7 @@ export default function OrderContent() {
                       {moment(order?.createdAt).format('DD/MM/YYYY')}
                     </TableCell>
                     <TableCell align="center">
-                      <IconButton href={`/OrderDetails/${order.id}`}>
+                      <IconButton href={`/orderDetails/${order.id}`}>
                         <PlaylistPlayIcon />
                       </IconButton>
                     </TableCell>
