@@ -1,10 +1,8 @@
-/* eslint-disable no-unused-vars */
 import {
   Container,
   Divider,
   Grid,
   IconButton,
-  Paper,
   Table,
   TableBody,
   TableCell,
