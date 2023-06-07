@@ -1,5 +1,6 @@
 import { Box, Button, Grid, Stack, TextField, Tooltip } from '@mui/material';
 import React, { useState } from 'react';
+import Swal from 'sweetalert2';
 import { client } from '../../client';
 import { userStorage } from '../storage';
 import { getAddressInfoByCep } from '../util';
@@ -17,10 +18,19 @@ function AddressForm({ onSave, onCancel, display }) {
   const [fullAddress, setFullAddress] = useState(clearState);
 
   const search = async () => {
-    const { state, city, address } = await getAddressInfoByCep(fullAddress.cep);
-    setFullAddress((oldState) => {
-      return { ...oldState, state, city, address };
-    });
+    const formattedCep = String(fullAddress.cep).replace(/[^a-zA-Z0-9 ]/g, '');
+    if (formattedCep.length !== 8) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Erro',
+        text: 'O CEP precisa ter 8 dígitos',
+      });
+    } else {
+      const { state, city, address } = await getAddressInfoByCep(formattedCep);
+      setFullAddress((oldState) => {
+        return { ...oldState, state, city, address };
+      });
+    }
   };
 
   function mandatoryFieldsAreValidated() {
