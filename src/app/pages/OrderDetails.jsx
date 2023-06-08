@@ -25,12 +25,14 @@ import { calculateOrderPrice, formatCurrency } from '../util';
 
 export default function OrderDetails() {
   const { id } = useParams();
-  const [order, setOrder] = useState([]);
+  const [order, setOrder] = useState({});
 
   useEffect(() => {
     const getOrder = async () => {
-      const response = await client.order.findOne(id);
-      setOrder(response);
+      const response = await client.order?.findOne(id);
+      if (response) {
+        setOrder(response);
+      }
     };
     getOrder();
   }, []);
@@ -53,7 +55,7 @@ function PaymentInfos({ order }) {
   return (
     <Container>
       <Grid container flexDirection="column" gap={2}>
-        <Typography variant="h3">Pedido #{order.id}</Typography>
+        <Typography variant="h3">Pedido #{order?.id}</Typography>
         <Divider />
         <Typography variant="h4">Pagamento</Typography>
         <Typography>
@@ -72,7 +74,7 @@ function PaymentInfos({ order }) {
           <b>
             {formatCurrency(
               parseFloat(calculateOrderPrice(order?.cart || [])) +
-                parseFloat(order.shippingPrice),
+                parseFloat(order?.shippingPrice),
             )}
           </b>
         </Typography>
@@ -173,7 +175,7 @@ function ItemsInfos({ order }) {
 }
 
 function TrackingList({ order }) {
-  const [tracking, setTracking] = useState();
+  const [tracking, setTracking] = useState([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -183,8 +185,10 @@ function TrackingList({ order }) {
       setTracking(response);
       setLoading(false);
     };
-    getTracking();
-  }, []);
+    if (Object.keys(order).length) {
+      getTracking();
+    }
+  }, [order]);
 
   return (
     <Grid container flexDirection="column" gap={4}>
@@ -192,9 +196,14 @@ function TrackingList({ order }) {
       {loading ? (
         <CircularProgress />
       ) : (
-        !!tracking &&
+        tracking.length &&
         tracking[0]?.eventos?.map((event) => (
-          <Grid key={event.codigo} container flexDirection="column" gap={1}>
+          <Grid
+            key={`${event.codigo}-${event.dtHrCriado}`}
+            container
+            flexDirection="column"
+            gap={1}
+          >
             <Typography>
               <b>{event.descricao}</b>
             </Typography>

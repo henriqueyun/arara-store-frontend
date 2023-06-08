@@ -5,7 +5,13 @@ import { client } from '../../client';
 import { userStorage } from '../storage';
 
 export default function ProfileContent() {
-  const [user, setUser] = useState();
+  const [user, setUser] = useState({
+    email: '',
+    fullName: '',
+    cpf: '',
+    birth: '',
+    createdAt: '',
+  });
 
   useEffect(() => {
     const getUser = async () => {

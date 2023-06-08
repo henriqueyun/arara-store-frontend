@@ -7,7 +7,7 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
-import { Container, Grid, Typography } from '@mui/material/';
+import { Container, Divider, Grid, Typography } from '@mui/material/';
 import ProfileContent from '../components/ProfileContent';
 import AddressContent from '../components/AddressContent';
 import OrderContent from '../components/OrderContent';
@@ -28,11 +28,13 @@ export default function Profile() {
                 <ListItemText primary="Perfil" />
               </ListItemButton>
             </ListItem>
+            <Divider />
             <ListItem>
               <ListItemButton onClick={() => handleContent('order')}>
                 <ListItemText primary="Pedidos" />
               </ListItemButton>
             </ListItem>
+            <Divider />
             <ListItem>
               <ListItemButton onClick={() => handleContent('address')}>
                 <ListItemText primary="Endereços" />

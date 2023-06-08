@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
-import PlaylistPlayIcon from '@mui/icons-material/PlaylistPlay';
+import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import { client } from '../../client';
 import { userStorage } from '../storage';
 import { calculateOrderPrice, formatCurrency } from '../util';
@@ -80,7 +80,7 @@ export default function OrderContent() {
                     </TableCell>
                     <TableCell align="center">
                       <IconButton href={`/orderDetails/${order.id}`}>
-                        <PlaylistPlayIcon />
+                        <FormatListBulletedIcon />
                       </IconButton>
                     </TableCell>
                   </TableRow>
