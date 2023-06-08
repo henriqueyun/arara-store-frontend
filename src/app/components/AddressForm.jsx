@@ -1,5 +1,6 @@
 import { Box, Button, Grid, Stack, TextField, Tooltip } from '@mui/material';
 import React, { useEffect, useState } from 'react';
+import Swal from 'sweetalert2';
 import { client } from '../../client';
 import { userStorage } from '../storage';
 import { getAddressInfoByCep } from '../util';
@@ -24,12 +25,19 @@ function AddressForm({ onSave, onCancel, display, updateAddress = null }) {
   }, [updateAddress]);
 
   const search = async () => {
-    const { state, city, address } = await getAddressInfoByCep(
-      fullAddress?.cep,
-    );
-    setFullAddress((oldState) => {
-      return { ...oldState, state, city, address };
-    });
+    const formattedCep = String(fullAddress.cep).replace(/[^a-zA-Z0-9 ]/g, '');
+    if (formattedCep.length !== 8) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Erro',
+        text: 'O CEP precisa ter 8 dígitos',
+      });
+    } else {
+      const { state, city, address } = await getAddressInfoByCep(formattedCep);
+      setFullAddress((oldState) => {
+        return { ...oldState, state, city, address };
+      });
+    }
   };
 
   function mandatoryFieldsAreValidated() {
@@ -50,10 +58,11 @@ function AddressForm({ onSave, onCancel, display, updateAddress = null }) {
 
   const saveAddress = async () => {
     if (!mandatoryFieldsAreValidated()) {
-      // eslint-disable-next-line no-alert
-      alert(
-        'Para salvar preencha os campos obrigatórios: CEP, cidade, estado, endereço (logradouro) e número',
-      );
+      Swal.fire({
+        icon: 'error',
+        title: 'Erro',
+        text: 'Para salvar preencha os campos obrigatórios: CEP, cidade, estado, endereço (logradouro) e número!',
+      });
       return;
     }
     if (fullAddress?.id) {

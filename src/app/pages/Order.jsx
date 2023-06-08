@@ -17,6 +17,7 @@ import {
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { calculateOrderPrice, formatCurrency } from '../util';
+import Swal from 'sweetalert2';
 import { client } from '../../client';
 import AddressForm from '../components/AddressForm';
 import { userStorage } from '../storage';
@@ -69,11 +70,12 @@ function Order() {
 
   const sendOrder = async () => {
     if (!validateFields()) {
-      // TODO: change alert
-      // eslint-disable-next-line no-alert
-      alert(
-        'Para finalizar preencha os selecione o endereço, método de envio e a forma de pagamento',
-      );
+      Swal.fire({
+        icon: 'error',
+        title: 'Erro',
+        text: 'Para finalizar preencha os selecione o endereço, método de envio e a forma de pagamento!',
+      });
+
       return;
     }
 
