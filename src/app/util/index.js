@@ -18,4 +18,20 @@ const getAddressInfoByCep = async (cep) => {
   return { state: uf, city: localidade, address: logradouro };
 };
 
-export { formatCurrency, calculateDiscount, getAddressInfoByCep };
+const calculateOrderPrice = (cart) => {
+  if (!cart.items?.length) {
+    return 0;
+  }
+  const itemsPrice = cart.items.reduce(
+    (acc, item) => acc + item.product.price * item.quantity,
+    0,
+  );
+  return itemsPrice;
+};
+
+export {
+  formatCurrency,
+  calculateDiscount,
+  getAddressInfoByCep,
+  calculateOrderPrice,
+};
