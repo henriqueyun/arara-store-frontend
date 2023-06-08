@@ -72,7 +72,7 @@ export default function AddressContent() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {addresses.length ? (
+              {addresses.length &&
                 addresses.map((address) => (
                   <TableRow
                     key={address.id}
@@ -94,11 +94,7 @@ export default function AddressContent() {
                       </IconButton>
                     </TableCell>
                   </TableRow>
-                ))
-              ) : (
-                // eslint-disable-next-line react/jsx-no-useless-fragment
-                <></>
-              )}
+                ))}
             </TableBody>
           </Table>
         </TableContainer>

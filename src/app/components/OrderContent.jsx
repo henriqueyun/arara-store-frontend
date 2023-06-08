@@ -49,7 +49,7 @@ export default function OrderContent() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {orders.length ? (
+              {orders.length &&
                 orders.map((order) => (
                   <TableRow
                     key={order.id}
@@ -84,11 +84,7 @@ export default function OrderContent() {
                       </IconButton>
                     </TableCell>
                   </TableRow>
-                ))
-              ) : (
-                // eslint-disable-next-line react/jsx-no-useless-fragment
-                <></>
-              )}
+                ))}
             </TableBody>
           </Table>
         </TableContainer>

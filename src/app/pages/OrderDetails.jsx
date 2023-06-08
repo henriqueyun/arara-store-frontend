@@ -1,8 +1,3 @@
-/* eslint-disable react/jsx-no-useless-fragment */
-/* eslint-disable no-nested-ternary */
-/* eslint-disable no-unused-vars */
-// eslint-disable-next-line react/jsx-no-useless-fragment
-
 import {
   Container,
   Divider,

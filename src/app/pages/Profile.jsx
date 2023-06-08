@@ -1,13 +1,10 @@
-/* eslint-disable no-unused-vars */
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import CssBaseline from '@mui/material/CssBaseline';
-import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
-import { Container, Divider, Grid, Typography } from '@mui/material/';
+import { Container, Divider, Grid } from '@mui/material/';
 import ProfileContent from '../components/ProfileContent';
 import AddressContent from '../components/AddressContent';
 import OrderContent from '../components/OrderContent';
