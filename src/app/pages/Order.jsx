@@ -16,8 +16,8 @@ import {
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { calculateOrderPrice, formatCurrency } from '../util';
 import Swal from 'sweetalert2';
+import { calculateOrderPrice, formatCurrency } from '../util';
 import { client } from '../../client';
 import AddressForm from '../components/AddressForm';
 import { userStorage } from '../storage';
