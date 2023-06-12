@@ -3,7 +3,6 @@ import React from 'react';
 import { calculateDiscount, formatCurrency } from '../util';
 
 export default function ProductItem({ product }) {
-  console.log('🚀 ~ file: ProductItem.jsx:6 ~ ProductItem ~ product:', product);
   return (
     <div>
       <img
