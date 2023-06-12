@@ -7,7 +7,10 @@ const ProductService = (http) => ({
     const { data } = await http.get(`/products/${id}`);
     return data;
   },
-  hello: () => 'Hello!',
+  findShowCase: async () => {
+    const { data } = await http.get('/products/showCase');
+    return data;
+  },
 });
 
 export default ProductService;
