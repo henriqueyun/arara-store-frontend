@@ -18,12 +18,15 @@ const getAddressInfoByCep = async (cep) => {
   return { state: uf, city: localidade, address: logradouro };
 };
 
-const calculateOrderPrice = (cart) => {
-  if (!cart.items?.length) {
+const calculateOrderPrice = (items) => {
+  if (!items?.length) {
     return 0;
   }
-  const itemsPrice = cart.items.reduce(
-    (acc, item) => acc + item.product.price * item.quantity,
+  const itemsPrice = items.reduce(
+    (acc, item) =>
+      acc +
+      calculateDiscount(item.product.price, item.product.discount) *
+        item.quantity,
     0,
   );
   return itemsPrice;
