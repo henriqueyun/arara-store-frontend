@@ -4,11 +4,11 @@ import ProductItem from './ProductItem';
 import { client } from '../../client';
 
 export default function Showcase() {
-  const [products, setProducts] = useState([]);
+  const [showCases, setShowCases] = useState([]);
   useEffect(() => {
     const getProducts = async () => {
-      const response = await client.products.findAll();
-      setProducts(response);
+      const response = await client.products.findShowCase();
+      setShowCases(response);
     };
     getProducts();
   }, []);
@@ -17,15 +17,18 @@ export default function Showcase() {
     <Grid container display="flex" justifyContent="center" my={4} gap={4}>
       {
         // TODO: adjust when showcase backend is done to not use hardcoded six products
-        products.length ? (
-          products.slice(0, 6).map((product) => (
-            <Grid key={product.id} item>
+        showCases.length ? (
+          showCases.map((showCase) => (
+            <Grid key={showCase.product.id} item>
               <Link
                 color="inherit"
                 underline="none"
-                href={`/products/${product.id}`}
+                href={`/products/${showCase.product.id}`}
               >
-                <ProductItem key={product.id} product={product} />
+                <ProductItem
+                  key={showCase.product.id}
+                  product={showCase.product}
+                />
               </Link>
             </Grid>
           ))
