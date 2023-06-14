@@ -16,7 +16,11 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import moment from 'moment';
 import { client } from '../../client';
-import { calculateOrderPrice, formatCurrency } from '../util';
+import {
+  calculateDiscount,
+  calculateOrderPrice,
+  formatCurrency,
+} from '../util';
 
 export default function OrderDetails() {
   const { id } = useParams();
@@ -58,7 +62,9 @@ function PaymentInfos({ order }) {
         </Typography>
         <Typography>
           Total dos produtos:{' '}
-          <b>{formatCurrency(calculateOrderPrice(order?.cart || []))} </b>
+          <b>
+            {formatCurrency(calculateOrderPrice(order?.cart?.items || []))}{' '}
+          </b>
         </Typography>
         <Typography>
           Valor do frete:{' '}
@@ -68,7 +74,7 @@ function PaymentInfos({ order }) {
           Valor total:{' '}
           <b>
             {formatCurrency(
-              parseFloat(calculateOrderPrice(order?.cart || [])) +
+              parseFloat(calculateOrderPrice(order?.cart?.items || [])) +
                 parseFloat(order?.shippingPrice),
             )}
           </b>
@@ -140,7 +146,10 @@ function ItemsInfos({ order }) {
                 <TableCell align="left">
                   {' '}
                   {formatCurrency(
-                    parseFloat(item.product.price) * item.quantity,
+                    calculateDiscount(
+                      item.product.price,
+                      item.product.discount,
+                    ) * item.quantity,
                   )}
                 </TableCell>
               </TableRow>
@@ -158,7 +167,7 @@ function ItemsInfos({ order }) {
                 align="left"
               >
                 {formatCurrency(
-                  parseFloat(calculateOrderPrice(order?.cart || [])),
+                  parseFloat(calculateOrderPrice(order?.cart?.items || [])),
                 )}
               </TableCell>
             </TableRow>

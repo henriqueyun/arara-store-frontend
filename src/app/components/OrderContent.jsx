@@ -71,7 +71,7 @@ export default function OrderContent() {
                     </TableCell>
                     <TableCell align="center">
                       {formatCurrency(
-                        parseFloat(calculateOrderPrice(order.cart)) +
+                        parseFloat(calculateOrderPrice(order.cart.items)) +
                           parseFloat(order.shippingPrice),
                       )}
                     </TableCell>

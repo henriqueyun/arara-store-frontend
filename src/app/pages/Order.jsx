@@ -126,10 +126,10 @@ function Order() {
         <Grid container flexDirection="column" gap={2}>
           <Typography variant="h3">3. PAGAMENTO</Typography>
           <Payment
-            orderPrice={formatCurrency(calculateOrderPrice(cart))}
+            orderPrice={formatCurrency(calculateOrderPrice(cart.items))}
             shippingPrice={formatCurrency(parseFloat(order.shippingPrice))}
             totalPrice={formatCurrency(
-              parseFloat(calculateOrderPrice(cart)) +
+              parseFloat(calculateOrderPrice(cart.items)) +
                 parseFloat(order.shippingPrice),
             )}
             onPaymentChange={(e) =>
