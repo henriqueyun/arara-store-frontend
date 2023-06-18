@@ -79,9 +79,16 @@ function Order() {
       return;
     }
 
-    await client.order.send(order, userStorage.getId());
-    // TODO: change navigate to /orders and alert to user that payment page is not done yet
-    navigate('/payment');
+    const response = await client.order.send(order, userStorage.getId());
+    if (response) {
+      navigate(`/payment?method=${order.payment}`);
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Erro',
+        text: 'Algo de errado aconteceu!',
+      });
+    }
   };
 
   const [displayAddressForm, setDisplayAddressForm] = useState('none');
@@ -90,7 +97,7 @@ function Order() {
     <Container sx={{ p: 0, py: 8, backgroundColor: 'none' }}>
       <Grid container flexDirection="column" gap={5}>
         <OrderHeader />
-        <Typography variant="h3">1. ENTREGA</Typography>
+        <Typography variant="h4">1. ENTREGA</Typography>
         <Grid container flexDirection="column" gap={4}>
           <AddressSelect
             addresses={addresses}
@@ -120,11 +127,11 @@ function Order() {
           />
         </Grid>
         <Divider />
-        <Typography variant="h3">2. PEDIDO</Typography>
+        <Typography variant="h4">2. PEDIDO</Typography>
         <OrderItems items={cart.items} />
         <Divider />
         <Grid container flexDirection="column" gap={2}>
-          <Typography variant="h3">3. PAGAMENTO</Typography>
+          <Typography variant="h4">3. PAGAMENTO</Typography>
           <Payment
             orderPrice={formatCurrency(calculateOrderPrice(cart.items))}
             shippingPrice={formatCurrency(parseFloat(order.shippingPrice))}
@@ -150,10 +157,10 @@ function Order() {
 function OrderHeader() {
   return (
     <>
-      <Typography variant="h2">
+      <Typography variant="h4">
         <b>Finalizar Pedido</b>
       </Typography>
-      <Typography variant="h3">
+      <Typography variant="h4">
         <b>Quase tudo pronto!</b>
       </Typography>
     </>
@@ -246,7 +253,7 @@ function DeliverySelect({ cep, onSelect }) {
       ) : (
         !!shippings.length && (
           <Grid>
-            <Typography variant="h4">Valor Frete</Typography>
+            <Typography variant="h5">Valor Frete</Typography>
             <RadioGroup
               defaultValue="female"
               onChange={(e) => {
@@ -310,7 +317,7 @@ function OrderItem({ item }) {
           alt="Product"
         />
         <Grid>
-          <Typography variant="h5">{item.product.description}</Typography>
+          <Typography variant="h6">{item.product.description}</Typography>
           <Price
             price={parseFloat(item.product.price)}
             discount={item.product.discount}
@@ -338,16 +345,16 @@ function Payment({ orderPrice, shippingPrice, totalPrice, onPaymentChange }) {
 function PaymentInfo({ orderPrice, shippingPrice, totalPrice }) {
   return (
     <>
-      <Typography variant="h4">
+      <Typography variant="h5">
         <b>Valor</b>
       </Typography>
       <Grid container flexDirection="column" gap={2}>
-        <Typography variant="h5">Valor do pedido: {orderPrice}</Typography>
-        <Typography variant="h5">Valor do frete {shippingPrice}</Typography>
-        <Typography variant="h5">
+        <Typography variant="h6">Valor do pedido: {orderPrice}</Typography>
+        <Typography variant="h6">Valor do frete {shippingPrice}</Typography>
+        <Typography variant="h6">
           <b>Valor total: {totalPrice}</b>
         </Typography>
-        <Typography variant="h5">Descontos aplicados: R$ 0,00</Typography>
+        <Typography variant="h6">Descontos aplicados: R$ 0,00</Typography>
       </Grid>
     </>
   );
@@ -356,7 +363,7 @@ function PaymentInfo({ orderPrice, shippingPrice, totalPrice }) {
 function PaymentOptions({ onChange }) {
   return (
     <>
-      <Typography variant="h4">
+      <Typography variant="h5">
         <b>Método de pagamento</b>
       </Typography>
       <Grid>
@@ -367,13 +374,12 @@ function PaymentOptions({ onChange }) {
             label={<Typography>Pix</Typography>}
           />
           <FormControlLabel
-            value="bole
-                console.log('ue', items);to"
+            value="boleto"
             control={<Radio />}
             label={<Typography>Boleto Bancário</Typography>}
           />
           <FormControlLabel
-            value="debito"
+            value="cartao"
             control={<Radio />}
             label={
               <>
