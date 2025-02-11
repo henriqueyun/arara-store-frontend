@@ -72,7 +72,19 @@ export default function AddressContent() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {addresses.length &&
+              {!addresses.length ? (
+                <TableRow
+                  key="empty orders"
+                  sx={{
+                    '&:last-child td, &:last-child th': { border: 0 },
+                    fontWeight: 'bold',
+                  }}
+                >
+                  <TableCell align="center">
+                    Não foi possível buscar os endereços
+                  </TableCell>
+                </TableRow>
+              ) : (
                 addresses.map((address) => (
                   <TableRow
                     key={address.id}
@@ -94,7 +106,8 @@ export default function AddressContent() {
                       </IconButton>
                     </TableCell>
                   </TableRow>
-                ))}
+                ))
+              )}
             </TableBody>
           </Table>
         </TableContainer>

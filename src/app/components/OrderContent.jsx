@@ -49,7 +49,19 @@ export default function OrderContent() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {orders.length &&
+              {!orders.length ? (
+                <TableRow
+                  key="empty orders"
+                  sx={{
+                    '&:last-child td, &:last-child th': { border: 0 },
+                    fontWeight: 'bold',
+                  }}
+                >
+                  <TableCell align="center">
+                    Não foi possível buscar os pedidos
+                  </TableCell>
+                </TableRow>
+              ) : (
                 orders.map((order) => (
                   <TableRow
                     key={order.id}
@@ -84,7 +96,8 @@ export default function OrderContent() {
                       </IconButton>
                     </TableCell>
                   </TableRow>
-                ))}
+                ))
+              )}
             </TableBody>
           </Table>
         </TableContainer>

@@ -40,10 +40,7 @@ export default function Menubar() {
       />
       <Grid sx={{ display: 'flex' }}>
         <Button href="/products">
-          <Typography color="background.default">Home</Typography>
-        </Button>
-        <Button href="/products">
-          <Typography color="background.default">Muié</Typography>
+          <Typography color="background.default">Produtos</Typography>
         </Button>
       </Grid>
       <Grid sx={{ display: 'flex' }}>

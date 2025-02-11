@@ -94,7 +94,9 @@ export default function ProductsFilter({ products, handleFilter }) {
   return (
     // TODO: refactor and split in components
     <Grid>
-      {productsFilters.length &&
+      {!productsFilters.length ? (
+        <Typography>Erro ao montar os filtros, recarregue a página</Typography>
+      ) : (
         productsFilters.map((filter) =>
           filter.values ? (
             <Accordion key={filter.field}>
@@ -139,7 +141,8 @@ export default function ProductsFilter({ products, handleFilter }) {
               Erro ao montar os filtros, recarregue a página
             </Typography>
           ),
-        )}
+        )
+      )}
 
       <Grid py={2}>
         <Button onClick={cleanFilters} variant="outlined" fullWidth>

@@ -15,8 +15,18 @@ export default function ProfileContent() {
 
   useEffect(() => {
     const getUser = async () => {
-      const response = await client.auth.findOne(userStorage.getId());
-      setUser(response);
+      try {
+        const response = await client.auth.findOne(userStorage.getId());
+        setUser(response);
+      } catch (err) {
+        setUser({
+          email: 'Erro ao buscar os dados',
+          fullName: 'Erro ao buscar os dados',
+          cpf: 'Erro ao buscar os dados',
+          birth: 'Erro ao buscar os dados',
+          createdAt: 'Erro ao buscar os dados',
+        });
+      }
     };
     getUser();
   }, []);

@@ -246,11 +246,27 @@ function CartTable({ cartItems, onChange }) {
       );
     }, 0);
   };
+
+  const pickRandomMsg = () => {
+    const msgs = [
+      'Se você não comprar nada o desconto é de 100% ✂️🏷️',
+      'Foi mal, não aceitamos vale-refeição ☕🍞',
+      'Sua mulher tem dois cupons? Sinto muito, ainda não aceitamos cupons 🛒😭',
+    ];
+
+    const randomIndex = Math.round(Math.random() * (msgs.length - 1));
+    return `${randomIndex} ${msgs[randomIndex]}`;
+  };
+
   return (
     <>
       <CartTableAction>
         {cartItems.length ? (
-          <Button startIcon={<PercentIcon />} variant="outlined">
+          <Button
+            onClick={() => alert(pickRandomMsg())}
+            startIcon={<PercentIcon />}
+            variant="outlined"
+          >
             APLICAR CUPOM DE DESCONTO
           </Button>
         ) : (
