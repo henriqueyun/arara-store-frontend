@@ -271,7 +271,7 @@ function BuyButtons({ productId, quantity }) {
   const navigate = useNavigate();
   const addToCart = async () => {
     const { id: userId } = JSON.parse(localStorage.getItem('loggedUser'));
-    return client.cart.items.add(productId, quantity, userId);
+    return client.cart.items.add(productId, quantity, userId || '1');
   };
 
   const showBuyOptions = () => {
@@ -317,7 +317,7 @@ function LargeDescription() {
     <Grid textAlign="left">
       <Typography variant="h6">DETALHES DO PRODUTO</Typography>
       <br />
-      CAMISETA OVERSIZE PRETA
+      CAMISETA HARDCODED OVERSIZE PRETA MERAMENTE ILUSTRATIVA
       <br />
       <br />
       Modelagem: Reta
@@ -331,21 +331,27 @@ function LargeDescription() {
       Detalhes: Possui logo frontal.
       <br />
       <br />
-      Medidas da peça no tamanho G:
+      Medidas da peça no tamanho G:{' '}
+      <i>
+        (Detalhes meramente ilustrativos, porque a vida é muito curta para
+        medidas exatas!)
+      </i>
+      <br />• Ombro: 15cm{' '}
+      <i>(ou algo próximo disso, quem mede com régua mesmo?)</i>
+      <br />• Ombro a ombro: 52cm{' '}
+      <i>(ou a distância entre dois bocejos numa manhã de segunda)</i>
+      <br />• Comprimento da manga: 21cm{' '}
+      <i>(ou o suficiente para cobrir o essencial)</i>
+      <br />• Largura da manga: 36cm{' '}
+      <i>
+        (larga o bastante para abraçar a ideia de que detalhes são só sugestões)
+      </i>
+      <br />• Comprimento da peça: 74cm{' '}
+      <i>(ou o quanto você puxar para ajustar)</i>
+      <br />• Tórax: 118cm <i>(ou o tamanho do seu coração após um bom café)</i>
       <br />
-      • Ombro: 15cm
-      <br />
-      • Ombro a ombro: 52cm
-      <br />
-      • Comprimento da manga: 21cm
-      <br />
-      • Largura da manga: 36cm
-      <br />
-      • Comprimento da peça: 74cm
-      <br />
-      • Tórax: 118cm
-      <br />
-      Medidas do Modelo: Altura: 1,89m/ Tórax: 103cm/ Manequim: 42.
+      Medidas do Modelo: Altura: 1,89m/ Tórax: 103cm/ Manequim: 42{' '}
+      <i>(Modelo pode variar, assim como nossos humores)</i>
       <br />
       <br />
       CLÁSSICA E ATEMPORAL:
@@ -356,6 +362,10 @@ function LargeDescription() {
       toque urbano e descolado com personalidade! <br />
       Aposte com peças mais estruturadas para criar um look que vai desde o
       trabalho ao happy hour!
+      <br />
+      <i>
+        (Detalhes técnicos podem variar, mas o estilo é garantido. Ou quase.)
+      </i>
       <br />
     </Grid>
   );

@@ -51,7 +51,7 @@ function AddressForm({ onSave, onCancel, display, updateAddress = null }) {
     ];
     function isValid(field) {
       const value = fullAddress[field];
-      return value || value.length;
+      return value;
     }
     return fieldsToValidate.every(isValid);
   }
@@ -65,6 +65,7 @@ function AddressForm({ onSave, onCancel, display, updateAddress = null }) {
       });
       return;
     }
+
     if (fullAddress?.id) {
       const { id } = fullAddress;
       delete fullAddress?.id;
@@ -74,6 +75,7 @@ function AddressForm({ onSave, onCancel, display, updateAddress = null }) {
     } else {
       await client.address.add({ ...fullAddress }, userStorage.getId());
     }
+
     await onSave();
     setFullAddress(clearState);
   };
@@ -154,7 +156,12 @@ function AddressForm({ onSave, onCancel, display, updateAddress = null }) {
           />
         </Stack>
         <Grid display="flex" gap={2}>
-          <Button variant="contained" onClick={saveAddress}>
+          <Button
+            variant="contained"
+            onClick={async () => {
+              await saveAddress();
+            }}
+          >
             Salvar Endereço
           </Button>
           <Button variant="outlined" onClick={onCancel}>

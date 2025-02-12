@@ -10,7 +10,7 @@ import AddressContent from '../components/AddressContent';
 import OrderContent from '../components/OrderContent';
 
 export default function Profile() {
-  const [pageContent, setPageContent] = React.useState('');
+  const [pageContent, setPageContent] = React.useState('profile');
   const handleContent = (content) => {
     setPageContent(content);
   };

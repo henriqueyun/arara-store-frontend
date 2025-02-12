@@ -98,6 +98,9 @@ function Order() {
       <Grid container flexDirection="column" gap={5}>
         <OrderHeader />
         <Typography variant="h4">1. ENTREGA</Typography>
+        <Typography variant="subtitle1">
+          Selecione o endereço para calcular o Frete
+        </Typography>
         <Grid container flexDirection="column" gap={4}>
           <AddressSelect
             addresses={addresses}
@@ -128,10 +131,20 @@ function Order() {
         </Grid>
         <Divider />
         <Typography variant="h4">2. PEDIDO</Typography>
-        <OrderItems items={cart.items} />
+        <Typography variant="subtitle1">
+          Confira os itens desse pedido para garantir que não há erros
+        </Typography>
+        {cart.items ? (
+          <OrderItems items={cart.items} />
+        ) : (
+          <Typography variant="">Não há itens pedidos</Typography>
+        )}
         <Divider />
         <Grid container flexDirection="column" gap={2}>
           <Typography variant="h4">3. PAGAMENTO</Typography>
+          <Typography variant="subtitle1">
+            Não deixe de checar o valor total do pedido junto à entrega
+          </Typography>
           <Payment
             orderPrice={formatCurrency(calculateOrderPrice(cart.items))}
             shippingPrice={formatCurrency(parseFloat(order.shippingPrice))}
@@ -238,9 +251,18 @@ function DeliverySelect({ cep, onSelect }) {
     const getShippingMethods = async () => {
       if (cep) {
         setLoading(true);
-        const response = await client.shipping.listForCep(cep);
-        setShippings(response);
-        setLoading(false);
+        try {
+          const response = await client.shipping.listForCep(cep);
+          setShippings(response);
+        } catch (error) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Erro',
+            text: 'Erro ao buscar estimativa de entrega!',
+          });
+        } finally {
+          setLoading(false);
+        }
       }
     };
     getShippingMethods();
@@ -370,16 +392,16 @@ function PaymentOptions({ onChange }) {
         <RadioGroup row onChange={onChange}>
           <FormControlLabel
             control={<Radio />}
-            value="pix"
+            value="Pix"
             label={<Typography>Pix</Typography>}
           />
           <FormControlLabel
-            value="boleto"
+            value="Boleto"
             control={<Radio />}
             label={<Typography>Boleto Bancário</Typography>}
           />
           <FormControlLabel
-            value="cartao"
+            value="Cartão"
             control={<Radio />}
             label={
               <>

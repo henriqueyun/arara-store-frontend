@@ -20,7 +20,7 @@ import AddressForm from './AddressForm';
 
 export default function AddressContent() {
   const [addresses, setAddresses] = useState([]);
-  const [updateAddress, setUpdateAddress] = useState([]);
+  const [updateAddress, setUpdateAddress] = useState('');
 
   const getAddresses = async () => {
     const response = await client.address.findByUser(userStorage.getId());
@@ -51,8 +51,8 @@ export default function AddressContent() {
     <Container>
       <Grid>
         <AddressForm
-          onSave={() => {
-            getAddresses();
+          onSave={async () => {
+            await getAddresses();
           }}
           updateAddress={updateAddress}
         />

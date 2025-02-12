@@ -263,6 +263,7 @@ function CartTable({ cartItems, onChange }) {
       <CartTableAction>
         {cartItems.length ? (
           <Button
+            // eslint-disable-next-line no-alert
             onClick={() => alert(pickRandomMsg())}
             startIcon={<PercentIcon />}
             variant="outlined"
