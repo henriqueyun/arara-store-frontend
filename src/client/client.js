@@ -9,7 +9,8 @@ import {
 } from './services';
 
 function setAxiosConfig() {
-  axios.defaults.baseURL = 'http://localhost:3000';
+  axios.defaults.baseURL =
+    process.env.REACT_APP_API_URL ?? 'http://localhost:3000';
   axios.interceptors.response.use(
     (response) => {
       return response;
