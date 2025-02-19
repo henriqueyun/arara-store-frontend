@@ -7,6 +7,7 @@ import {
   AddressService,
   OrderService,
 } from './services';
+import HealthService from './services/health';
 
 function setAxiosConfig() {
   axios.defaults.baseURL =
@@ -37,6 +38,7 @@ const client = {
   shipping: ShippingService(axios),
   address: AddressService(axios),
   order: OrderService(axios),
+  health: HealthService(axios),
 };
 
 function setAuth(token) {
