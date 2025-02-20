@@ -8,7 +8,6 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    // eslint-disable-next-line consistent-return
     async function getData() {
       try {
         setIsLoading(true);
@@ -26,9 +25,21 @@ export default function Home() {
   return (
     <Grid container flexDirection="column">
       <Grid container p={4} justifyContent="center">
-        <Grid container justifyContent="center">
+        <Grid flex justifyContent="center">
           {isLoading ? (
-            <CircularProgress />
+            <Grid
+              container
+              p={4}
+              borderRadius={3}
+              border="2px solid rgb(226, 161, 161)"
+              gap={2}
+            >
+              <CircularProgress size={16} />
+              <Typography variant="p">
+                Estamos verificando se a API da Ararastore está online, aguarde
+                alguns instantes.
+              </Typography>
+            </Grid>
           ) : (
             !isAPIOnline && (
               <Typography
